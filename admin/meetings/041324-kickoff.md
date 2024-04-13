@@ -55,13 +55,15 @@
 - Michael: Designer + dedicated artist 
 - Aaron: Backend + dedicated garlic farmer
 - Satvik: 
-- Jalen:
-- Warren:
-- Timothy:
-- Jan:
+- Jalen: 
+- Warren: Backend + team DJ
+- Timothy: 
+- Jan: 
 - Alex: Planner + Coachella 
-- Franky:
-- Esther:
+- Franky: 
+- Esther: 
 
 #### Video Editor: Esther
 
+### Issues:
+We experienced a merge conflict during our meeting. To resolve similar issues in the future, we can create a new branch and commit to there (given that everybody is working on different files). Then, we can merge the branch and the main branch and delete the branch.
