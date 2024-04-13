@@ -60,8 +60,8 @@
 - Timothy: 
 - Jan: 
 - Alex: Planner + Coachella 
-- Franky: 
-- Esther: 
+- Franky: Frontend + surfer who drinks a lot of water 
+- Esther: Frontend + lego builder
 
 #### Video Editor: Esther
 
