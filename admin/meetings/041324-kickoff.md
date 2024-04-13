@@ -13,6 +13,9 @@
 - Ethan Shih
 - Michael Pena
 
+### Absence:
+- Alex Turco
+
 ### Agenda:
   1. Role assignment
   2. Introductory Video
