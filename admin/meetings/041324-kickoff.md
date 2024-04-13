@@ -13,6 +13,9 @@
 - Ethan Shih
 - Michael Pena
 
+### Absence:
+- Alex Turco
+
 ### Agenda:
   1. Role assignment
   2. Introductory Video
@@ -47,3 +50,17 @@
 #### Esther's Idea:
 - Each person films themselves
 - Toss an object (e.g. ball) which would be caught be another person
+  
+#### Video's Plot:
+- Michael: Designer + dedicated artist 
+- Aaron: Backend + dedicated garlic farmer
+- Satvik: 
+- Jalen:
+- Warren:
+- Timothy:
+- Jan:
+- Alex: Planner + Coachella 
+- Franky:
+- Esther:
+
+#### Video Editor: Esther
