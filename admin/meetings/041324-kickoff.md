@@ -54,14 +54,15 @@
 #### Video's Plot:
 - Michael: Designer + dedicated artist 
 - Aaron: Backend + dedicated garlic farmer
-- Satvik: 
-- Jalen: 
+- Satvik: Team Lead + dedicated baker
+- Jalen: Backend + indecisive
 - Warren: Backend + team DJ
-- Timothy: 
-- Jan: 
+- Timothy: Team Lead + tortoise enjoyer 
+- Jan: Frontend + cook
 - Alex: Planner + Coachella 
 - Franky: Frontend + surfer who drinks a lot of water 
 - Esther: Frontend + lego builder
+- Ethan: Backend + Valorant player 
 
 #### Video Editor: Esther
 
