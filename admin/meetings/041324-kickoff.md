@@ -17,8 +17,12 @@
 - Alex Turco
 
 ### Agenda:
-  1. Role assignment
-  2. Introductory Video
+  1. Create GitHub
+  2. Role assignment
+  3. Introductory Video
+
+### Create GitHub:
+Aaron has created a GitHub for the team.
 
 ### Role Assignment:
 
@@ -52,7 +56,7 @@
 - Toss an object (e.g. ball) which would be caught be another person
   
 #### Video's Plot:
-- Michael: Designer + dedicated artist 
+- Michael: Designer + likes to simulate hurricanes and disasters for civilians 
 - Aaron: Backend + dedicated garlic farmer
 - Satvik: Team Lead + dedicated baker
 - Jalen: Backend + indecisive
@@ -68,3 +72,6 @@
 
 ### Issues:
 We experienced a merge conflict during our meeting. To resolve similar issues in the future, we can create a new branch and commit to there (given that everybody is working on different files). Then, we can merge the branch and the main branch and delete the branch.
+
+### Leftover Tasks:
+- Team Contract 
