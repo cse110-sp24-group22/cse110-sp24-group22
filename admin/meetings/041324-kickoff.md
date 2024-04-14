@@ -53,20 +53,21 @@ Aaron has created a GitHub for the team.
 
 #### Esther's Idea:
 - Each person films themselves
-- Toss an object (e.g. ball) which would be caught be another person
-  
-#### Video's Plot:
-- Michael: Designer + likes to simulate hurricanes and disasters for civilians 
-- Aaron: Backend + dedicated garlic farmer
-- Satvik: Team Lead + dedicated baker
-- Jalen: Backend + indecisive
-- Warren: Backend + team DJ
-- Timothy: Team Lead + tortoise enjoyer 
-- Jan: Frontend + cook
-- Alex: Planner + Coachella 
-- Franky: Frontend + surfer who drinks a lot of water 
-- Esther: Frontend + lego builder
-- Ethan: Backend + Valorant player 
+- Pass the phone to the next person
+- Talk about their fun facts
+
+#### Video Order:
+1. Jalen: Backend + indecisive
+2. Aaron: Backend + dedicated garlic farmer
+3. Timothy: Team Lead + tortoise enjoyer 
+4. Ethan: Backend + Valorant player 
+5. Esther: Frontend + lego builder
+6. Warren: Backend + team DJ
+7. Satvik: Team Lead + dedicated baker
+8. Franky: Frontend + surfer who drinks a lot of water 
+9. Jan: Frontend + cook
+10. Michael: Designer + likes to simulate hurricanes and disasters for civilians
+11. Alex: Planner + Coachella 
 
 #### Video Editor: Esther
 
