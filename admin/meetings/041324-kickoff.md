@@ -65,7 +65,7 @@ Aaron has created a GitHub for the team.
 6. Warren: Backend + team DJ
 7. Satvik: Team Lead + dedicated baker
 8. Franky: Frontend + surfer who drinks a lot of water 
-9. Jan: Frontend + cook
+9. Jan: Frontend + fell over the escalators when he was five
 10. Michael: Designer + likes to simulate hurricanes and disasters for civilians
 11. Alex: Planner + Coachella 
 
