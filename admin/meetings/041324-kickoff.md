@@ -1,4 +1,4 @@
-# Kickoff Meeting
+# Team 22: Kickoff Meeting
 ## Date: 4/13/2024
 
 ### Attendance:
