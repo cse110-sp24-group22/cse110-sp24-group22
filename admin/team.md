@@ -10,7 +10,7 @@
 
 ## Our Roster
 1. Satvik: Team Lead [github](https://github.com/SatvikS7)
-2. Timothy: Team Lead [github]
+2. Timothy: Team Lead [github](https://github.com/anematode)
 3. Alex: Planner [github]
 4. Michael: Designer [github]
 5. Jan: Frontend [github](https://github.com/jankwong705)
