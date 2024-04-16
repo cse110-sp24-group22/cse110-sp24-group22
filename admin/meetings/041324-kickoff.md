@@ -2,19 +2,17 @@
 ## Date: 4/13/2024
 
 ### Attendance:
-- Satvik Sriram
-- Jalen Chen
-- Warren 
-- Jan Kwong
-- Yi-Chan (Franky) Chiu
-- Esther Xiong
-- Aaron Shi
-- Timothy Herchen
-- Ethan Shih
-- Michael Pena
-
-### Absence:
-- Alex Turco
+- [x] Satvik Sriram
+- [x] Jalen Chen
+- [x] Warren 
+- [x] Jan Kwong
+- [x] Yi-Chan (Franky) Chiu
+- [x] Esther Xiong
+- [x] Aaron Shi
+- [x] Timothy Herchen
+- [x] Ethan Shih
+- [x] Michael Pena
+- [ ] Alex Turco
 
 ### Agenda:
   1. Create GitHub
