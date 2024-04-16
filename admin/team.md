@@ -13,8 +13,8 @@
 |---------|------------|---------------------------------------------------|
 | Satvik  | Team Lead  | [SatvikS7](https://github.com/SatvikS7)          |
 | Timothy | Team Lead  | [anematode](https://github.com/anematode)        |
-| Alex    | Planner    | N/A                                               |
-| Michael | Designer   | N/A                                               |
+| Alex    | Planner    | [alexturco7](https://github.com/alexturco7)      |
+| Michael | Designer   | [MichaelPena7](https://github.com/MichaelPena7)  |
 | Jan     | Frontend   | [jankwong705](https://github.com/jankwong705)    |
 | Esther  | Frontend   | [estherxiong](https://github.com/estherxiong)    |
 | Frankie | Frontend   | [y7chiu](https://github.com/y7chiu)              |
