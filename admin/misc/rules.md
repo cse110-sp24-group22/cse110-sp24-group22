@@ -1,5 +1,20 @@
 # CSE 110 Team 22 Working Agreement
-### Term Spring 2024
+### Team Name: Garlic Gardeners
+### Term Spring 2024  
+### Created: 4/16/2024
+
+## Team Members
+- [x] Satvik Sriram
+- [x] Jalen Chen
+- [x] Warren 
+- [x] Jan Kwong
+- [x] Yi-Chan (Franky) Chiu
+- [x] Esther Xiong
+- [x] Aaron Shi
+- [x] Timothy Herchen
+- [x] Ethan Shih
+- [x] Michael Pena
+- [x] Alex Turco
 
 ## Values
 - Communication
@@ -35,3 +50,5 @@ In the case of conflicts, the following steps should be taken:
 
 ## GitHub
 To prevent commit conflicts, notify of the rest of team before pushing anything.
+
+## Signature:
