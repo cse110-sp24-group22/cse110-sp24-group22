@@ -32,3 +32,5 @@ In the case of conflicts, the following steps should be taken:
 3. Consult the TA
 4. Consult the Professor
 
+## GitHub
+To prevent commit conflicts, notify of the rest of team before pushing anything.
