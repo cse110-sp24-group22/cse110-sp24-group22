@@ -1,20 +1,27 @@
-# CSE 110 Team 22 Working Agreement
-### Team Name: Garlic Gardeners
-### Term Spring 2024  
-### Created: 4/16/2024
+<h1 style="text-align: center;">CSE 110 Team 22 Working Agreement</h1>
+<h3 style="text-align: center;">Term: SP 24 | Creation date: 04/06/2024</h3>
 
-## Team Members
-- [x] Satvik Sriram
-- [x] Jalen Chen
-- [x] Warren 
-- [x] Jan Kwong
-- [x] Yi-Chan (Franky) Chiu
-- [x] Esther Xiong
-- [x] Aaron Shi
-- [x] Timothy Herchen
-- [x] Ethan Shih
-- [x] Michael Pena
-- [x] Alex Turco
+## Group Identification
+Course Number: CSE 110\
+Instructor: Thomas A. Powell\
+Team Name: Garlic Gardeners\
+Term: Spring 2024  \
+Created: 4/16/2024
+
+## Team Member Info
+| Name    | Role       | Github Page                                           |
+|---------|------------|---------------------------------------------------|
+| Satvik  | Team Lead  | [SatvikS7](https://github.com/SatvikS7)          |
+| Timothy | Team Lead  | [anematode](https://github.com/anematode)        |
+| Alex    | Planner    | [alexturco7](https://github.com/alexturco7)      |
+| Michael | Designer   | [MichaelPena7](https://github.com/MichaelPena7)  |
+| Jan     | Frontend   | [jankwong705](https://github.com/jankwong705)    |
+| Esther  | Frontend   | [estherxiong](https://github.com/estherxiong)    |
+| Frankie | Frontend   | [y7chiu](https://github.com/y7chiu)              |
+| Jalen   | Backend    | [jchen054](https://github.com/jchen054)          |
+| Aaron   | Backend    | [Aaron3963](https://github.com/Aaron3963)        |
+| Ethan   | Backend    | [EdgarNonsense](https://github.com/EdgarNonsense)|
+| Warren  | Backend    | [warren231](https://github.com/warren231)        |
 
 ## Values
 - Communication
@@ -49,6 +56,10 @@ In the case of conflicts, the following steps should be taken:
 4. Consult the Professor
 
 ## GitHub
-To prevent commit conflicts, notify of the rest of team before pushing anything.
+- To prevent merge conflicts and progress loss, notify of the rest of team before doing important actions.
 
-## Signature:
+<br/><br/>
+<br/><br/>
+<br/><br/>
+<br/><br/>
+ <h2 style="text-align: right;">Signature: ________________</h2>
