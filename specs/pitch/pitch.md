@@ -5,8 +5,8 @@
 - Make journaling a fun experience while still allowing plenty of personal expression and reflection. Adapt the amount of ***scaffolding*** commensurately with how emootionally stunted the developer is.
     - Scaffolding: Features meant to encourage people to journal and journal thoughtfully.
 - Allow developers to remember random bolts of brilliance.
-# Risks
 
+# Risks
 - Excessive complexity, features which no one will ever use despite considerable developer effort
     - Example: Facebook's Metaverse
 - Poor performance after a few hundred journal entries, making the journal 
