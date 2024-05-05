@@ -1,5 +1,4 @@
 # Purpose
-
 - Making good habits of recording anything the developers do on their end.
 - Provide a medium for developers to maintain organization of their work.
 - Encourage developers and other shut-ins to journal more.
