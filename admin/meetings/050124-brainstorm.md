@@ -23,7 +23,7 @@
 
 ### Warmup retrospective
 
-- Warren: Better assignment of 
+- Warren: Would like better assignment of tasks, somewhat unclear who was going to do what
 
 ### TA feedback
 
