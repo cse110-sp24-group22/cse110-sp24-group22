@@ -23,6 +23,9 @@
 ### General discussion
 
 ## CI/CD Pipeline
-- Definition of "done" code: functional code
+- Definition of "done" code: formatted and functional code
 - Definition of "done-done" code: documented, ready-to-merge, tested, fixed-style code 
 - Pipeline will not check codestyle
+- Teams divided by features
+  - Each team will have their own code reviewer
+- Final Code Reviewer: Aaron
