@@ -43,3 +43,7 @@
 - Warren and Michael
 - Frankie and Timothy 
 - Jan, Satvik, and Esther
+
+### Designing
+- Changed tree to garlic based on Esther's idea
+- 
