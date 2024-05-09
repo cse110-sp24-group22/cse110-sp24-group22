@@ -31,6 +31,7 @@
 - Teams divided by features
   - Each team will have their own code reviewer
 - Final Code Reviewer: Aaron
+- Start working on it today
 - Tasks: make a diagram, Markdown file, and demonstration video
 
 ### ADR (Architectural Decision Records)
