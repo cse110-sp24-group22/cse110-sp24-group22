@@ -20,7 +20,8 @@
 
 1. Discuss CI/CD Pipeline 
 2. Discuss ADR (Architectural Decision Records)
-3. Assign teams for Lab 6 
+3. Assign teams for Lab 6
+4. Begin Design Stage
 
 ## General discussion
 
@@ -33,9 +34,10 @@
 - Final Code Reviewer: Aaron
 - Start working on it today
 - Tasks: make a diagram, Markdown file, and demonstration video
+- Tim and Aaron decided to keep it simple and use Jest and one more for pipeline
 
 ### ADR (Architectural Decision Records)
-- Write down what the big decision is, who checks the decision, type of decision, considered options, decision outcome
+- Write down what the big decision is, who checks the decision, the type of decision, considered options, decision outcome
 
 ### Teams for Lab 6
 - Jalen and Aaron
@@ -44,6 +46,26 @@
 - Frankie and Timothy 
 - Jan, Satvik, and Esther
 
-### Designing
-- Changed tree to garlic based on Esther's idea
-- 
+### Design Stage
+- Everyone minus the pipeline team (Aaron + Tim) began working on a rough design of the front page of the website
+- Based on the description made on Friday, many people drew out a tree and leaves representing documents
+- Satvik used branches as a method of organization, branch = month
+- Esther pitched a new idea to flip the current design; instead of a tree with branches to leaves of entries, we implement garlic identity and use the roots of the garlic as the tree, offshoots = branches, root endpoints = leaves
+- "Above ground" will be saved for decorative area/place for rewards for the streak, sun contains the streak number, TBD
+- Next split into the wireframe team (Esther, Michael, Ethan) and User Flow team (Satvik, Warren, Frankie, Alex, Jalen)
+  
+#### Wireframe Team
+- began working on Figma
+
+#### User Flow Team
+- began working on Miro
+- decided on how layers of the website, found that most actions can be done on the front page, the website will have more breadth rather than depth -> minimalism
+- the second layer is the text editor
+
+### Leftover Tasks
+- CI/CD pipeline
+- User Flow
+- Wireframes
+- Review Github file naming, commit/error template, clean repository,  
+
+
