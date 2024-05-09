@@ -46,6 +46,10 @@
 - Frankie and Timothy 
 - Jan, Satvik, and Esther
 
+### Pitch Feedback
+- Decided the nonfunctional features to focus on our performance and accessibility (minimum 70 on both based on Lighthouse)
+- Get a minimum score of 70 in these two categories.
+
 ### Design Stage
 - Everyone minus the pipeline team (Aaron + Tim) began working on a rough design of the front page of the website
 - Based on the description made on Friday, many people drew out a tree and leaves representing documents
