@@ -24,4 +24,5 @@
 
 ## CI/CD Pipeline
 - Definition of "done" code: functional code
-- Definition of "done-done" code: 
+- Definition of "done-done" code: documented, ready-to-merge, tested, fixed-style code 
+- Pipeline will not check codestyle
