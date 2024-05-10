@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
 docs
-docs\decisions
+docs/decisions
 package-lock.json
 package.json
