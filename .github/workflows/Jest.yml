@@ -1,0 +1,22 @@
+name: Jest Testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Check_Jest:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Unit Tests
+      run: npm test
