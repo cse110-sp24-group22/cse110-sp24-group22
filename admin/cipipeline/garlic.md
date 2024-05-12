@@ -18,6 +18,14 @@
 - Description\
   JSDocs will generate a doc webpage for our project. But devs **must** annotate their code correctly for JSDocs to compile. Enforcing it when coding.
 
+## Manual Code Review
+- Status: `Active`
+- Using: GitHub
+- Triggered: Pull Request
+- Requirements to pass: `manual`
+- Description\
+  After splitting into small working groups, there will be code reviewers in each group. They will handle PR reviews within the group. Aaron will be reviewing when the branch is merging to `main`.
+
 ## Maintainability
 - Status: `Active`
 - Using: CodeClimate
