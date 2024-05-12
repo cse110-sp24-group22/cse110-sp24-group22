@@ -1,4 +1,5 @@
 # Project **Garlic**
+[![Maintainability](https://api.codeclimate.com/v1/badges/89c9e08de03e1c342c76/maintainability)](https://codeclimate.com/github/cse110-sp24-group22/cse110-sp24-group22/maintainability)\
 This is a project developed by team 22 of SP24 CSE 110.
 ## Project description
 We are dedicated to bring the most organic products to your hands, especially garlics!
