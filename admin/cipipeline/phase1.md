@@ -52,4 +52,4 @@
   Will add E2E testing when we have a framework of our project.
 
 ## CI/CD Diagram
-![diagram](CICD_Diagram.jpg)
+![diagram](phase1.jpg)
