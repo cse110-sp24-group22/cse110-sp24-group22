@@ -1,20 +1,18 @@
----
-name: Feature Request
-about: Add new features to the project
-title: "[Feature]"
-labels: Feature
-assignees: ''
+# Name
 
----
+## Short discrption
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## Assignees
+  (using @cse110-sp24-group22/[teamname]) or names
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## Feature's checkpoints
+- [ ] A
+- [ ] B
+- [ ] C
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## Optional checkpoints
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## ETA
+
+## Note
+**Do not forget** to assign your group on the right, as well as link the corresponding branch/PR with it.
