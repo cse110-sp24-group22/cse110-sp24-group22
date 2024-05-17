@@ -15,6 +15,14 @@
   </head>
   <body>
 
+    <!-- Title and x button -->
+    <div class="title-bar">
+      <input type="text" id="titleInput" placeholder="Enter title here">
+      <button>x</button>
+    </div>
+    
+    <p id="timestamp"></p>
+
     <!-- Create the editor container -->
     <div id="editor">
       <p>Hello World!</p>
@@ -22,11 +30,21 @@
       <p><br /></p>
     </div>
 
+    <button>Save</button>
+
     <!-- Initialize Quill editor -->
     <script>
+
+      // Store the opening time of the editor
+      const editorOpenTime = new Date();
+
       const quill = new Quill("#editor", {
         theme: "snow",
       });
+
+      // Display opening time timestamp
+      document.getElementById("timestamp").innerText = "Timestamp: " + editorOpenTime.toLocaleString();
+
     </script>
   </body>
 </html>
