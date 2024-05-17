@@ -47,5 +47,10 @@
 
 ### What to complete in the sprint
 
+#### Feature Team: Root System
 - Timothy: Root growing
 - Satvik: 30% of the website elements
+
+#### Feature Team: Doc Editing Features
+
+#### Design Team
