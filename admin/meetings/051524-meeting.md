@@ -52,5 +52,9 @@
 - Satvik: 30% of the website elements
 
 #### Feature Team: Doc Editing Features
+- Quill text editor with image and screenshot insertion
+- Store using `LocalStorage`
+- Basic journal layout and CSS
+- Saving & Auto Saving
 
 #### Design Team
