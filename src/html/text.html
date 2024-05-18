@@ -11,6 +11,7 @@
 
       <!-- Include the Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+    <script src="../scripts/text.js" type="module"></script>
     <title>Document</title>
   </head>
   <body>
@@ -25,9 +26,6 @@
 
     <!-- Create the editor container -->
     <div id="editor">
-      <p>Hello World!</p>
-      <p>Some initial <strong>bold</strong> text</p>
-      <p><br /></p>
     </div>
 
     <button>Save</button>
@@ -38,9 +36,6 @@
       // Store the opening time of the editor
       const editorOpenTime = new Date();
 
-      const quill = new Quill("#editor", {
-        theme: "snow",
-      });
 
       // Display opening time timestamp
       document.getElementById("timestamp").innerText = "Timestamp: " + editorOpenTime.toLocaleString();
