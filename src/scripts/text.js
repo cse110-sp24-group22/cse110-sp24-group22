@@ -1,47 +1,65 @@
 window.addEventListener("DOMContentLoaded", init);
 
-let journalList = []
+let journalList = [];
 
 function init() {
-    journalList = getJournals();
+    journalList = getJournalList();
 
+    const listElement = document.getElementById('journalList');
+    const closeButton = document.getElementById('closeJournal');
+    const journalContainer = document.querySelector('.journal');
 
-    const quill = new Quill("#editor", {
-        theme: "snow",
+    listElement.addEventListener('click', function(event) {
+      if (event.target.tagName === 'LI') {
+        // Show the journal container
+        journalContainer.style.visibility = "visible";
+      }
     });
 
-    // Retrieve the saved content from localStorage and set it to the editor if available
-    var savedContent = localStorage.getItem("GarlicNotes");
-    if (savedContent) {
-        quill.setContents(JSON.parse(savedContent), "api");
-    }
-
-    quill.on("text-change", function () {
-        delta = quill.getContents();
-        localStorage.setItem(
-            "quillContent",
-            JSON.stringify({ timeHash: quill.getContents() })
-        );
+    closeButton.addEventListener('click', function(event) {
+        journalContainer.style.visibility = "hidden";
     });
 }
 
-function getJournals() {
-    if (localStorage.length === 0) {
+
+function getJournalList() {
+    if (!localStorage.getItem("GarlicNotes")) {
         return [];
+    } else {
+        return JSON.parse(localStorage.getItem("GarlicNotes"));
     }
-    else { return JSON.parse(localStorage.getItem('GarlicNotes')); }
 }
 
-function getJournalByTimeHash() {
+function getJournalByID(id) {
+    return getJournalList().find((item) => item.id === id);
+}
+
+function loadJournal(id) { 
 
 }
 
 function createJournal() {
+    const quill = new Quill("#editor", {
+        theme: "snow",
+    });
 
+    const stamp = new Date().getTime();
+
+    const noteObject = {
+        timestamp: stamp,
+        "title": "",
+        tags: [],
+        delta: JSON.stringify(quill.getContents()),
+    };
+
+    journalList.push(noteObject);
+    saveJournal(journalList);
 }
 
-function addJournal() {
-    
+function saveJournal(journalList) {
+    localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
 function removeJournal() { }
+
+function clearLocalStorage() { }

@@ -17,12 +17,19 @@
     <script src="../scripts/text.js" type="module"></script>
     <title>Document</title>
   </head>
+
   <body>
+    <ul id="journalList">
+      <li data-title="Journal Entry 1">1716083360980</li>
+      <li data-title="Journal Entry 2">Journal Entry 2</li>
+      <li data-title="Journal Entry 3">Journal Entry 3</li>
+    </ul>
+
     <!-- Title and x button -->
     <div class="journal">
       <div class="title-bar">
         <input type="text" id="titleInput" placeholder="Enter title here" />
-        <button>x</button>
+        <button id = "closeJournal">x</button>
       </div>
 
       <p id="timestamp"></p>
