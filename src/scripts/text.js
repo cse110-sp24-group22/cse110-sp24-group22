@@ -4,23 +4,32 @@ let journalList = [];
 
 function init() {
     journalList = getJournalList();
+    
 
-    const listElement = document.getElementById('journalList');
-    const closeButton = document.getElementById('closeJournal');
-    const journalContainer = document.querySelector('.journal');
+    const listElement = document.getElementById("journalList");
+    const closeButton = document.getElementById("closeJournal");
+    const journalContainer = document.querySelector(".journal");
 
-    listElement.addEventListener('click', function(event) {
-      if (event.target.tagName === 'LI') {
-        // Show the journal container
-        journalContainer.style.visibility = "visible";
-      }
+    listElement.addEventListener("click", function (event) {
+        if (event.target.tagName === "LI") {
+            // Show the journal container
+            journalContainer.style.visibility = "visible";
+
+            const noteObject = getJournalByTimestamp(event.target.innerText);
+            let quill = displayJournal(noteObject.timestamp, "#editor");
+
+            quill.on("text-change", () => {
+                const newDelta = quill.getContents();
+                noteObject.delta = newDelta;
+                saveJournal(journalList);
+            });
+        }
     });
 
-    closeButton.addEventListener('click', function(event) {
+    closeButton.addEventListener("click", function (event) {
         journalContainer.style.visibility = "hidden";
     });
 }
-
 
 function getJournalList() {
     if (!localStorage.getItem("GarlicNotes")) {
@@ -30,12 +39,18 @@ function getJournalList() {
     }
 }
 
-function getJournalByID(id) {
-    return getJournalList().find((item) => item.id === id);
+function getJournalByTimestamp(timestamp) {
+    return journalList.find((entry) => entry.timestamp == timestamp);
 }
 
-function loadJournal(id) { 
+function displayJournal(timestamp, bindingElement) {
+    const quill = new Quill(bindingElement, {
+        theme: "snow",
+    });
 
+    let delta = getJournalByTimestamp(timestamp).delta.ops;
+    quill.setContents(delta, "api");
+    return quill;
 }
 
 function createJournal() {
@@ -47,9 +62,9 @@ function createJournal() {
 
     const noteObject = {
         timestamp: stamp,
-        "title": "",
+        title: "",
         tags: [],
-        delta: JSON.stringify(quill.getContents()),
+        delta: quill.getContents(),
     };
 
     journalList.push(noteObject);
