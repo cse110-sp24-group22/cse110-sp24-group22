@@ -1,95 +1,83 @@
 /* Styles for the title bar */
-  .title-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #f3f3f3;
-      padding: 10px 20px;
-      border-bottom: 1px solid #ccc;
-      margin-bottom: 5px;
-  }
-  
-  #titleInput {
-    flex-grow: 0;
-    width: 200px; 
-    padding: 8px 10px;
-    font-size: 12px;
-    border: 1px solid #ccc;
-    border-radius: 60px;
-    margin-right: 400px;
-  }
-  
-  .title-bar button {
-    background-color: red;
-    color: black;
-    border: none;
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 10px;
-    float: right;
-  }
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* Optional: background color for the page */
+}
 
-  /* Style the toolbar container */
-  .ql-toolbar {
-    background-color: #f2f2f2;
-    border-bottom: 10px solid #ccc;
-    width: 500px;
-    padding: 10px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
-  }
+.journal {
+  width: 40%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align all child elements */
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff; /* Optional: background color */
+}
 
-  /* Style the buttons within the toolbar */
-  .ql-toolbar button {
-    background-color: #fff;
-    color: #333;
-    border: 10px solid #ccc;
-    padding: 3px 5px;
-    margin-right: 5px;
-    cursor: pointer;
-  }
-  
-  .title-bar button:hover {
-    background-color: white;
-  }
-  
-  /* Styles for the timestamp */
-  #timestamp {
-    margin: 1px 25px;
-    font-size: 12px;
-    color: #666;
-    margin-bottom: 35px;
-  }
-  
-  /* Styles for the editor container */
-  #editor {
-    height: 550px;
-    width: 1250px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin: 0 auto;
-    margin-bottom: 25px;
-  }
-  
-  /* Styles for the save button */
-  body > button {
-    display: block;
-    margin: 5px auto;
-    padding: 10px 20px;
-    font-size: 14px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    float: right;
-  }
-  
-  body > button:hover {
-    background-color: #45a049;
-  }
-  
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f3f3f3;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  width: 100%; /* Ensure it takes full width */
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+#titleInput {
+  flex-grow: 1;
+  padding: 8px 10px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 60px;
+  margin-right: 10px;
+}
+
+.title-bar button {
+  background-color: red;
+  color: black;
+  border: none;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.title-bar button:hover {
+  background-color: white;
+}
+
+/* Styles for the timestamp */
+#timestamp {
+  align-self: flex-start; /* Align timestamp to the start */
+  margin: 10px 0;
+  font-size: 12px;
+  color: #666;
+}
+
+
+/* Styles for the save button */
+.journal > button {
+  align-self: flex-end;
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.journal > button:hover {
+  background-color: #45a049;
+}

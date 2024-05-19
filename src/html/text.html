@@ -4,45 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="../css/text.css">
+    <link rel="stylesheet" href="../css/text.css" />
 
-        <!-- Include Quill stylesheet -->
-        <link
-        href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
-        rel="stylesheet"
-      />
+    <!-- Include Quill stylesheet -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+      rel="stylesheet"
+    />
 
-      <!-- Include the Quill library -->
+    <!-- Include the Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
     <script src="../scripts/text.js" type="module"></script>
     <title>Document</title>
   </head>
   <body>
-
     <!-- Title and x button -->
-    <div class="title-bar">
-      <input type="text" id="titleInput" placeholder="Enter title here">
-      <button>x</button>
+    <div class="journal">
+      <div class="title-bar">
+        <input type="text" id="titleInput" placeholder="Enter title here" />
+        <button>x</button>
+      </div>
+
+      <p id="timestamp"></p>
+
+      <!-- Create the editor container -->
+      <div id="editor"></div>
+      <button>Save</button>
     </div>
-    
-    <p id="timestamp"></p>
-
-    <!-- Create the editor container -->
-    <div id="editor">
-    </div>
-
-    <button>Save</button>
-
-    <!-- Initialize Quill editor -->
-    <script>
-
-      // Store the opening time of the editor
-      const editorOpenTime = new Date();
-
-
-      // Display opening time timestamp
-      document.getElementById("timestamp").innerText = "Timestamp: " + editorOpenTime.toLocaleString();
-
-    </script>
   </body>
 </html>
