@@ -9,6 +9,7 @@ function init() {
     const listElement = document.getElementById("journalList");
     const closeButton = document.getElementById("closeJournal");
     const journalContainer = document.querySelector(".journal");
+    const titleInput = document.getElementById("titleInput");
 
     listElement.addEventListener("click", function (event) {
         if (event.target.tagName === "LI") {
@@ -25,6 +26,13 @@ function init() {
             });
         }
     });
+    
+    titleInput.addEventListener("input", function (event) {
+        // Update title in JournalList when title input changes
+        const noteObject = getJournalByTimestamp(event.target.innerText);
+        updateTitle(noteObject.timestamp, titleInput.value);
+    });
+
 
     closeButton.addEventListener("click", function (event) {
         journalContainer.style.visibility = "hidden";
@@ -74,6 +82,13 @@ function createJournal() {
 function saveJournal(journalList) {
     localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
+
+function updateTitle(timestamp, newTitle) {
+    const noteObject = getJournalByTimestamp(timestamp);
+    noteObject.title = newTitle;
+    saveJournal(journalList);
+}
+
 
 function removeJournal() { }
 
