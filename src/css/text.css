@@ -20,8 +20,16 @@ html, body {
 }
 
 #journalList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #ccc; /* Add border to each list element */
   padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+#journalList li span {
+  flex-grow: 1; /* Allow the title to take up as much space as possible */
 }
 
 /* Adjusted styles for the title bar */
@@ -114,7 +122,7 @@ html, body {
   font-size: 12px;
   cursor: pointer;
   border-radius: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .delete-button:hover {
