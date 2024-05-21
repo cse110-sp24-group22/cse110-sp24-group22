@@ -28,6 +28,7 @@ function init() {
     const journalContainer = document.querySelector(".journal");
     const titleInput = document.getElementById("titleInput");
     const saveButton = document.getElementById("saveJournal");
+    const addButton = document.querySelector("add");
 
     // Load journal list from localStorage
     //journalList = getJournalList();
@@ -69,6 +70,12 @@ function init() {
                 });
             }
         }
+    });
+
+    //add journal
+    addButton.addEventListener("click", () => {
+        createJournal();
+        updateUI();
     });
 
     titleInput.addEventListener("input", function(event) {
@@ -146,6 +153,8 @@ function createJournal() {
         tags: [],
         delta: quill.getContents(),
     };
+
+    displayJournal(stamp, "#editor");
 
     journalList.push(noteObject);
     saveJournal(journalList);
