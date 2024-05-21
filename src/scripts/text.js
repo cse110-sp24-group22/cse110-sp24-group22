@@ -1,42 +1,98 @@
 window.addEventListener("DOMContentLoaded", init);
 
-let journalList = [];
+let journalList = [{
+        timestamp: "1716097247973", // Example timestamp
+        title: "Journal Entry 1",
+        tags: [],
+        delta: { ops: [{ insert: 'Initial content' }] }, // Example delta
+    },
+    {
+        timestamp: "1723097247973", // Example timestamp
+        title: "Journal Entry 2",
+        tags: [],
+        delta: { ops: [{ insert: 'Initial content' }] }, // Example delta
+    },
+    {
+        timestamp: "1736097247973", // Example timestamp
+        title: "Journal Entry 3",
+        tags: [],
+        delta: { ops: [{ insert: 'Initial content' }] }, // Example delta
+    }
+];
+
+let currentQuill = null; // Maintain reference to current Quill instance
 
 function init() {
-    journalList = getJournalList();
-    
-
     const listElement = document.getElementById("journalList");
     const closeButton = document.getElementById("closeJournal");
     const journalContainer = document.querySelector(".journal");
     const titleInput = document.getElementById("titleInput");
+    const saveButton = document.getElementById("saveJournal");
 
-    listElement.addEventListener("click", function (event) {
+    // Load journal list from localStorage
+    //journalList = getJournalList();
+
+    listElement.addEventListener("click", function(event) {
         if (event.target.tagName === "LI") {
             // Show the journal container
             journalContainer.style.visibility = "visible";
 
-            const noteObject = getJournalByTimestamp(event.target.innerText);
-            let quill = displayJournal(noteObject.timestamp, "#editor");
+            const timestamp = event.target.getAttribute("data-timestamp");
+            var noteObject = getJournalByTimestamp(timestamp);
 
-            quill.on("text-change", () => {
-                const newDelta = quill.getContents();
-                noteObject.delta = newDelta;
-                saveJournal(journalList);
-            });
+            if (noteObject) {
+                // Reset previous Quill instance if exists
+                if (currentQuill) {
+                    currentQuill.setContents([]);
+                    currentQuill.off("text-change");
+                }
+
+                currentQuill = displayJournal(timestamp, "#editor");
+
+                currentQuill.on("text-change", () => {
+                    const newDelta = currentQuill.getContents();
+                    noteObject.delta = newDelta;
+                    saveJournal(journalList);
+                });
+
+                titleInput.value = noteObject.title;
+
+                closeButton.addEventListener("click", function(event) {
+                    journalContainer.style.visibility = "hidden";
+                    noteObject = null;
+                });
+
+                saveButton.addEventListener("click", function(event) {
+                    updateTitleAndSave(timestamp, titleInput.value);
+                    // Update UI after saving the title
+                    updateUI();
+                });
+            }
         }
     });
-    
-    titleInput.addEventListener("input", function (event) {
+
+    titleInput.addEventListener("input", function(event) {
         // Update title in JournalList when title input changes
         const noteObject = getJournalByTimestamp(event.target.innerText);
-        updateTitle(noteObject.timestamp, titleInput.value);
+        if (noteObject) {
+            updateTitle(noteObject.timestamp, titleInput.value);
+            updateUI(); // Update UI after updating the title
+        }
     });
 
+    // Function to update UI with the latest journal list
+    function updateUI() {
+        listElement.innerHTML = ""; // Clear previous entries
+        journalList.forEach(entry => {
+            const listItem = document.createElement("li");
+            listItem.textContent = entry.title;
+            listItem.setAttribute("data-timestamp", entry.timestamp);
+            listElement.appendChild(listItem);
+        });
+    }
 
-    closeButton.addEventListener("click", function (event) {
-        journalContainer.style.visibility = "hidden";
-    });
+    // Initial update of UI
+    updateUI();
 }
 
 function getJournalList() {
@@ -86,10 +142,9 @@ function saveJournal(journalList) {
 function updateTitle(timestamp, newTitle) {
     const noteObject = getJournalByTimestamp(timestamp);
     noteObject.title = newTitle;
-    saveJournal(journalList);
 }
 
-
-function removeJournal() { }
-
-function clearLocalStorage() { }
+function updateTitleAndSave(timestamp, newTitle) {
+    updateTitle(timestamp, newTitle);
+    saveJournal(journalList);
+}
