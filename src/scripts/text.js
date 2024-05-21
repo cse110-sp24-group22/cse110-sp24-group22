@@ -87,6 +87,22 @@ function init() {
             const listItem = document.createElement("li");
             listItem.textContent = entry.title;
             listItem.setAttribute("data-timestamp", entry.timestamp);
+
+            // Create delete button
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.classList.add("delete-button");
+            deleteButton.setAttribute("data-timestamp", entry.timestamp);
+
+            // Add event listener to delete button
+            deleteButton.addEventListener("click", function(event) {
+            event.stopPropagation(); // Prevent LI click event
+            const timestamp = event.target.getAttribute("data-timestamp");
+            deleteJournal(timestamp);
+            updateUI();
+            });
+
+            listItem.appendChild(deleteButton);
             listElement.appendChild(listItem);
         });
     }
@@ -148,3 +164,8 @@ function updateTitleAndSave(timestamp, newTitle) {
     updateTitle(timestamp, newTitle);
     saveJournal(journalList);
 }
+
+function deleteJournal(timestamp) {
+    journalList = journalList.filter(entry => entry.timestamp != timestamp);
+    saveJournal(journalList);
+  }
