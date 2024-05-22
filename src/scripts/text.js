@@ -74,7 +74,10 @@ function init() {
 
     //add journal
     addButton.addEventListener("click", () => {
-        createJournal();
+        const timeStamp = new Date().getTime();
+        createJournal(timeStamp);
+        journalContainer.style.visibility = "visible";
+        displayJournal(timeStamp, '#editor');
         updateUI();
     });
 
@@ -130,6 +133,22 @@ function getJournalByTimestamp(timestamp) {
     return journalList.find((entry) => entry.timestamp == timestamp);
 }
 
+function createJournal(timeStamp) {
+    const quill = new Quill("#editor", {
+        theme: "snow",
+    });
+
+    const noteObject = {
+        timestamp: timeStamp,
+        title: "",
+        tags: [],
+        delta: quill.getContents(),
+    };
+
+    journalList.push(noteObject);
+    saveJournal(journalList);
+}
+
 function displayJournal(timestamp, bindingElement) {
     const quill = new Quill(bindingElement, {
         theme: "snow",
@@ -138,26 +157,6 @@ function displayJournal(timestamp, bindingElement) {
     let delta = getJournalByTimestamp(timestamp).delta.ops;
     quill.setContents(delta, "api");
     return quill;
-}
-
-function createJournal() {
-    const quill = new Quill("#editor", {
-        theme: "snow",
-    });
-
-    const stamp = new Date().getTime();
-
-    const noteObject = {
-        timestamp: stamp,
-        title: "",
-        tags: [],
-        delta: quill.getContents(),
-    };
-
-    displayJournal(stamp, "#editor");
-
-    journalList.push(noteObject);
-    saveJournal(journalList);
 }
 
 function saveJournal(journalList) {
