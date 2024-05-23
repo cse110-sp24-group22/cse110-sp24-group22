@@ -31,5 +31,14 @@
 - Mini stand-ups among small teams 
 - Mini stand-ups among small teams should be recorded
 
-### Lab Teams 
+### Get our work done
+- Jan & Aaron: bug-fix text-editing
+- Alex & Frankie & Satvik & Jalen: HTML
+- Tim: features 
 
+### Lab Teams 
+- Aaron & Esther
+- Jalen & Warren
+- Tim & Alex 
+- Satvik & Frankie 
+- Jan & Ethan & Michael
