@@ -1,4 +1,5 @@
-let journalList = JSON.parse(localStorage.getItem("GarlicNotes"));
+//Store the data into localStorage before staring all the things.
+let journalList = getJournalList();
 
 document.addEventListener("DOMContentLoaded", init());
 
@@ -7,16 +8,19 @@ function init() {
 }
 
 function displayList (journalList){
+    //Iterate through list and append them to HTML
     journalList.forEach((item) => {
         createListItem(item);
     });
 }
 
-// Create list elements and append them to the list
+
 function createListItem(item) {
-    const itemList = document.getElementById("item-list");
+  //Get the essential elements
+  const itemList = document.getElementById("item-list");
   const listItem = document.createElement("li");
   const title = document.createElement("div");
+
 
   title.textContent = item.title;
   listItem.appendChild(title);
@@ -24,6 +28,7 @@ function createListItem(item) {
   const details = document.createElement("div");
   details.style.fontSize = "small";
 
+//   Get and set timestamp
   const timestamp = new Date(parseInt(item.timestamp)).toLocaleString();
   const timestampText = document.createElement("div");
   timestampText.textContent = `Timestamp: ${timestamp}`;
@@ -38,7 +43,7 @@ function createListItem(item) {
     tagElement.textContent = tag;
     tagElement.className = "tag";
     tagElement.onclick = () => {
-      // Event triggered when clicking into tag. Future feature for filter search
+    // Event triggered when clicking into tag. Future feature for filter search
     };
     tagsContainer.appendChild(tagElement);
     tagsContainer.appendChild(document.createTextNode(" ")); // Add space between tags
@@ -53,6 +58,7 @@ function createListItem(item) {
   deleteButton.className = "delete-button";
   deleteButton.style.display = "none";
 
+// EventListener: When clicking delete, delete from page and LocalStorage
   deleteButton.onclick = () => {
     listItem.remove();
     deleteJournal(item.timestamp);
@@ -66,6 +72,7 @@ function createListItem(item) {
     deleteButton.style.display = "none";
   };
 
+//   Append the entire list item into the list
   itemList.appendChild(listItem);
 }
 
