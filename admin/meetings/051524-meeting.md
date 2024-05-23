@@ -1,9 +1,13 @@
 # Team 22:
+
 ## Date: 5/15/2024
+
 ## Location: Geisel and Zoom
+
 ## Time: 7pm-9pm
 
 ## Attendance:
+
 - [x] Satvik Sriram
 - [x] Jalen Chen
 - [x] Warren
@@ -48,13 +52,18 @@
 ### What to complete in the sprint
 
 #### Feature Team: Root System
+
 - Timothy: Root growing
 - Satvik: 30% of the website elements
 
 #### Feature Team: Doc Editing Features
+
 - Quill text editor with image and screenshot insertion
 - Store using `LocalStorage`
 - Basic journal layout and CSS
 - Saving & Auto Saving
 
 #### Design Team
+
+- Finished layout of the front page
+- Need to figure out how the design of the journaling entries
