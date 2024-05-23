@@ -42,3 +42,10 @@
 - Tim & Alex 
 - Satvik & Frankie 
 - Jan & Ethan & Michael
+
+### Home Page/User Flow Mock-up
+- We clarified home page design with members from all teams
+- This led to discussions on exactly how the user interacts with the journal and all other windows/screens that should be present
+- Esther and Jalen brought up including multiple entries per day for user experience. This was accounted for by linking a day's node to an existing listview screen where a search query is passed in for that day will be made.
+- Menu was scrapped due to lack of functionality
+- Drew mockup on a white board and will be added to the Miro project board
