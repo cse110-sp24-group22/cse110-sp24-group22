@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Page</title>
+    <link rel="stylesheet" href="../css/list.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Item List</h1>
+            <button onclick="location.href='main.html'" class="return-button">Return to Main Page</button>
+        </header>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." class="search-bar">
+        </div>
+        <div class="add-button-container">
+            <button class="new-journal-button">New Journal</button>
+        </div>
+        <ul class="item-list" id="item-list">
+            <!-- Items will be dynamically inserted here -->
+        </ul>
+    </div>
+</body>
+<script src="../scripts/list.js"></script>
+</html>
