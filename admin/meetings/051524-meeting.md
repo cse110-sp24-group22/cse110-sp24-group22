@@ -58,3 +58,5 @@
 - Saving & Auto Saving
 
 #### Design Team
+- Finished layout of the front page
+- Need to figure out how the design of the journaling entries
