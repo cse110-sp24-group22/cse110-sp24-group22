@@ -4,9 +4,7 @@ html, body {
 }
 
 .section {
-    height: 200vh;
-    background-size: cover;
-    background-attachment: fixed;
+    height: 75vw;
     padding: 0;
     margin: 0;
 }
@@ -15,34 +13,19 @@ html, body {
     background: url('/src/assets/background_top_soil.svg'), url('/src/assets/background_sky.svg');
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center top;
 }
 
 .section2 {
     background: url('/src/assets/background_deep_ground.svg');
     background-repeat: no-repeat;
     background-size: cover;
-}
-/*
-background-container {
-    display: block;
-    margin: 0;
-    padding: 0;
-    border: 0;
+    background-position: center top;
 }
 
-.levelOne {
-    background-image: url('/src/assets/background_top_soil.svg'), url('/src/assets/background_sky.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    height:fit-content;
-    margin: 0;
-}
 
-.levelTwo {
-    background-image: url('/src/assets/background_deep_ground.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    height:fit-content;
-    margin: 0;
+@media screen and (max-width: 560px) {
+    .section {
+        height: 420px;
+    }
 }
-*/
