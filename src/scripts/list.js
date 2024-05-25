@@ -21,7 +21,6 @@ function createListItem(item) {
   const listItem = document.createElement("li");
   const title = document.createElement("div");
 
-
   title.textContent = item.title;
   listItem.appendChild(title);
 
@@ -85,7 +84,7 @@ function getJournalList() {
 }
 
 function deleteJournal(timestamp) {
-  journalList = journalList.filter(entry => entry.timestamp != timestamp);
+  journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournal(journalList);
 }
 
@@ -110,7 +109,7 @@ function getMatchingEntries(list, query) {
 
 function getTextFromDelta(delta) {
   // Include each string in insert operations within a Quill Delta
-  let text = '';
+  let text = "";
   delta.ops.forEach((op) => {
     text += op.insert;
   });
