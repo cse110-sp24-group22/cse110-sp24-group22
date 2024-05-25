@@ -1,5 +1,23 @@
+const rawData = [
+  {
+    "timestamp": "1716097247973",
+    "title": "This da bomb",
+    "tags": ["GPT", "IS", "GOAT"],
+    "delta": { "ops": [{ "insert": "\n" }] }
+  },
+  {
+    "timestamp": "1723097247973",
+    "title": "This da bomb",
+    "tags": [],
+    "delta": { "ops": [{ "insert": "\n" }] }
+  }
+];
 //Store the data into localStorage before staring all the things.
 let journalList = getJournalList();
+if (journalList.length === 0) {
+  saveJournal(rawData);
+  journalList = rawData;
+}
 
 document.addEventListener("DOMContentLoaded", init());
 
@@ -95,6 +113,8 @@ function saveJournal(journalList) {
 function getMatchingEntries(list, query) {
   let matchingEntriesByTitle = [];
   let matchingEntriesByContent = [];
+  let matchingEntriesByTags = [];
+  let matchingEntriesByTimestamp = [];
   query = query.toLowerCase();
   // Prioritize entries matching on title before matching on content.
   list.forEach((entry) => {
@@ -102,9 +122,17 @@ function getMatchingEntries(list, query) {
       matchingEntriesByTitle.push(entry);
     } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
       matchingEntriesByContent.push(entry);
-    }
+    } else if (new Date(parseInt(entry.timestamp)).toLocaleString().toLowerCase().includes(query)) {
+      matchingEntriesByTimestamp.push(entry);
+    } else {
+      // Check if any tag in the entry matches the query
+      const matchingTags = entry.tags.filter(tag => tag.toLowerCase().includes(query));
+      if (matchingTags.length > 0) {
+        matchingEntriesByTags.push(entry);
+      }
+  }
   });
-  return matchingEntriesByTitle.concat(matchingEntriesByContent);
+  return matchingEntriesByTitle.concat(matchingEntriesByContent, matchingEntriesByTimestamp, matchingEntriesByTags);
 }
 
 function getTextFromDelta(delta) {
