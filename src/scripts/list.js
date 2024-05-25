@@ -1,23 +1,6 @@
-const rawData = [
-  {
-    "timestamp": "1716097247973",
-    "title": "This da bomb",
-    "tags": ["GPT", "IS", "GOAT"],
-    "delta": { "ops": [{ "insert": "\n" }] }
-  },
-  {
-    "timestamp": "1723097247973",
-    "title": "This da bomb",
-    "tags": [],
-    "delta": { "ops": [{ "insert": "\n" }] }
-  }
-];
+
 //Store the data into localStorage before staring all the things.
 let journalList = getJournalList();
-if (journalList.length === 0) {
-  saveJournal(rawData);
-  journalList = rawData;
-}
 
 document.addEventListener("DOMContentLoaded", init());
 
