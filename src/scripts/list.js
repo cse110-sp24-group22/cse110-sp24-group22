@@ -111,11 +111,17 @@ function saveJournal(journalList) {
 }
 
 function getMatchingEntries(list, query) {
+  query = query.toLowerCase();
+
+  if (query.startsWith("#")) {
+    // type # to search by tags
+    return searchByTags(list, query.slice(1));
+  }
+
   let matchingEntriesByTitle = [];
   let matchingEntriesByContent = [];
-  let matchingEntriesByTags = [];
   let matchingEntriesByTimestamp = [];
-  query = query.toLowerCase();
+
   // Prioritize entries matching on title before matching on content.
   list.forEach((entry) => {
     if (entry.title.toLowerCase().includes(query)) {
@@ -124,15 +130,10 @@ function getMatchingEntries(list, query) {
       matchingEntriesByContent.push(entry);
     } else if (new Date(parseInt(entry.timestamp)).toLocaleString().toLowerCase().includes(query)) {
       matchingEntriesByTimestamp.push(entry);
-    } else {
-      // Check if any tag in the entry matches the query
-      const matchingTags = entry.tags.filter(tag => tag.toLowerCase().includes(query));
-      if (matchingTags.length > 0) {
-        matchingEntriesByTags.push(entry);
-      }
-  }
+    }
   });
-  return matchingEntriesByTitle.concat(matchingEntriesByContent, matchingEntriesByTimestamp, matchingEntriesByTags);
+
+  return matchingEntriesByTitle.concat(matchingEntriesByContent, matchingEntriesByTimestamp);
 }
 
 function getTextFromDelta(delta) {
@@ -144,6 +145,13 @@ function getTextFromDelta(delta) {
   return text;
 }
 
+function searchByTags(list, query) {
+  query = query.toLowerCase();
+  return list.filter((entry) => {
+    return entry.tags.some(tag => tag.toLowerCase().includes(query));
+  });
+}
+
 function setUpSearch() {
   const searchBar = document.getElementById("search-bar");
   // EventListener: After typing, filter items to those matching search
@@ -153,3 +161,4 @@ function setUpSearch() {
     displayList(getMatchingEntries(journalList, searchBar.value));
   };
 }
+
