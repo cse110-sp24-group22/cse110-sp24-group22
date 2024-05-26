@@ -5,6 +5,43 @@ document.addEventListener("DOMContentLoaded", init());
 
 function init() {
   displayList(journalList);
+
+  // Pop-up editor
+  document.addEventListener("DOMContentLoaded", function() {
+    const newJournalButton = document.querySelector(".new-journal-button");
+    const modal = document.getElementById("journalModal");
+    const closeModal = document.getElementById("closeModal");
+    const saveJournal = document.getElementById("saveJournal");
+  
+    let quill;
+  
+    newJournalButton.addEventListener("click", function() {
+      modal.style.display = "block";
+      if (!quill) {
+        quill = new Quill('#editor', {
+          theme: 'snow'
+        });
+      }
+    });
+  
+    closeModal.addEventListener("click", function() {
+      modal.style.display = "none";
+    });
+  
+    window.addEventListener("click", function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    });
+  
+    saveJournal.addEventListener("click", function() {
+      const journalContent = quill.root.innerHTML;
+      console.log(journalContent);
+      // Add your logic to save the journal content
+      modal.style.display = "none";
+    });
+  });
+
 }
 
 function displayList (journalList){
