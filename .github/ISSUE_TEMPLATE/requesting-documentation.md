@@ -2,7 +2,7 @@
 name: Requesting Documentation
 about: Notify what needs documentation and in what way
 title: "[Documentation]"
-labels: 'documentation'
+labels: documentation
 assignees: ''
 
 ---
