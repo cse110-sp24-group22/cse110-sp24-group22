@@ -3,45 +3,12 @@ let journalList = getJournalList();
 
 document.addEventListener("DOMContentLoaded", init());
 
+let quill;
+
 function init() {
+  const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
-
-  // Pop-up editor
-  document.addEventListener("DOMContentLoaded", function() {
-    const newJournalButton = document.querySelector(".new-journal-button");
-    const modal = document.getElementById("journalModal");
-    const closeModal = document.getElementById("closeModal");
-    const saveJournal = document.getElementById("saveJournal");
-  
-    let quill;
-  
-    newJournalButton.addEventListener("click", function() {
-      modal.style.display = "block";
-      if (!quill) {
-        quill = new Quill('#editor', {
-          theme: 'snow'
-        });
-      }
-    });
-  
-    closeModal.addEventListener("click", function() {
-      modal.style.display = "none";
-    });
-  
-    window.addEventListener("click", function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    });
-  
-    saveJournal.addEventListener("click", function() {
-      const journalContent = quill.root.innerHTML;
-      console.log(journalContent);
-      // Add your logic to save the journal content
-      modal.style.display = "none";
-    });
-  });
-
+  newJournalButton.addEventListener("click", function() {editJournal()});
 }
 
 function displayList (journalList){
@@ -66,9 +33,9 @@ function createListItem(item) {
   details.style.fontSize = "small";
 
 //   Get and set timestamp
-  const timestamp = new Date(parseInt(item.timestamp)).toLocaleString();
+  let timestamp = parseInt(item.timestamp)
   const timestampText = document.createElement("div");
-  timestampText.textContent = `Timestamp: ${timestamp}`;
+  timestampText.textContent = `Timestamp: ${new Date(timestamp).toLocaleString()}`;
   details.appendChild(timestampText);
 
   // Generate tags
@@ -85,6 +52,9 @@ function createListItem(item) {
     tagsContainer.appendChild(tagElement);
     tagsContainer.appendChild(document.createTextNode(" ")); // Add space between tags
   });
+
+
+
 
   details.appendChild(tagsContainer);
   listItem.appendChild(details);
@@ -108,6 +78,9 @@ function createListItem(item) {
   listItem.onmouseout = () => {
     deleteButton.style.display = "none";
   };
+  listItem.onclick = () => {
+    editJournal(timestamp);
+  };
 
 //   Append the entire list item into the list
   itemList.appendChild(listItem);
@@ -121,6 +94,15 @@ function getJournalList() {
     }
 }
 
+function getJournalByTimestamp(timestamp) {
+  journal = journalList.find((entry) => entry.timestamp == timestamp)
+  if (journal === undefined) {
+    console.error(`Error: No journal entry found with timestamp ${timestamp}`);
+    return undefined;
+  }
+  else return journal;
+}
+
 function deleteJournal(timestamp) {
     journalList = journalList.filter(entry => entry.timestamp != timestamp);
     saveJournal(journalList);
@@ -128,4 +110,46 @@ function deleteJournal(timestamp) {
 
 function saveJournal(journalList) {
     localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+}
+
+function editJournal (id) {
+
+  const modal = document.getElementById("journalModal");
+  const closeModal = document.getElementById("closeModal");
+  const saveJournal = document.getElementById("saveJournal");
+  
+  modal.style.display = "block";
+
+
+  if (!quill) {
+    quill = new Quill('#editor', {
+      theme: 'snow'
+    });
+  }
+
+
+  closeModal.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  saveJournal.addEventListener("click", function() {
+    const journalContent = quill.root.innerHTML;
+    console.log(journalContent);
+    // Add your logic to save the journal content
+    modal.style.display = "none";
+  });
+  
+  if (id !== undefined){
+    journal = getJournalByTimestamp(id);
+    quill.setContents(journal.delta);
+  }
+  else{
+    quill.setText('\n');
+  }
 }
