@@ -14,6 +14,10 @@ function init() {
 }
 
 function displayList(journalList) {
+  // Clear lits to prevent duplicating entries.
+  const itemList = document.getElementById("item-list");
+  itemList.innerHTML = "";
+
   //Iterate through list and append them to HTML
   journalList.forEach((item) => {
     createListItem(item);
@@ -115,6 +119,9 @@ function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
   const saveJournal = document.getElementById("saveJournal");
+  const titleBar = document.getElementById("journalTitle");
+
+
 
   modal.style.display = "block";
 
@@ -127,6 +134,7 @@ function editJournal(id) {
 
   closeModal.addEventListener("click", function () {
     modal.style.display = "none";
+    displayList(journalList);
   });
 
   window.addEventListener("click", function (event) {
@@ -139,6 +147,7 @@ function editJournal(id) {
     const journalContent = quill.root.innerHTML;
     console.log(journalContent);
     // Add your logic to save the journal content
+    // TODO!!!!!!!!!!!!!
     modal.style.display = "none";
   });
 
@@ -147,7 +156,7 @@ function editJournal(id) {
     id = new Date().getTime()
     let noteObject = {
       timestamp: id,
-      title: "Testing",
+      title: "",
       tags: [],
       delta: undefined,
     };
@@ -159,12 +168,22 @@ function editJournal(id) {
   }
 
   noteObject = getJournalByTimestamp(id);
-  quill.setContents(journal.delta);
 
-  // Save changes
+  // Retrieve stored data
+  quill.setContents(journal.delta);
+  titleBar.value = noteObject.title;
+
+  // Save changes on text
   quill.on("text-change", () => {
     const newDelta = quill.getContents();
     noteObject.delta = newDelta;
+    saveJournalList(journalList);
+  });
+
+  // Save changes on title
+  titleBar.addEventListener("input", () => {
+    let title = titleBar.value;
+    noteObject.title = title;
     saveJournalList(journalList);
   });
 }

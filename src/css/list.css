@@ -173,3 +173,13 @@ h1 {
   #editor {
     height: 300px;
   }
+
+  #journalTitle {
+    width: calc(100% - 20px); /* Adjust width to fit within padding */
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding is included in width */
+  }
