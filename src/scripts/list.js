@@ -1,3 +1,4 @@
+
 //Store the data into localStorage before staring all the things.
 let journalList = getJournalList();
 
@@ -8,6 +9,7 @@ let quill;
 function init() {
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
+
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
@@ -22,7 +24,10 @@ function displayList(journalList) {
   journalList.forEach((item) => {
     createListItem(item);
   });
+  
+   setUpSearch();
 }
+
 
 function createListItem(item) {
   //Get the essential elements
@@ -36,8 +41,10 @@ function createListItem(item) {
   const details = document.createElement("div");
   details.style.fontSize = "small";
 
+
   //   Get and set timestamp
   let timestamp = parseInt(item.timestamp);
+  
   const timestampText = document.createElement("div");
   timestampText.textContent = `Timestamp: ${new Date(
     timestamp
@@ -69,8 +76,12 @@ function createListItem(item) {
   deleteButton.style.display = "none";
 
   // EventListener: When clicking delete, delete from page and LocalStorage
+
   deleteButton.onclick = (event) => {
     event.stopPropagation();
+
+    deleteButton.onclick = () => {
+
     listItem.remove();
     deleteJournal(timestamp);
   };
@@ -187,3 +198,60 @@ function editJournal(id) {
     saveJournalList(journalList);
   });
 }
+
+function saveJournal(journalList) {
+  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+}
+
+function getMatchingEntries(list, query) {
+  query = query.toLowerCase();
+
+  if (query.startsWith("#")) {
+    // type # to search by tags
+    return searchByTags(list, query.slice(1));
+  }
+
+  let matchingEntriesByTitle = [];
+  let matchingEntriesByContent = [];
+  let matchingEntriesByTimestamp = [];
+
+  // Prioritize entries matching on title before matching on content.
+  list.forEach((entry) => {
+    if (entry.title.toLowerCase().includes(query)) {
+      matchingEntriesByTitle.push(entry);
+    } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
+      matchingEntriesByContent.push(entry);
+    } else if (new Date(parseInt(entry.timestamp)).toLocaleString().toLowerCase().includes(query)) {
+      matchingEntriesByTimestamp.push(entry);
+    }
+  });
+
+  return matchingEntriesByTitle.concat(matchingEntriesByContent, matchingEntriesByTimestamp);
+}
+
+function getTextFromDelta(delta) {
+  // Include each string in insert operations within a Quill Delta
+  let text = "";
+  delta.ops.forEach((op) => {
+    text += op.insert;
+  });
+  return text;
+}
+
+function searchByTags(list, query) {
+  query = query.toLowerCase();
+  return list.filter((entry) => {
+    return entry.tags.some(tag => tag.toLowerCase().includes(query));
+  });
+}
+
+function setUpSearch() {
+  const searchBar = document.getElementById("search-bar");
+  // EventListener: After typing, filter items to those matching search
+  searchBar.oninput = () => {
+    const itemList = document.getElementById("item-list");
+    itemList.replaceChildren(); // Empty item list
+    displayList(getMatchingEntries(journalList, searchBar.value));
+  };
+}
+
