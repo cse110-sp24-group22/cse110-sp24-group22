@@ -1,34 +1,39 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="../scripts/list.js"></script>
-    <title>List Page</title>
-    <link rel="stylesheet" href="../css/list.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>Item List</h1>
-        <button onclick="location.href='main.html'" class="return-button">
-          Return to Main Page
-        </button>
-      </header>
-      <div class="search-container">
-        <input
-          type="text"
-          placeholder="Search... (type # if search by tag)"
-          class="search-bar"
-          id="search-bar"
-        />
-      </div>
-      <div class="add-button-container">
-        <button class="new-journal-button">New Journal</button>
-      </div>
-      <ul class="item-list" id="item-list">
-        <!-- Items will be dynamically inserted here -->
-      </ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script defer src="../scripts/list.js"></script>
+  <title>List Page</title>
+  <link rel="stylesheet" href="../css/list.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Item List</h1>
+      <button onclick="location.href='main.html'" class="return-button">
+        Return to Main Page
+      </button>
+    </header>
+    <div class="search-container">
+      <input type="text" placeholder="Search..." class="search-bar" id="search-bar" />
     </div>
-  </body>
+    <div class="filter-container">
+      <input type="text" placeholder="Enter tags to filter by" id="tags-bar" />
+      <label for="start-date">Start Date</label>
+      <input type="date" id="start-date" />
+      <label for="start-date">End Date</label>
+      <input type="date" id="end-date" />
+    </div>
+    <div class="add-button-container">
+      <button class="new-journal-button">New Journal</button>
+    </div>
+    <ul class="item-list" id="item-list">
+      <!-- Items will be dynamically inserted here -->
+    </ul>
+  </div>
+</body>
+
 </html>

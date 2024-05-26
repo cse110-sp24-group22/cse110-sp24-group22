@@ -93,17 +93,47 @@ function saveJournal(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
+ * @param {string} query - exact string to search for 
+ * @param {Array.string} tags - list of exact tags to include
+ * @param {string} startDate - start date formatted yyyy-mm-dd
+ * @param {string} endDate - end date formatted yyyy-mm-dd
+ * @returns matching entries
+ */
+function searchJournal(query, tags, startDate, endDate) {
+  let filteredList = journalList;
+
+  // Filter by tags, case-sensitive
+  tags.forEach(tag => {
+    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
+  });
+
+  // Filter by date range
+  let startMilliseconds = Date.parse(startDate + "T00:00:00"); // Use user's local timezone
+  let endMilliseconds = Date.parse(endDate + "T00:00:00");
+  // Only filter if date was correctly formatted
+  if (!isNaN(startMilliseconds)) {
+    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
+  }
+  if (!isNaN(endMilliseconds)) {
+    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
+  }
+
+  return getMatchingEntries(filteredList, query);
+}
+
+/**
+ * Searches a list of entries for a case-insensitive string.
+ * @param {Array.Object} list - list of entries
+ * @param {string} query - exact string to search for 
+ * @returns matching entries
+ */
 function getMatchingEntries(list, query) {
   query = query.toLowerCase();
 
-  if (query.startsWith("#")) {
-    // type # to search by tags
-    return searchByTags(list, query.slice(1));
-  }
-
   let matchingEntriesByTitle = [];
   let matchingEntriesByContent = [];
-  let matchingEntriesByTimestamp = [];
 
   // Prioritize entries matching on title before matching on content.
   list.forEach((entry) => {
@@ -111,14 +141,17 @@ function getMatchingEntries(list, query) {
       matchingEntriesByTitle.push(entry);
     } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
       matchingEntriesByContent.push(entry);
-    } else if (new Date(parseInt(entry.timestamp)).toLocaleString().toLowerCase().includes(query)) {
-      matchingEntriesByTimestamp.push(entry);
     }
   });
 
-  return matchingEntriesByTitle.concat(matchingEntriesByContent, matchingEntriesByTimestamp);
+  return matchingEntriesByTitle.concat(matchingEntriesByContent);
 }
 
+/**
+ * Extracts all the text in a Quill delta.
+ * @param {Object} delta - Quill delta containing text operations
+ * @returns all the text in a Quill delta
+ */
 function getTextFromDelta(delta) {
   // Include each string in insert operations within a Quill Delta
   let text = "";
@@ -128,20 +161,32 @@ function getTextFromDelta(delta) {
   return text;
 }
 
-function searchByTags(list, query) {
-  query = query.toLowerCase();
-  return list.filter((entry) => {
-    return entry.tags.some(tag => tag.toLowerCase().includes(query));
-  });
+/**
+ * Parses a string of comma-separated tags into an array. 
+ * @param {string} tagsString - string of comma-separated tags
+ * @returns array of tags
+ */
+function parseTags(tagsString) {
+  return tagsString.split(",").filter(tag => tag.length > 0);
 }
 
+/**
+ * Prepares search functionality on the page.
+ */
 function setUpSearch() {
   const searchBar = document.getElementById("search-bar");
-  // EventListener: After typing, filter items to those matching search
-  searchBar.oninput = () => {
-    const itemList = document.getElementById("item-list");
-    itemList.replaceChildren(); // Empty item list
-    displayList(getMatchingEntries(journalList, searchBar.value));
-  };
-}
+  const tagsBar = document.getElementById("tags-bar");
+  const startDate = document.getElementById("start-date");
+  const endDate = document.getElementById("end-date");
 
+  const searchElements = [searchBar, tagsBar, startDate, endDate];
+  const itemList = document.getElementById("item-list");
+
+  // EventListener: After typing in any input, filter items to those that match search
+  searchElements.forEach(element => {
+    element.oninput = () => {
+      itemList.replaceChildren(); // Empty item list
+      displayList(searchJournal(searchBar.value, parseTags(tagsBar.value), startDate.value, endDate.value));
+    };
+  });
+}
