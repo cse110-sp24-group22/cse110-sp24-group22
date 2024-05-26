@@ -35,7 +35,8 @@ Review the effectiveness of our previous sprint.
   1.) Describe what you worked on today (link the issue associated). \
   2.) Describe any decisions you made. \
   3.) If possible, provide an image of anything you have done. 
-- This should hopefully keep everyone informed about what has been done in the project on a daily basis and notify everyone of design decisions that were made by a person. 
+- This should hopefully keep everyone informed about what has been done in the project on a daily basis and notify everyone of design decisions that were made by a person.
+- Ethan added extra channels in slack to notify design team about requests. 
 
 ##### Not Enough Progress
 - There were concerns by many people that the development was not going as fast as it should.
