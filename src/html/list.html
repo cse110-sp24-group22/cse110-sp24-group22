@@ -13,13 +13,9 @@
   </head>
 
   <body>
-    <div class="container">
-      <header>
-        <h1>Item List</h1>
-        <button onclick="location.href='main.html'" class="return-button">
-          Return to Main Page
-        </button>
-      </header>
+    <header>
+      <img src="..\assets\TeamIcon_3Diagonal.png", class="logo", height="47", width="47", alt="logo"/>
+      
       <div class="search-container">
         <input
           type="text"
@@ -28,13 +24,24 @@
           id="search-bar"
         />
       </div>
-      <div class="add-button-container">
-        <button class="new-journal-button">New Journal</button>
-      </div>
+      <button onclick="location.href='main.html'" class="return-button">
+        Root View
+      </button>
+      <button class="sort-button">
+        Sort
+      </button>
+    </header>
+    <div class="entry-header">
+      <h2>Name</h2>
+      <h2>Tags</h2>
+      <h2>Last Edited</h2>
+      <h2>Delete</h2>
+    </div>
+    <main>
+      <button class="new-journal-button">New Journal</button>
       <ul class="item-list" id="item-list">
         <!-- Items will be dynamically inserted here -->
       </ul>
-
       <div class="modal" id="journalModal">
         <div class="modal-content">
           <span class="close-button" id="closeModal">&times;</span>
@@ -43,7 +50,6 @@
           <button id="saveJournal">Save</button>
         </div>
       </div>
-
-    </div>
+    </main>
   </body>
 </html>
