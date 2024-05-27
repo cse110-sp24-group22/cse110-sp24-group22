@@ -113,6 +113,7 @@ function editJournal(id) {
   const closeModal = document.getElementById("closeModal");
   const saveJournal = document.getElementById("saveJournal");
   const titleBar = document.getElementById("journalTitle");
+  const itemList = document.getElementById("item-list");
 
   modal.style.display = "block";
 
@@ -135,6 +136,8 @@ function editJournal(id) {
     const journalContent = quill.root.innerHTML;
     console.log(journalContent);
     modal.style.display = "none";
+    itemList.innerHTML = "";
+    displayList(journalList);
   });
 
   if (id === undefined) {
