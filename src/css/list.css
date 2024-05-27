@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #FFE2B6;
     margin: 0;
     padding: 0;
     display: flex;
@@ -58,20 +58,24 @@ h1 {
     font-size: 16px;
 }
 
-.new-journal-container {
+.add-button-container {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
 }
 
 .new-journal-button {
-    background-color: #28a745;
-    color: white;
+    bottom: 5%;
+    right: 5%;
+    position: fixed;
+    background-color: #D0FBBC;
+    color: black;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    
 }
 
 .new-journal-button:hover {
