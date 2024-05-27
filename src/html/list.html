@@ -6,7 +6,12 @@
     <script defer src="../scripts/list.js"></script>
     <title>List Page</title>
     <link rel="stylesheet" href="../css/list.css" />
+
+    <!-- Quill injected CSS & JS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   </head>
+
   <body>
     <div class="container">
       <header>
@@ -29,6 +34,16 @@
       <ul class="item-list" id="item-list">
         <!-- Items will be dynamically inserted here -->
       </ul>
+
+      <div class="modal" id="journalModal">
+        <div class="modal-content">
+          <span class="close-button" id="closeModal">&times;</span>
+          <input type="text" id="journalTitle" placeholder="Enter title here..." />
+          <div id="editor"></div>
+          <button id="saveJournal">Save</button>
+        </div>
+      </div>
+
     </div>
   </body>
 </html>
