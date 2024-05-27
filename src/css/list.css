@@ -50,6 +50,10 @@ h1 {
     justify-content: center;
 }
 
+.filter-container {
+    margin: 20px 0;
+}
+
 .search-bar {
     width: 100%;
     padding: 10px;
