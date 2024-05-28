@@ -1,4 +1,8 @@
 /* FIX: .delete-button needs proper centering */
+/* FIX: weird margins for header (seems to be margin on top of content when not
+        specified */
+/* TODO: reconfigure journal entry element creations so that tags and timestamp
+         are affected by grid display */
 
 body {
     font-family: Arial, sans-serif;
@@ -12,6 +16,10 @@ body {
 main {
     margin-top: 125px;
     display: inline;
+}
+
+.logo {
+    place-self: center;
 }
 
 .container {
@@ -64,9 +72,11 @@ h2 {
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
+    width: 150px;
+    place-self: center;
 }
 
 .return-button:hover, .sort-button:hover {
@@ -101,7 +111,7 @@ h2 {
     color: black;
     border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
     z-index: 2;

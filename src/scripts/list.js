@@ -28,20 +28,23 @@ function createListItem(item) {
   const listItem = document.createElement("li");
 
   const title = document.createElement("div");
+  title.setAttribute("id", "entry-title");
   title.textContent = item.title;
   listItem.appendChild(title);
-
+  
   const details = document.createElement("div");
   details.style.fontSize = "small";
 
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
+  timestampText.setAttribute("id", "entry-timestamp");
   timestampText.textContent = `Timestamp: ${new Date(
     timestamp
   ).toLocaleString()}`;
   details.appendChild(timestampText);
 
   const tagsContainer = document.createElement("div");
+  tagsContainer.setAttribute("id", "entry-tags");
   tagsContainer.textContent = "Tags: ";
 
   item.tags.forEach((tag) => {
