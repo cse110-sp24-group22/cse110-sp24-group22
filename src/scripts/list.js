@@ -179,7 +179,7 @@ function editJournal(id) {
   });
   
   tagInput.addEventListener("input", () => {  // listen to tag input
-    let tagsList = tagInput.value.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0);  // parse input into array
+    let tagsList = parseTags(tagInput.value);  // parse input into array
     noteObject.tags = tagsList; // save as note's tags
     saveJournalList(journalList);
   })
