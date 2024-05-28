@@ -74,6 +74,7 @@ function createListItem(item) {
       listItem.remove();
       deleteJournal(timestamp);
     }
+    event.stopPropagation();
   };
 
   listItem.appendChild(deleteButton);
@@ -179,6 +180,8 @@ function editJournal(id) {
     noteObject.title = title;
     saveJournalList(journalList);
   });
+
+  tagInput.value = noteObject.tags; // populate input bar with tags from the note
   
   tagInput.addEventListener("input", () => {  // listen to tag input
     let tagsList = parseTags(tagInput.value);  // parse input into array
