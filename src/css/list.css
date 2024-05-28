@@ -61,7 +61,7 @@ h2 {
 }
 
 .return-button, .sort-button{
-    background-color: #007bff;
+    background-color: #4D4D4D;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -70,8 +70,8 @@ h2 {
     font-size: 14px;
 }
 
-.return-button:hover {
-    background-color: #0056b3;
+.return-button:hover, .sort-button:hover {
+    background-color: #202020;
 }
 
 .search-container {
@@ -109,7 +109,7 @@ h2 {
 }
 
 .new-journal-button:hover {
-    background-color: #218838;
+    background-color: #659b4c;
 }
 
 .item-list {
@@ -153,6 +153,10 @@ h2 {
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #96121f;
 }
 
 .item-list li:hover .delete-button {
