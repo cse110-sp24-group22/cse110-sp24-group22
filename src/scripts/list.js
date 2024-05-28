@@ -69,9 +69,11 @@ function createListItem(item) {
 
   // EventListener: When clicking delete, delete from page and LocalStorage
   deleteButton.onclick = (event) => {
-    event.stopPropagation();
-    listItem.remove();
-    deleteJournal(timestamp);
+    if(window.confirm(`Are you sure you would like to delete the "${item.title}"?`)) {
+      event.stopPropagation();
+      listItem.remove();
+      deleteJournal(timestamp);
+    }
   };
 
   listItem.appendChild(deleteButton);
