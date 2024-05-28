@@ -120,6 +120,7 @@ function editJournal(id) {
   const saveJournal = document.getElementById("saveJournal");
   const titleBar = document.getElementById("journalTitle");
   const itemList = document.getElementById("item-list");
+  const tagInput = document.getElementById("journalTag");
 
   modal.style.display = "block";
 
@@ -176,6 +177,12 @@ function editJournal(id) {
     noteObject.title = title;
     saveJournalList(journalList);
   });
+  
+  tagInput.addEventListener("input", () => {  // listen to tag input
+    let tagsList = tagInput.value.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0);  // parse input into array
+    noteObject.tags = tagsList; // save as note's tags
+    saveJournalList(journalList);
+  })
 }
 
 function saveJournal(journalList) {
