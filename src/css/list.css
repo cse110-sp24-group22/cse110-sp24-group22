@@ -5,7 +5,7 @@ body {
     background-color: #FFE2B6;
     margin: 0;
     padding: 0;
-    display: grid;
+    display:grid;
     height: 100vh;
 }
 
@@ -31,6 +31,7 @@ header {
     position: fixed;
     grid-template-columns: .5fr 2fr .5fr .5fr;
     column-gap: 10px;
+    z-index: 2;
 }
 
 .main-header {
@@ -103,7 +104,7 @@ h2 {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    
+    z-index: 2;
 }
 
 .new-journal-button:hover {
