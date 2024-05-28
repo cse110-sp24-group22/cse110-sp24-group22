@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", init);
 
 let quill;
 
+let sortDirection = {
+  name: true,
+  timestamp: true
+};
+
 function init() {
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
@@ -13,6 +18,36 @@ function init() {
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
+}
+
+document.getElementById("sort-name").addEventListener("click", () => {
+  sortByCategory("name");
+});
+document.getElementById("sort-timestamp").addEventListener("click", () => {
+  sortByCategory("timestamp");
+});
+
+function sortByCategory(category) {
+  if (category === "name") {
+    journalList.sort((a, b) => {
+      if (sortDirection.name) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+    sortDirection.name = !sortDirection.name;
+  } else if (category === "timestamp") {
+    journalList.sort((a, b) => {
+      if (sortDirection.timestamp) {
+        return a.timestamp - b.timestamp;
+      } else {
+        return b.timestamp - a.timestamp;
+      }
+    });
+    sortDirection.timestamp = !sortDirection.timestamp;
+  }
+  displayList(journalList);
 }
 
 function displayList(list) {
