@@ -2,6 +2,7 @@ name: Prettier Linting
 
 on:
   pull_request:
+  push:
     branches:
         - main
 
