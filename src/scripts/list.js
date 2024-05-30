@@ -60,7 +60,7 @@ function createListItem(item) {
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
   timestampText.textContent = `Timestamp: ${new Date(
-    timestamp
+    timestamp,
   ).toLocaleString()}`;
   details.appendChild(timestampText);
 
@@ -239,8 +239,8 @@ function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
 
   // Filter by tags, case-sensitive
-  tags.forEach(tag => {
-    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
+  tags.forEach((tag) => {
+    filteredList = filteredList.filter((entry) => entry.tags.includes(tag));
   });
 
   // Filter by date range
@@ -248,10 +248,14 @@ function searchJournal(query, tags, startDate, endDate) {
   let endMilliseconds = Date.parse(endDate + "T00:00:00");
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
-    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
+    filteredList = filteredList.filter(
+      (entry) => entry.timestamp >= startMilliseconds,
+    );
   }
   if (!isNaN(endMilliseconds)) {
-    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
+    filteredList = filteredList.filter(
+      (entry) => entry.timestamp <= endMilliseconds,
+    );
   }
 
   return getMatchingEntries(filteredList, query);
@@ -299,7 +303,7 @@ function getTextFromDelta(delta) {
  * @returns {string[]} array of tags
  */
 function parseTags(tagsString) {
-  return tagsString.split(",").filter(tag => tag.length > 0);
+  return tagsString.split(",").filter((tag) => tag.length > 0);
 }
 
 /**
@@ -315,10 +319,17 @@ function setUpSearch() {
   const itemList = document.getElementById("item-list");
 
   // EventListener: After typing in any input, filter items to those that match search
-  searchElements.forEach(element => {
+  searchElements.forEach((element) => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(searchJournal(searchBar.value, parseTags(tagsBar.value), startDate.value, endDate.value));
+      displayList(
+        searchJournal(
+          searchBar.value,
+          parseTags(tagsBar.value),
+          startDate.value,
+          endDate.value,
+        ),
+      );
     };
   });
 }
