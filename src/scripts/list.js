@@ -86,7 +86,7 @@ function createListItem(item) {
 
   // Generate tags
   const tagsContainer = document.createElement("div");
-  tagsContainer.textContent = "Tags: ";
+  tagsContainer.textContent = "";
 
   item.tags.forEach((tag) => {
     const tagElement = document.createElement("span");
@@ -103,7 +103,7 @@ function createListItem(item) {
 
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
-  timestampText.textContent = `Timestamp: ${new Date(
+  timestampText.textContent = `     ${new Date(
     timestamp
   ).toLocaleString()}`;
   timestampText.className = "timestamp";
