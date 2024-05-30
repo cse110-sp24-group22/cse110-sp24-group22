@@ -3,8 +3,20 @@ let journalList = getJournalList();
 
 document.addEventListener("DOMContentLoaded", init);
 
+/**
+ * Journal entry object.
+ * @typedef {Object} JournalEntry
+ * @property {number} timestamp - unique identifier and time it was created
+ * @property {string} title - title of the journal entry
+ * @property {Array.string} tags - list of tags
+ * @property {Object} delta - Quill delta containing text operations
+ */
+
 let quill;
 
+/**
+ * Called on page load.
+ */
 function init() {
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
@@ -15,6 +27,10 @@ function init() {
   });
 }
 
+/**
+ * Displays a list of journal entries on the page.
+ * @param list {JournalEntry[]} - list of journal entries
+ */
 function displayList(list) {
   //Iterate through list and append them to HTML
   const itemList = document.getElementById("item-list");
@@ -25,6 +41,10 @@ function displayList(list) {
   });
 }
 
+/**
+ * Creates a list item for a journal entry.
+ * @param item {JournalEntry} - journal entry
+ */
 function createListItem(item) {
   //Get the essential elements
   const itemList = document.getElementById("item-list");
@@ -89,6 +109,10 @@ function createListItem(item) {
   itemList.appendChild(listItem);
 }
 
+/**
+ * Retrieves the list of journal entries from localStorage.
+ * @returns {JournalEntry[]} - list of journal entries
+ */
 function getJournalList() {
   if (!localStorage.getItem("GarlicNotes")) {
     return [];
@@ -97,6 +121,11 @@ function getJournalList() {
   }
 }
 
+/**
+ * Retrieves a journal entry by its timestamp.
+ * @param timestamp {number} - unique identifier and time it was created
+ * @returns {JournalEntry|undefined} - journal entry or undefined if not found
+ */
 function getJournalByTimestamp(timestamp) {
   journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
@@ -105,15 +134,27 @@ function getJournalByTimestamp(timestamp) {
   } else return journal;
 }
 
+/**
+ * Deletes a journal entry by its timestamp.
+ * @param timestamp {number} - unique identifier and time it was created
+ */
 function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
 }
 
+/**
+ * Saves the list of journal entries to localStorage.
+ * @param journalList {JournalEntry[]} - list of journal entries
+ */
 function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Opens a modal to edit a journal entry.
+ * @param id {number} - unique identifier and time it was created
+ */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
@@ -178,17 +219,21 @@ function editJournal(id) {
   });
 }
 
+/**
+ * Saves the list of journal entries to localStorage.
+ * @param journalList {JournalEntry[]} - list of journal entries
+ */
 function saveJournal(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
- * @param {string} query - exact string to search for 
+ * @param {string} query - exact string to search for
  * @param {Array.string} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns matching entries
+ * @returns {JournalEntry[]} matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
@@ -214,9 +259,9 @@ function searchJournal(query, tags, startDate, endDate) {
 
 /**
  * Searches a list of entries for a case-insensitive string.
- * @param {Array.Object} list - list of entries
- * @param {string} query - exact string to search for 
- * @returns matching entries
+ * @param {JournalEntry[]} list - list of entries
+ * @param {string} query - exact string to search for
+ * @returns {JournalEntry[]} matching entries
  */
 function getMatchingEntries(list, query) {
   query = query.toLowerCase();
@@ -238,7 +283,7 @@ function getMatchingEntries(list, query) {
 /**
  * Extracts all the text in a Quill delta.
  * @param {Object} delta - Quill delta containing text operations
- * @returns all the text in a Quill delta
+ * @returns {string} all the text in a Quill delta
  */
 function getTextFromDelta(delta) {
   let text = "";
@@ -249,9 +294,9 @@ function getTextFromDelta(delta) {
 }
 
 /**
- * Parses a string of comma-separated tags into an array. 
+ * Parses a string of comma-separated tags into an array.
  * @param {string} tagsString - string of comma-separated tags
- * @returns array of tags
+ * @returns {string[]} array of tags
  */
 function parseTags(tagsString) {
   return tagsString.split(",").filter(tag => tag.length > 0);
