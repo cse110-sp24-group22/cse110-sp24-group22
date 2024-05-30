@@ -219,7 +219,6 @@ function editJournal(id) {
   });
 }
 
-
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
  * @param {string} query - exact string to search for
