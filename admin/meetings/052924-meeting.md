@@ -49,4 +49,8 @@
 - README
 
 # Lab Teams
-- 
+- Satvik and Aaron
+- Michael and Alex 
+- Jan and Jalen
+- Frankie and Esther 
+- Tim, Warren, and Ethan
