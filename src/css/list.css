@@ -96,6 +96,19 @@ h1 {
     border-radius: 4px;
     font-size: 18px;
     transition: background 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-list li div {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.timestamp {
+    font-size: 12px;
 }
 
 .item-list li:hover {

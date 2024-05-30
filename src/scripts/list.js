@@ -81,17 +81,8 @@ function createListItem(item) {
 
   const title = document.createElement("div");
   title.textContent = item.title;
+  title.className = "title";
   listItem.appendChild(title);
-
-  const details = document.createElement("div");
-  details.style.fontSize = "small";
-
-  let timestamp = parseInt(item.timestamp);
-  const timestampText = document.createElement("div");
-  timestampText.textContent = `Timestamp: ${new Date(
-    timestamp
-  ).toLocaleString()}`;
-  details.appendChild(timestampText);
 
   // Generate tags
   const tagsContainer = document.createElement("div");
@@ -108,8 +99,15 @@ function createListItem(item) {
     tagsContainer.appendChild(document.createTextNode(" ")); // Add space between tags
   });
 
-  details.appendChild(tagsContainer);
-  listItem.appendChild(details);
+  listItem.appendChild(tagsContainer);
+
+  let timestamp = parseInt(item.timestamp);
+  const timestampText = document.createElement("div");
+  timestampText.textContent = `Timestamp: ${new Date(
+    timestamp
+  ).toLocaleString()}`;
+  timestampText.className = "timestamp";
+  listItem.appendChild(timestampText);
 
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
