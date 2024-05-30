@@ -1,9 +1,19 @@
 let journalList = getJournalList();
 
-document.addEventListener("DOMContentLoaded", init);
-
 let quill;
 
+/**
+ * Journal entry object.
+ * @typedef {Object} JournalEntry
+ * @property {number} timestamp
+ * @property {string} title
+ * @property {string[]} tags
+ * @property {any} delta
+ */
+
+/**
+ * Called as soon as the document loads.
+ */
 function init() {
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
@@ -14,6 +24,12 @@ function init() {
   });
 }
 
+document.addEventListener("DOMContentLoaded", init);
+
+/**
+ * Display the list of journals on the page.
+ * @param journalList {JournalEntry[]} - List of journal entries to display.
+ */
 function displayList(journalList) {
   const itemList = document.getElementById("item-list");
   itemList.innerHTML = "";
@@ -23,6 +39,10 @@ function displayList(journalList) {
   });
 }
 
+/**
+ * Create a list item for a journal entry.
+ * @param item {JournalEntry} - Journal entry to create a list item for.
+ */
 function createListItem(item) {
   const itemList = document.getElementById("item-list");
   const listItem = document.createElement("li");
@@ -83,6 +103,10 @@ function createListItem(item) {
   itemList.appendChild(listItem);
 }
 
+/**
+ * Get the list of journals from local storage.
+ * @returns {JournalEntry[]} - List of journal entries.
+ */
 function getJournalList() {
   if (!localStorage.getItem("GarlicNotes")) {
     return [];
@@ -91,23 +115,41 @@ function getJournalList() {
   }
 }
 
+/**
+ * Get a journal entry by its timestamp, or undefined if not found.
+ * @param timestamp {number} - Timestamp of the journal entry to get.
+ * @returns {JournalEntry|undefined}
+ */
 function getJournalByTimestamp(timestamp) {
-  journal = journalList.find((entry) => entry.timestamp == timestamp);
+  let journal = journalList.find((entry) => entry.timestamp = timestamp);
+
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
     return undefined;
   } else return journal;
 }
 
+/**
+ * Delete a journal entry by its timestamp.
+ * @param timestamp {number} - Timestamp of the journal entry to delete.
+ */
 function deleteJournal(timestamp) {
-  journalList = journalList.filter((entry) => entry.timestamp != timestamp);
+  journalList = journalList.filter((entry) => entry.timestamp !== timestamp);
   saveJournalList(journalList);
 }
 
+/**
+ * Save the list of journal entries to local storage.
+ * @param journalList {JournalEntry[]} - List of journal entries to save.
+ */
 function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Edit a journal entry.
+ * @param id {number} - Timestamp of the journal entry to edit. If not provided, a new journal entry will be created.
+ */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
@@ -127,7 +169,7 @@ function editJournal(id) {
   });
 
   window.addEventListener("click", function (event) {
-    if (event.target == modal) {
+    if (event.target === modal) {
       modal.style.display = "none";
     }
   });
@@ -172,10 +214,20 @@ function editJournal(id) {
   });
 }
 
+/**
+ * Save a journal entry to local storage.
+ * @param journalList {JournalEntry[]} - List of journal entries to save.
+ */
 function saveJournal(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Get the list of journal entries that match the search query.
+ * @param list {JournalEntry[]} - List of journal entries to search.
+ * @param query {string} - Search query.
+ * @returns {JournalEntry[]} - List of journal entries that match the search query.
+ */
 function getMatchingEntries(list, query) {
   query = query.toLowerCase();
 
@@ -208,6 +260,11 @@ function getMatchingEntries(list, query) {
   );
 }
 
+/**
+ * Get the text content of a Quill delta.
+ * @param delta {any} - Quill delta object.
+ * @returns {string} - Text content of the delta.
+ */
 function getTextFromDelta(delta) {
   let text = "";
   delta.ops.forEach((op) => {
@@ -216,6 +273,12 @@ function getTextFromDelta(delta) {
   return text;
 }
 
+/**
+ * Search for journal entries by tags.
+ * @param list {JournalEntry[]}
+ * @param query {string}
+ * @returns {JournalEntry[]}
+ */
 function searchByTags(list, query) {
   query = query.toLowerCase();
   return list.filter((entry) => {
@@ -223,6 +286,9 @@ function searchByTags(list, query) {
   });
 }
 
+/**
+ * Set up the search bar to filter journal entries.
+ */
 function setUpSearch() {
   const searchBar = document.getElementById("search-bar");
   searchBar.oninput = () => {
