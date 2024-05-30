@@ -289,6 +289,7 @@ function getTextFromDelta(delta) {
   return text;
 }
 
+
 /**
  * Parses a string of comma-separated tags into an array.
  * @param {string} tagsString - string of comma-separated tags
@@ -297,6 +298,7 @@ function getTextFromDelta(delta) {
 function parseTags(tagsString) {
   return tagsString.split(",").filter((tag) => tag.length > 0);
 }
+
 
 /**
  * Prepares search functionality on the page.
