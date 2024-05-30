@@ -1,0 +1,48 @@
+name: Prettier Linting & JS Doc Generation
+
+on:
+  pull_request:
+    branches:
+        - main
+
+jobs:
+  prettier-linting:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            ref: ${{ github.event.pull_request.head.ref }}
+            persist-credentials: false
+  
+        - name: Prettify code
+          uses: creyD/prettier_action@v4.3
+          with:
+            prettier_options: --write **/*.{js,md,html,css}
+            only_changed: True
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            commit_message: "Code Formatted by GitHub Action"
+  
+  JSDoc-generation:
+    needs: prettier-linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Build
+        uses: andstor/jsdoc-action@v1
+        with:
+          source_dir: ./src/scripts
+          output_dir: ./docs
+
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: JSDoc updated by GitHub Action
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          push: origin HEAD:${{github.head_ref}}
