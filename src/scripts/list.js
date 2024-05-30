@@ -47,7 +47,21 @@ function sortByCategory(category) {
     });
     sortDirection.timestamp = !sortDirection.timestamp;
   }
+  updateSortArrows(category);
   displayList(journalList);
+}
+
+function updateSortArrows(category) {
+  const nameSortArrow = document.getElementById("sort-name");
+  const timestampSortArrow = document.getElementById("sort-timestamp");
+
+  if (category === "name") {
+    nameSortArrow.innerHTML = sortDirection.name ? "&#9650;" : "&#9660;";
+    timestampSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
+  } else if (category === "timestamp") {
+    timestampSortArrow.innerHTML = sortDirection.timestamp ? "&#9650;" : "&#9660;";
+    nameSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
+  }
 }
 
 function displayList(list) {
