@@ -103,18 +103,25 @@ h1 {
 
 .item-list li div {
     flex: 1;
-    display: flex;
+    display: fixed;
     flex-wrap: wrap;
-    gap: 5px;
 }
 
-.timestamp {
+.item-list li .timestamp {
     font-size: 12px;
-    margin-left: 95px;
+    margin-left: 10px;
+    text-align: right;
+    margin-right: 10px;
 }
 
-.title{
+.item-list li .title{
     margin-left: 10px;
+    flex: 1.1;
+    margin-right: 30px;
+}
+
+.item-list li .tag{
+    text-align: center;
 }
 
 .item-list li:hover {
@@ -149,7 +156,6 @@ h1 {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 12px;
-
 }
 
 .tag:hover {
@@ -223,7 +229,7 @@ h1 {
 }
 
 .list-header span {
-    flex: 1;
+    flex: .25;
     text-align: center;
     font-weight: bold;
 }
