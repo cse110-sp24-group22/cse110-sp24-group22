@@ -219,13 +219,6 @@ function editJournal(id) {
   });
 }
 
-/**
- * Saves the list of journal entries to localStorage.
- * @param journalList {JournalEntry[]} - list of journal entries
- */
-function saveJournal(journalList) {
-  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
-}
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
