@@ -1,8 +1,5 @@
 name: JS Doc Generation
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
         - main
