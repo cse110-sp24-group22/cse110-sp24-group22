@@ -62,7 +62,7 @@ describe("Testing non-DOM functions in list.js", () => {
         "delta": {
           "ops": [
             {
-              "insert": "hi\n"
+              "insert": "text\n"
             }
           ]
         }
@@ -74,7 +74,7 @@ describe("Testing non-DOM functions in list.js", () => {
         "delta": {
           "ops": [
             {
-              "insert": "bye\n"
+              "insert": "test\n"
             }
           ]
         }
@@ -89,7 +89,51 @@ describe("Testing non-DOM functions in list.js", () => {
         "delta": {
           "ops": [
             {
-              "insert": "hi\n"
+              "insert": "text\n"
+            }
+          ]
+        }
+      }
+    ]);
+  });
+
+  test("getMatchingEntries to correctly grab entries containing content 'test'", () => {
+    let journalList = [
+      {
+        "timestamp": 1717082192861,
+        "title": "Hi",
+        "tags": [],
+        "delta": {
+          "ops": [
+            {
+              "insert": "text\n"
+            }
+          ]
+        }
+      },
+      {
+        "timestamp": 1717082302909,
+        "title": "Goodbye",
+        "tags": [],
+        "delta": {
+          "ops": [
+            {
+              "insert": "test\n"
+            }
+          ]
+        }
+      }
+    ];
+    let matches = getMatchingEntries(journalList, "test");
+    expect(matches).toStrictEqual([
+      {
+        "timestamp": 1717082302909,
+        "title": "Goodbye",
+        "tags": [],
+        "delta": {
+          "ops": [
+            {
+              "insert": "test\n"
             }
           ]
         }
