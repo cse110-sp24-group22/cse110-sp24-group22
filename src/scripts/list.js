@@ -1,5 +1,6 @@
 //Store the data into localStorage before staring all the things.
 let journalList = getJournalList();
+let journalTags = getJournalTags();
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -100,6 +101,13 @@ function getJournalList() {
   }
 }
 
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) { 
+    return new Set();
+  }
+  return JSON.parse(localStorage.getItem("GarlicNotesTags"));
+}
+
 function getJournalByTimestamp(timestamp) {
   journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
@@ -113,8 +121,18 @@ function deleteJournal(timestamp) {
   saveJournalList(journalList);
 }
 
+function deleteTag(tag) {
+  journalTags = journalTags.filter((entry) => entry != tag);
+  saveJournalTags(journalTags);
+}
+
 function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+}
+
+// storage of tags on localStorage 
+function saveJournalTags(journalTags) {
+  localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
 }
 
 function editJournal(id) {
@@ -124,6 +142,7 @@ function editJournal(id) {
   const titleBar = document.getElementById("journalTitle");
   const itemList = document.getElementById("item-list");
   const tagInput = document.getElementById("journalTag");
+  const tagList = document.getElementById("tag-list");
 
   modal.style.display = "block";
 
@@ -183,15 +202,41 @@ function editJournal(id) {
 
   tagInput.value = noteObject.tags; // populate input bar with tags from the note
   
-  tagInput.addEventListener("input", () => {  // listen to tag input
+  //listen to when users click on the bar
+  tagInput.addEventListener("click", () => {
+    displayTags(tagList);
+  });
+
+  //listen to when users type input
+  tagInput.addEventListener("input", () => { 
     let tagsList = parseTags(tagInput.value);  // parse input into array
     noteObject.tags = tagsList; // save as note's tags
+    tagsList.forEach(tag => {
+      journalTags.add(tag);
+    });
     saveJournalList(journalList);
-  })
+    saveJournalTags(tagsList);
+  });
 }
 
-function saveJournal(journalList) {
-  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+/**
+ * Displays the whole list of tags.
+ * @returns all tags
+ */
+function displayTags(tagList) {
+  tagList.innerHTML = '';
+  journalTags.forEach(tag => {
+    const tagItem = document.createElement('div');
+    tagItem.className = 'tag-item';
+    tagItem.textContent = tag;
+    tagItem.addEventListener('click', () => {
+      tagInput.value = tag;
+      parseTags(tagInput.value); // Update tags based on selection
+      tagList.style.display = 'none'; // Hide the list after selection
+    });
+    tagList.appendChild(tagItem);
+  });
+  tagList.style.display = 'block';
 }
 
 /**
