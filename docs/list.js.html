@@ -1,4 +1,32 @@
-//Store the data into localStorage before staring all the things.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: list.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: list.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//Store the data into localStorage before staring all the things.
 let journalList = getJournalList();
 
 document.addEventListener("DOMContentLoaded", init);
@@ -14,11 +42,6 @@ document.addEventListener("DOMContentLoaded", init);
 
 let quill;
 
-let sortDirection = {
-  name: true,
-  timestamp: true
-};
-
 /**
  * Called on page load.
  */
@@ -30,50 +53,6 @@ function init() {
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
-}
-
-document.getElementById("sort-name").addEventListener("click", () => {
-  sortByCategory("name");
-});
-document.getElementById("sort-timestamp").addEventListener("click", () => {
-  sortByCategory("timestamp");
-});
-
-function sortByCategory(category) {
-  if (category === "name") {
-    journalList.sort((a, b) => {
-      if (sortDirection.name) {
-        return a.title.localeCompare(b.title);
-      } else {
-        return b.title.localeCompare(a.title);
-      }
-    });
-    sortDirection.name = !sortDirection.name;
-  } else if (category === "timestamp") {
-    journalList.sort((a, b) => {
-      if (sortDirection.timestamp) {
-        return a.timestamp - b.timestamp;
-      } else {
-        return b.timestamp - a.timestamp;
-      }
-    });
-    sortDirection.timestamp = !sortDirection.timestamp;
-  }
-  updateSortArrows(category);
-  displayList(journalList);
-}
-
-function updateSortArrows(category) {
-  const nameSortArrow = document.getElementById("sort-name");
-  const timestampSortArrow = document.getElementById("sort-timestamp");
-
-  if (category === "name") {
-    nameSortArrow.innerHTML = sortDirection.name ? "&#9650;" : "&#9660;";
-    timestampSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
-  } else if (category === "timestamp") {
-    timestampSortArrow.innerHTML = sortDirection.timestamp ? "&#9650;" : "&#9660;";
-    nameSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
-  }
 }
 
 /**
@@ -101,7 +80,6 @@ function createListItem(item) {
 
   const title = document.createElement("div");
   title.textContent = item.title;
-  title.className = "title";
   listItem.appendChild(title);
 
   const details = document.createElement("div");
@@ -116,7 +94,7 @@ function createListItem(item) {
 
   // Generate tags
   const tagsContainer = document.createElement("div");
-  tagsContainer.textContent = "";
+  tagsContainer.textContent = "Tags: ";
 
   item.tags.forEach((tag) => {
     const tagElement = document.createElement("span");
@@ -129,15 +107,8 @@ function createListItem(item) {
     tagsContainer.appendChild(document.createTextNode(" ")); // Add space between tags
   });
 
-  listItem.appendChild(tagsContainer);
-
-  let timestamp = parseInt(item.timestamp);
-  const timestampText = document.createElement("div");
-  timestampText.textContent = `     ${new Date(
-    timestamp
-  ).toLocaleString()}`;
-  timestampText.className = "timestamp";
-  listItem.appendChild(timestampText);
+  details.appendChild(tagsContainer);
+  listItem.appendChild(details);
 
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
@@ -303,7 +274,7 @@ function searchJournal(query, tags, startDate, endDate) {
   }
   if (!isNaN(endMilliseconds)) {
     filteredList = filteredList.filter(
-      (entry) => entry.timestamp <= endMilliseconds,
+      (entry) => entry.timestamp &lt;= endMilliseconds,
     );
   }
 
@@ -382,3 +353,26 @@ function setUpSearch() {
     };
   });
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createListItem">createListItem</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu May 30 2024 06:36:33 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
