@@ -144,8 +144,7 @@ function editJournal(id) {
   const itemList = document.getElementById("item-list");
   const tagInput = document.getElementById("journalTag");
   const tagList = document.getElementById("tag-list");
-  const tagItem = document.getElementById("tag-item");
-  const tagButtons = document.getElementById("tag-buttons");
+  const tagSave = document.getElementById("save-tag");
 
   modal.style.display = "block";
 
@@ -204,37 +203,33 @@ function editJournal(id) {
   });
 
   tagInput.value = noteObject.tags; // populate input bar with tags from the note
-  
-  //listen to when users click on the bar
-  tagInput.addEventListener("click", () => {
-    displayTags(tagList);
-  });
 
-  //listen to when users type input
-  tagInput.addEventListener("change", () => { 
+  // listen to when users type input
+  tagInput.addEventListener("input", () => { 
     let tagsList = parseTags(tagInput.value);  // parse input into array
-    displayTags(tagList);
     noteObject.tags = tagsList; // save as note's tags
     tagsList.forEach(tag => {
       journalTags.push(tag);
+      const tagItem = document.createElement("option");
+      tagItem.value = tag;
+      tagItem.className = 'tag-item';
+      tagList.appendChild(tagItem);
     });
     saveJournalList(journalList);
-    saveJournalTags(tagsList);
+    saveJournalTags(journalTags);
   });
-}
 
-/**
- * Displays the whole list of tags.
- * @returns all tags
- */
-function displayTags(tagList) {
-  //tagList.innerHTML = '';
-  journalTags.forEach(tag => {
-    const tagItem = document.createElement("option");
-    tagItem.value = tag;
-    tagItem.className = 'tag-item';
-    tagList.appendChild(tagItem);
-  });
+  tagSave.addEventListener("click", () => {
+    let tagsList = parseTags(tagInput.value);  // parse input into array
+    tagsList.forEach(tag => {
+      journalTags.add(tag);
+      const tagItem = document.createElement("option");
+      tagItem.value = tag;
+      tagItem.className = 'tag-item';
+      tagList.appendChild(tagItem);
+    });
+    noteObject.tags = tagsList; // save as note's tags
+  })
 }
 
 /**
