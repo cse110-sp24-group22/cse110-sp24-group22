@@ -3,6 +3,14 @@ let journalList = getJournalList();
 
 document.addEventListener("DOMContentLoaded", init);
 
+/**
+ * Journal entry object.
+ * @typedef {Object} JournalEntry
+ * @property {number} timestamp - unique identifier and time it was created
+ * @property {string} title - title of the journal entry
+ * @property {Array.string} tags - list of tags
+ * @property {Object} delta - Quill delta containing text operations
+ */
 let quill;
 
 let sortDirection = {
@@ -10,9 +18,13 @@ let sortDirection = {
   timestamp: true
 };
 
+/**
+ * Called on page load.
+ */
 function init() {
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
+
   setUpSearch();
   newJournalButton.addEventListener("click", function () {
     editJournal();
@@ -26,6 +38,7 @@ document.getElementById("sort-timestamp").addEventListener("click", () => {
   sortByCategory("timestamp");
 });
 
+/* Making the list sort*/
 function sortByCategory(category) {
   if (category === "name") {
     journalList.sort((a, b) => {
@@ -50,6 +63,7 @@ function sortByCategory(category) {
   displayList(journalList);
 }
 
+/*make the sorting arrow up and down correspond to its sorting*/
 function updateSortArrows(category) {
   const nameSortArrow = document.getElementById("sort-name");
   const timestampSortArrow = document.getElementById("sort-timestamp");
@@ -63,6 +77,10 @@ function updateSortArrows(category) {
   }
 }
 
+/**
+ * Displays a list of journal entries on the page.
+ * @param list {JournalEntry[]} - list of journal entries
+ */
 function displayList(list) {
   //Iterate through list and append them to HTML
   const itemList = document.getElementById("item-list");
@@ -73,11 +91,15 @@ function displayList(list) {
   });
 }
 
+/**
+ * Creates a list item for a journal entry.
+ * @param item {JournalEntry} - journal entry
+ */
 function createListItem(item) {
   //Get the essential elements
   const itemList = document.getElementById("item-list");
   const listItem = document.createElement("li");
-  
+
   const title = document.createElement("div");
   title.textContent = item.title;
   title.className = "title";
@@ -135,6 +157,10 @@ function createListItem(item) {
   itemList.appendChild(listItem);
 }
 
+/**
+ * Retrieves the list of journal entries from localStorage.
+ * @returns {JournalEntry[]} - list of journal entries
+ */
 function getJournalList() {
   if (!localStorage.getItem("GarlicNotes")) {
     return [];
@@ -143,6 +169,11 @@ function getJournalList() {
   }
 }
 
+/**
+ * Retrieves a journal entry by its timestamp.
+ * @param timestamp {number} - unique identifier and time it was created
+ * @returns {JournalEntry|undefined} - journal entry or undefined if not found
+ */
 function getJournalByTimestamp(timestamp) {
   journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
@@ -151,15 +182,27 @@ function getJournalByTimestamp(timestamp) {
   } else return journal;
 }
 
+/**
+ * Deletes a journal entry by its timestamp.
+ * @param timestamp {number} - unique identifier and time it was created
+ */
 function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
 }
 
+/**
+ * Saves the list of journal entries to localStorage.
+ * @param journalList {JournalEntry[]} - list of journal entries
+ */
 function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Opens a modal to edit a journal entry.
+ * @param id {number} - unique identifier and time it was created
+ */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
