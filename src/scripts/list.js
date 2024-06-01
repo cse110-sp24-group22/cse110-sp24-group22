@@ -1,6 +1,7 @@
 //Store the data into localStorage before staring all the things.
 let journalList = getJournalList();
 let journalTags = getJournalTags();
+var tagSet = new Set();
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -101,13 +102,6 @@ function getJournalList() {
   }
 }
 
-function getJournalTags() {
-  if(!localStorage.getItem("GarlicNotesTags")) { 
-    return new Set();
-  }
-  return JSON.parse(localStorage.getItem("GarlicNotesTags"));
-}
-
 function getJournalByTimestamp(timestamp) {
   journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
@@ -121,18 +115,25 @@ function deleteJournal(timestamp) {
   saveJournalList(journalList);
 }
 
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) { 
+    return tagSet;
+  }
+  return JSON.parse(localStorage.getItem("GarlicNotesTags"));
+}
+
 function deleteTag(tag) {
   journalTags = journalTags.filter((entry) => entry != tag);
   saveJournalTags(journalTags);
 }
 
-function saveJournalList(journalList) {
-  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
-}
-
 // storage of tags on localStorage 
 function saveJournalTags(journalTags) {
   localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
+}
+
+function saveJournalList(journalList) {
+  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
 function editJournal(id) {
@@ -143,6 +144,8 @@ function editJournal(id) {
   const itemList = document.getElementById("item-list");
   const tagInput = document.getElementById("journalTag");
   const tagList = document.getElementById("tag-list");
+  const tagItem = document.getElementById("tag-item");
+  const tagButtons = document.getElementById("tag-buttons");
 
   modal.style.display = "block";
 
@@ -208,11 +211,12 @@ function editJournal(id) {
   });
 
   //listen to when users type input
-  tagInput.addEventListener("input", () => { 
+  tagInput.addEventListener("change", () => { 
     let tagsList = parseTags(tagInput.value);  // parse input into array
+    displayTags(tagList);
     noteObject.tags = tagsList; // save as note's tags
     tagsList.forEach(tag => {
-      journalTags.add(tag);
+      journalTags.push(tag);
     });
     saveJournalList(journalList);
     saveJournalTags(tagsList);
@@ -224,19 +228,13 @@ function editJournal(id) {
  * @returns all tags
  */
 function displayTags(tagList) {
-  tagList.innerHTML = '';
+  //tagList.innerHTML = '';
   journalTags.forEach(tag => {
-    const tagItem = document.createElement('div');
+    const tagItem = document.createElement("option");
+    tagItem.value = tag;
     tagItem.className = 'tag-item';
-    tagItem.textContent = tag;
-    tagItem.addEventListener('click', () => {
-      tagInput.value = tag;
-      parseTags(tagInput.value); // Update tags based on selection
-      tagList.style.display = 'none'; // Hide the list after selection
-    });
     tagList.appendChild(tagItem);
   });
-  tagList.style.display = 'block';
 }
 
 /**
