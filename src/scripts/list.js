@@ -3,15 +3,6 @@ let journalList = getJournalList();
 
 document.addEventListener("DOMContentLoaded", init);
 
-/**
- * Journal entry object.
- * @typedef {Object} JournalEntry
- * @property {number} timestamp - unique identifier and time it was created
- * @property {string} title - title of the journal entry
- * @property {Array.string} tags - list of tags
- * @property {Object} delta - Quill delta containing text operations
- */
-
 let quill;
 
 let sortDirection = {
@@ -19,14 +10,10 @@ let sortDirection = {
   timestamp: true
 };
 
-/**
- * Called on page load.
- */
 function init() {
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
   setUpSearch();
-
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
@@ -76,10 +63,6 @@ function updateSortArrows(category) {
   }
 }
 
-/**
- * Displays a list of journal entries on the page.
- * @param list {JournalEntry[]} - list of journal entries
- */
 function displayList(list) {
   //Iterate through list and append them to HTML
   const itemList = document.getElementById("item-list");
@@ -90,29 +73,15 @@ function displayList(list) {
   });
 }
 
-/**
- * Creates a list item for a journal entry.
- * @param item {JournalEntry} - journal entry
- */
 function createListItem(item) {
   //Get the essential elements
   const itemList = document.getElementById("item-list");
   const listItem = document.createElement("li");
-
+  
   const title = document.createElement("div");
   title.textContent = item.title;
   title.className = "title";
   listItem.appendChild(title);
-
-  const details = document.createElement("div");
-  details.style.fontSize = "small";
-
-  let timestamp = parseInt(item.timestamp);
-  const timestampText = document.createElement("div");
-  timestampText.textContent = `Timestamp: ${new Date(
-    timestamp,
-  ).toLocaleString()}`;
-  details.appendChild(timestampText);
 
   // Generate tags
   const tagsContainer = document.createElement("div");
@@ -166,10 +135,6 @@ function createListItem(item) {
   itemList.appendChild(listItem);
 }
 
-/**
- * Retrieves the list of journal entries from localStorage.
- * @returns {JournalEntry[]} - list of journal entries
- */
 function getJournalList() {
   if (!localStorage.getItem("GarlicNotes")) {
     return [];
@@ -178,11 +143,6 @@ function getJournalList() {
   }
 }
 
-/**
- * Retrieves a journal entry by its timestamp.
- * @param timestamp {number} - unique identifier and time it was created
- * @returns {JournalEntry|undefined} - journal entry or undefined if not found
- */
 function getJournalByTimestamp(timestamp) {
   journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
@@ -191,27 +151,15 @@ function getJournalByTimestamp(timestamp) {
   } else return journal;
 }
 
-/**
- * Deletes a journal entry by its timestamp.
- * @param timestamp {number} - unique identifier and time it was created
- */
 function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
 }
 
-/**
- * Saves the list of journal entries to localStorage.
- * @param journalList {JournalEntry[]} - list of journal entries
- */
 function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
-/**
- * Opens a modal to edit a journal entry.
- * @param id {number} - unique identifier and time it was created
- */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
@@ -275,21 +223,23 @@ function editJournal(id) {
     saveJournalList(journalList);
   });
 }
-
+function saveJournal(journalList) {
+  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+}
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
- * @param {string} query - exact string to search for
+ * @param {string} query - exact string to search for 
  * @param {Array.string} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns {JournalEntry[]} matching entries
+ * @returns matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
 
   // Filter by tags, case-sensitive
-  tags.forEach((tag) => {
-    filteredList = filteredList.filter((entry) => entry.tags.includes(tag));
+  tags.forEach(tag => {
+    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
   });
 
   // Filter by date range
@@ -297,14 +247,10 @@ function searchJournal(query, tags, startDate, endDate) {
   let endMilliseconds = Date.parse(endDate + "T00:00:00");
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
-    filteredList = filteredList.filter(
-      (entry) => entry.timestamp >= startMilliseconds,
-    );
+    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
   }
   if (!isNaN(endMilliseconds)) {
-    filteredList = filteredList.filter(
-      (entry) => entry.timestamp <= endMilliseconds,
-    );
+    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
   }
 
   return getMatchingEntries(filteredList, query);
@@ -312,9 +258,9 @@ function searchJournal(query, tags, startDate, endDate) {
 
 /**
  * Searches a list of entries for a case-insensitive string.
- * @param {JournalEntry[]} list - list of entries
- * @param {string} query - exact string to search for
- * @returns {JournalEntry[]} matching entries
+ * @param {Array.Object} list - list of entries
+ * @param {string} query - exact string to search for 
+ * @returns matching entries
  */
 function getMatchingEntries(list, query) {
   query = query.toLowerCase();
@@ -336,7 +282,7 @@ function getMatchingEntries(list, query) {
 /**
  * Extracts all the text in a Quill delta.
  * @param {Object} delta - Quill delta containing text operations
- * @returns {string} all the text in a Quill delta
+ * @returns all the text in a Quill delta
  */
 function getTextFromDelta(delta) {
   let text = "";
@@ -347,12 +293,12 @@ function getTextFromDelta(delta) {
 }
 
 /**
- * Parses a string of comma-separated tags into an array.
+ * Parses a string of comma-separated tags into an array. 
  * @param {string} tagsString - string of comma-separated tags
- * @returns {string[]} array of tags
+ * @returns array of tags
  */
 function parseTags(tagsString) {
-  return tagsString.split(",").filter((tag) => tag.length > 0);
+  return tagsString.split(",").filter(tag => tag.length > 0);
 }
 
 /**
@@ -368,17 +314,10 @@ function setUpSearch() {
   const itemList = document.getElementById("item-list");
 
   // EventListener: After typing in any input, filter items to those that match search
-  searchElements.forEach((element) => {
+  searchElements.forEach(element => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(
-        searchJournal(
-          searchBar.value,
-          parseTags(tagsBar.value),
-          startDate.value,
-          endDate.value,
-        ),
-      );
+      displayList(searchJournal(searchBar.value, parseTags(tagsBar.value), startDate.value, endDate.value));
     };
   });
 }
