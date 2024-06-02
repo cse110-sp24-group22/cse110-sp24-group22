@@ -1,6 +1,5 @@
-//Store the data into localStorage before staring all the things.
-let journalList = getJournalList();
-
+// Instantiate list of entries.
+let journalList;
 document.addEventListener("DOMContentLoaded", init);
 
 /**
@@ -8,7 +7,7 @@ document.addEventListener("DOMContentLoaded", init);
  * @typedef {Object} JournalEntry
  * @property {number} timestamp - unique identifier and time it was created
  * @property {string} title - title of the journal entry
- * @property {Array.string} tags - list of tags
+ * @property {string[]} tags - list of tags
  * @property {Object} delta - Quill delta containing text operations
  */
 let quill;
@@ -22,6 +21,8 @@ let sortDirection = {
  * Called on page load.
  */
 function init() {
+  // Store the data into localStorage before starting all the things.
+  journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
 
@@ -189,7 +190,7 @@ function getJournalList() {
  * @returns {JournalEntry|undefined} - journal entry or undefined if not found
  */
 function getJournalByTimestamp(timestamp) {
-  journal = journalList.find((entry) => entry.timestamp == timestamp);
+  let journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
     return undefined;
@@ -249,9 +250,10 @@ function editJournal(id) {
     displayList(journalList);
   });
 
+  let noteObject;
   if (id === undefined) {
     id = new Date().getTime();
-    let noteObject = {
+    noteObject = {
       timestamp: id,
       title: "",
       tags: [],
@@ -285,7 +287,7 @@ function saveJournal(journalList) {
 }
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
- * @param {string} query - exact string to search for 
+ * @param {string} query - exact string to search for
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
@@ -378,3 +380,5 @@ function setUpSearch() {
     };
   });
 }
+
+export {getTextFromDelta, getMatchingEntries};
