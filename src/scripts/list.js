@@ -38,7 +38,14 @@ document.getElementById("sort-timestamp").addEventListener("click", () => {
   sortByCategory("timestamp");
 });
 
-/* Making the list sort*/
+/**
+ * Sorts the journal list by the specified category.
+ * 
+ * @param {string} category - The category to sort by. This can be "name" or "timestamp".
+ * If "name" is specified, the journal list is sorted alphabetically by the title of the journal entries.
+ * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
+ * The sort direction (ascending or descending) is toggled each time the function is called with the same category.
+ */
 function sortByCategory(category) {
   if (category === "name") {
     journalList.sort((a, b) => {
@@ -63,7 +70,14 @@ function sortByCategory(category) {
   displayList(journalList);
 }
 
-/*make the sorting arrow up and down correspond to its sorting*/
+/**
+ * Updates the direction of the sorting arrows based on the sorting category and direction.
+ *
+ * @param {string} category - The category of sorting. This can be "name" or "timestamp".
+ * If "name" is specified, the name sort arrow's direction is updated based on the sort direction.
+ * If "timestamp" is specified, the timestamp sort arrow's direction is updated based on the sort direction.
+ * The other arrow is reset to its default direction.
+ */
 function updateSortArrows(category) {
   const nameSortArrow = document.getElementById("sort-name");
   const timestampSortArrow = document.getElementById("sort-timestamp");
@@ -272,7 +286,7 @@ function saveJournal(journalList) {
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
  * @param {string} query - exact string to search for 
- * @param {Array.string} tags - list of exact tags to include
+ * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
  * @returns matching entries
