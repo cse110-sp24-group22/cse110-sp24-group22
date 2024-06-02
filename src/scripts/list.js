@@ -10,8 +10,12 @@ document.addEventListener("DOMContentLoaded", init);
  * @property {string[]} tags - list of tags
  * @property {Object} delta - Quill delta containing text operations
  */
-
 let quill;
+
+let sortDirection = {
+  name: true,
+  timestamp: true
+};
 
 /**
  * Called on page load.
@@ -21,11 +25,71 @@ function init() {
   journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
   displayList(journalList);
-  setUpSearch();
 
+  setUpSearch();
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
+}
+
+document.getElementById("sort-name").addEventListener("click", () => {
+  sortByCategory("name");
+});
+document.getElementById("sort-timestamp").addEventListener("click", () => {
+  sortByCategory("timestamp");
+});
+
+/**
+ * Sorts the journal list by the specified category.
+ * 
+ * @param {string} category - The category to sort by. This can be "name" or "timestamp".
+ * If "name" is specified, the journal list is sorted alphabetically by the title of the journal entries.
+ * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
+ * The sort direction (ascending or descending) is toggled each time the function is called with the same category.
+ */
+function sortByCategory(category) {
+  if (category === "name") {
+    journalList.sort((a, b) => {
+      if (sortDirection.name) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+    sortDirection.name = !sortDirection.name;
+  } else if (category === "timestamp") {
+    journalList.sort((a, b) => {
+      if (sortDirection.timestamp) {
+        return a.timestamp - b.timestamp;
+      } else {
+        return b.timestamp - a.timestamp;
+      }
+    });
+    sortDirection.timestamp = !sortDirection.timestamp;
+  }
+  updateSortArrows(category);
+  displayList(journalList);
+}
+
+/**
+ * Updates the direction of the sorting arrows based on the sorting category and direction.
+ *
+ * @param {string} category - The category of sorting. This can be "name" or "timestamp".
+ * If "name" is specified, the name sort arrow's direction is updated based on the sort direction.
+ * If "timestamp" is specified, the timestamp sort arrow's direction is updated based on the sort direction.
+ * The other arrow is reset to its default direction.
+ */
+function updateSortArrows(category) {
+  const nameSortArrow = document.getElementById("sort-name");
+  const timestampSortArrow = document.getElementById("sort-timestamp");
+
+  if (category === "name") {
+    nameSortArrow.innerHTML = sortDirection.name ? "&#9650;" : "&#9660;";
+    timestampSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
+  } else if (category === "timestamp") {
+    timestampSortArrow.innerHTML = sortDirection.timestamp ? "&#9650;" : "&#9660;";
+    nameSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
+  }
 }
 
 /**
@@ -53,21 +117,12 @@ function createListItem(item) {
 
   const title = document.createElement("div");
   title.textContent = item.title;
+  title.className = "title";
   listItem.appendChild(title);
-
-  const details = document.createElement("div");
-  details.style.fontSize = "small";
-
-  let timestamp = parseInt(item.timestamp);
-  const timestampText = document.createElement("div");
-  timestampText.textContent = `Timestamp: ${new Date(
-    timestamp,
-  ).toLocaleString()}`;
-  details.appendChild(timestampText);
 
   // Generate tags
   const tagsContainer = document.createElement("div");
-  tagsContainer.textContent = "Tags: ";
+  tagsContainer.textContent = "";
 
   item.tags.forEach((tag) => {
     const tagElement = document.createElement("span");
@@ -80,8 +135,15 @@ function createListItem(item) {
     tagsContainer.appendChild(document.createTextNode(" ")); // Add space between tags
   });
 
-  details.appendChild(tagsContainer);
-  listItem.appendChild(details);
+  listItem.appendChild(tagsContainer);
+
+  let timestamp = parseInt(item.timestamp);
+  const timestampText = document.createElement("div");
+  timestampText.textContent = `     ${new Date(
+    timestamp
+  ).toLocaleString()}`;
+  timestampText.className = "timestamp";
+  listItem.appendChild(timestampText);
 
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
@@ -220,21 +282,23 @@ function editJournal(id) {
     saveJournalList(journalList);
   });
 }
-
+function saveJournal(journalList) {
+  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+}
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
  * @param {string} query - exact string to search for
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns {JournalEntry[]} matching entries
+ * @returns matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
 
   // Filter by tags, case-sensitive
-  tags.forEach((tag) => {
-    filteredList = filteredList.filter((entry) => entry.tags.includes(tag));
+  tags.forEach(tag => {
+    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
   });
 
   // Filter by date range
@@ -242,14 +306,10 @@ function searchJournal(query, tags, startDate, endDate) {
   let endMilliseconds = Date.parse(endDate + "T00:00:00");
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
-    filteredList = filteredList.filter(
-      (entry) => entry.timestamp >= startMilliseconds,
-    );
+    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
   }
   if (!isNaN(endMilliseconds)) {
-    filteredList = filteredList.filter(
-      (entry) => entry.timestamp <= endMilliseconds,
-    );
+    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
   }
 
   return getMatchingEntries(filteredList, query);
@@ -257,9 +317,9 @@ function searchJournal(query, tags, startDate, endDate) {
 
 /**
  * Searches a list of entries for a case-insensitive string.
- * @param {JournalEntry[]} list - list of entries
- * @param {string} query - exact string to search for
- * @returns {JournalEntry[]} matching entries
+ * @param {Array.Object} list - list of entries
+ * @param {string} query - exact string to search for 
+ * @returns matching entries
  */
 function getMatchingEntries(list, query) {
   query = query.toLowerCase();
@@ -281,7 +341,7 @@ function getMatchingEntries(list, query) {
 /**
  * Extracts all the text in a Quill delta.
  * @param {Object} delta - Quill delta containing text operations
- * @returns {string} all the text in a Quill delta
+ * @returns all the text in a Quill delta
  */
 function getTextFromDelta(delta) {
   let text = "";
@@ -292,12 +352,12 @@ function getTextFromDelta(delta) {
 }
 
 /**
- * Parses a string of comma-separated tags into an array.
+ * Parses a string of comma-separated tags into an array. 
  * @param {string} tagsString - string of comma-separated tags
- * @returns {string[]} array of tags
+ * @returns array of tags
  */
 function parseTags(tagsString) {
-  return tagsString.split(",").filter((tag) => tag.length > 0);
+  return tagsString.split(",").filter(tag => tag.length > 0);
 }
 
 /**
@@ -313,17 +373,10 @@ function setUpSearch() {
   const itemList = document.getElementById("item-list");
 
   // EventListener: After typing in any input, filter items to those that match search
-  searchElements.forEach((element) => {
+  searchElements.forEach(element => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(
-        searchJournal(
-          searchBar.value,
-          parseTags(tagsBar.value),
-          startDate.value,
-          endDate.value,
-        ),
-      );
+      displayList(searchJournal(searchBar.value, parseTags(tagsBar.value), startDate.value, endDate.value));
     };
   });
 }
