@@ -22,6 +22,7 @@ main {
     place-self: center;
 }
 
+/*
 .container {
     background: white;
     border-radius: 8px;
@@ -30,7 +31,7 @@ main {
     max-width: 600px;
     width: 100%;
 }
-
+*/
 header {
     display: grid;
     justify-content: space-between;
@@ -90,7 +91,7 @@ h2 {
 }
 
 .filter-container {
-    margin: 20px 0;
+    margin-top: 125px;
 }
 
 .search-bar {
@@ -149,7 +150,7 @@ h2 {
     "name tags last delete";
     grid-template-columns: .5fr 2fr .5fr .5fr;
     column-gap: 10px;
-
+}
 /* The item-list li div rule sets the flex property of the div within the list items. */
 .item-list li div {
     flex: 1;
@@ -210,9 +211,9 @@ h2 {
 .tag {
     display: inline-block;
     padding: 2px 5px;
-    border: 1px solid white;
+    border: 1px solid black;
     border-radius: 3px;
-    color: white;
+    color: black;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 12px;
@@ -275,14 +276,15 @@ h2 {
     border-radius: 4px;
     box-sizing: border-box; /* Ensure padding is included in width */
   }
-
+/*
   .list-container {
     width: 100%;
 }
 
 /* The .list-header rule sets the appearance and layout of the list header. */
+/*
 .list-header {
-    display: flex;
+    display: inline;
     justify-content: space-between;
     padding: 10px;
     background-color: #f1f1f1;
@@ -295,6 +297,7 @@ h2 {
     text-align: center;
     font-weight: bold;
 }
+*/
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
 .sort-arrow {

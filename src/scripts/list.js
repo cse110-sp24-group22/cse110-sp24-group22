@@ -150,14 +150,6 @@ function createListItem(item) {
 
   listItem.appendChild(tagsContainer);
 
-  let timestamp = parseInt(item.timestamp);
-  const timestampText = document.createElement("div");
-  timestampText.textContent = `     ${new Date(
-    timestamp
-  ).toLocaleString()}`;
-  timestampText.className = "timestamp";
-  listItem.appendChild(timestampText);
-
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
   deleteButton.className = "delete-button";
