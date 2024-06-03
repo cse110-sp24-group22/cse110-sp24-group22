@@ -89,6 +89,10 @@ h2 {
     justify-content: center;
 }
 
+.filter-container {
+    margin: 20px 0;
+}
+
 .search-bar {
     width: 100%;
     padding: 10px;
@@ -121,12 +125,14 @@ h2 {
     background-color: #659b4c;
 }
 
+/* The item-list rule removes the default list style and padding. */
 .item-list {
     list-style-type: none;
     padding: 0;
     display: inline;
 }
 
+/* The item-list li rule sets the appearance and layout of the list items. */
 .item-list li {
     position: relative;
     display: grid;
@@ -143,8 +149,35 @@ h2 {
     "name tags last delete";
     grid-template-columns: .5fr 2fr .5fr .5fr;
     column-gap: 10px;
+
+/* The item-list li div rule sets the flex property of the div within the list items. */
+.item-list li div {
+    flex: 1;
+    display: fixed;
+    flex-wrap: wrap;
 }
 
+/* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
+.item-list li .timestamp {
+    font-size: 12px;
+    margin-left: 10px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+/* The item-list li .title rule sets the layout of the title within the list items. */
+.item-list li .title{
+    margin-left: 10px;
+    flex: 1.1;
+    margin-right: 30px;
+}
+
+/* The item-list li .tag rule centers the text of the tag within the list items. */
+.item-list li .tag{
+    text-align: center;
+}
+
+/* The item-list li:hover rule changes the background color of the list items when they're hovered over. */
 .item-list li:hover {
     background: #C1B29B;
 }
@@ -173,6 +206,7 @@ h2 {
 }
 
 
+/* The tag rule sets the appearance of the tag, but makes it change when it's hovered over. */
 .tag {
     display: inline-block;
     padding: 2px 5px;
@@ -181,8 +215,10 @@ h2 {
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 12px;
 }
 
+/* The tag:hover rule changes the color and border color of the tag when it's hovered over. */
 .tag:hover {
     color: yellow;
     border-color: yellow;
@@ -239,3 +275,34 @@ h2 {
     border-radius: 4px;
     box-sizing: border-box; /* Ensure padding is included in width */
   }
+
+  .list-container {
+    width: 100%;
+}
+
+/* The .list-header rule sets the appearance and layout of the list header. */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.list-header span {
+    flex: .25;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* The .sort-arrow rule sets the appearance of the sort arrow. */
+.sort-arrow {
+    cursor: pointer;
+    color: red;
+}
+
+/* The .sort-arrow:hover rule changes the color of the sort arrow when it's hovered over. */
+.sort-arrow:hover {
+    color: darkred;
+}
