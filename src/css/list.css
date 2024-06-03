@@ -92,6 +92,7 @@ h2 {
 
 .filter-container {
     margin-top: 125px;
+    position: fixed;
 }
 
 .search-bar {
