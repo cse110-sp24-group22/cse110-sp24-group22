@@ -1,9 +1,8 @@
 /* FIX: .delete-button needs proper centering */
 /* FIX: weird margins for header (seems to be margin on top of content when not
         specified */
-/* TODO: reconfigure journal entry element creations so that tags and timestamp
-         are affected by grid display */
 
+/* body format, sets font family and page to be scrollable */
 body {
     font-family: Arial, sans-serif;
     background-color: #FFE2B6;
@@ -13,8 +12,9 @@ body {
     height: 100vh;
 }
 
+/* holds list of entries, inline makes entries spread across page, margin to account for headers */
 main {
-    margin-top: 125px;
+    margin-top: 150px;
     display: inline;
 }
 
@@ -22,16 +22,7 @@ main {
     place-self: center;
 }
 
-/*
-.container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-}
-*/
+/* general format for headers, placed above all content */
 header {
     display: grid;
     justify-content: space-between;
@@ -43,6 +34,12 @@ header {
     z-index: 2;
 }
 
+/* general transition for all buttons */
+button {
+    transition: background-color .3s ease;
+}
+
+/* given a height and color */
 .main-header {
     grid-template-areas: 
     "logo search root sort";
@@ -50,12 +47,15 @@ header {
     background-color: lightgrey;
 }
 
+/* margin to account for main-header and transition for filter box */
 .entry-header {
     margin-top: 75px;
     height: 50px;
     background-color: #947665;
     grid-template-areas: 
     "name tags last delete";
+    grid-template-columns: 1fr .75fr .75fr .5fr;
+    transition: margin .5s ease;
 }
 
 h1 {
@@ -68,7 +68,8 @@ h2 {
     place-self: center;
 }
 
-.return-button, .sort-button{
+/* format Root View button and Filter button */
+.return-button, .filter-button{
     background-color: #4D4D4D;
     color: white;
     border: none;
@@ -78,9 +79,11 @@ h2 {
     font-size: 14px;
     width: 150px;
     place-self: center;
+    transition: background-color .3s ease;
 }
 
-.return-button:hover, .sort-button:hover {
+/* button hover transition */
+.return-button:hover, .filter-button:hover {
     background-color: #202020;
 }
 
@@ -91,8 +94,19 @@ h2 {
 }
 
 .filter-container {
-    margin-top: 125px;
+    overflow: hidden;
+    height: 0px;
+    margin-top: 75px;
+    padding: 0px 0px 0px 0px;
     position: fixed;
+    grid-template-columns: 1fr .75fr .75fr .5fr;
+    background-color: #947665;
+    transition: height 0.5s ease, padding 0.5s ease;
+}
+
+.filter-container.show {
+    height: 30px;
+    padding-bottom: 10px 0px 10px 0px;
 }
 
 .search-bar {
@@ -149,7 +163,7 @@ h2 {
     transition: background 0.3s ease;
     grid-template-areas: 
     "name tags last delete";
-    grid-template-columns: .5fr 2fr .5fr .5fr;
+    grid-template-columns: 1fr .75fr .75fr .5fr;
     column-gap: 10px;
 }
 /* The item-list li div rule sets the flex property of the div within the list items. */
@@ -277,28 +291,6 @@ h2 {
     border-radius: 4px;
     box-sizing: border-box; /* Ensure padding is included in width */
   }
-/*
-  .list-container {
-    width: 100%;
-}
-
-/* The .list-header rule sets the appearance and layout of the list header. */
-/*
-.list-header {
-    display: inline;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #f1f1f1;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-}
-
-.list-header span {
-    flex: .25;
-    text-align: center;
-    font-weight: bold;
-}
-*/
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
 .sort-arrow {
