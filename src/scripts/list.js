@@ -41,7 +41,7 @@ document.getElementById("sort-timestamp").addEventListener("click", () => {
 
 /**
  * Sorts the journal list by the specified category.
- * 
+ *
  * @param {string} category - The category to sort by. This can be "name" or "timestamp".
  * If "name" is specified, the journal list is sorted alphabetically by the title of the journal entries.
  * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
@@ -215,14 +215,32 @@ function saveJournalList(journalList) {
 }
 
 /**
+ * Checks if a title is valid.
+ * @param title {string} - title of the journal entry
+ * @returns {boolean} - true if title is valid, false otherwise
+ */
+function isTitleValid(title) {
+  return title.trim().length > 0;
+}
+
+/**
+ * Default title for a journal entry.
+ * @type {string}
+ */
+const DEFAULT_TITLE = "Untitled";
+
+/**
  * Opens a modal to edit a journal entry.
  * @param id {number} - unique identifier and time it was created
  */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
+  /** @type {HTMLButtonElement} */
   const saveJournal = document.getElementById("saveJournal");
+  /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
+  /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
 
   modal.style.display = "block";
@@ -251,7 +269,7 @@ function editJournal(id) {
     id = new Date().getTime();
     noteObject = {
       timestamp: id,
-      title: "",
+      title: DEFAULT_TITLE,
       tags: [],
       delta: undefined,
     };
@@ -276,7 +294,15 @@ function editJournal(id) {
   function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
-    saveJournalList(journalList);
+
+    if (isTitleValid(title)) { // don't save if title is empty
+      saveJournalList(journalList);
+
+      saveJournal.disabled = false;
+    } else {
+      saveJournal.disabled = true;
+      saveJournal.title = "Title cannot be empty";
+    }
   }
 
   /**
@@ -285,7 +311,10 @@ function editJournal(id) {
   function quillUpdateTextHandler() {
     const newDelta = quill.getContents();
     noteObject.delta = newDelta;
-    saveJournalList(journalList);
+
+    if (isTitleValid(noteObject.title)) { // don't save if title is empty
+      saveJournalList(journalList);
+    }
   }
 
   /**
@@ -330,7 +359,7 @@ function searchJournal(query, tags, startDate, endDate) {
 /**
  * Searches a list of entries for a case-insensitive string.
  * @param {Array.Object} list - list of entries
- * @param {string} query - exact string to search for 
+ * @param {string} query - exact string to search for
  * @returns matching entries
  */
 function getMatchingEntries(list, query) {
@@ -364,7 +393,7 @@ function getTextFromDelta(delta) {
 }
 
 /**
- * Parses a string of comma-separated tags into an array. 
+ * Parses a string of comma-separated tags into an array.
  * @param {string} tagsString - string of comma-separated tags
  * @returns array of tags
  */
