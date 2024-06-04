@@ -270,18 +270,27 @@ function editJournal(id) {
 
   titleBar.addEventListener("input", updateTitleHandler);
 
+  /**
+   * Updates journal entry title with current contents in the title input bar.
+   */
   function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
     saveJournalList(journalList);
   }
 
+  /**
+   * Updates journal entry with current contents of the Quill editor.
+   */
   function quillUpdateTextHandler() {
     const newDelta = quill.getContents();
     noteObject.delta = newDelta;
     saveJournalList(journalList);
   }
 
+  /**
+   * Removes event listeners on input fields for the current journal.
+   */
   function removeJournalEventListeners() {
     titleBar.removeEventListener("input", updateTitleHandler);
     quill.off("text-change", quillUpdateTextHandler);
