@@ -234,13 +234,8 @@ function editJournal(id) {
   closeModal.addEventListener("click", function () {
     modal.style.display = "none";
     displayList(journalList);
-  });
-
-  window.addEventListener("click", function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  });
+    removeJournalEventListeners();
+  }, { once: true });
 
   saveJournal.addEventListener("click", function () {
     const journalContent = quill.root.innerHTML;
@@ -248,7 +243,8 @@ function editJournal(id) {
     modal.style.display = "none";
     itemList.innerHTML = "";
     displayList(journalList);
-  });
+    removeJournalEventListeners();
+  }, { once: true });
 
   let noteObject;
   if (id === undefined) {
@@ -270,20 +266,27 @@ function editJournal(id) {
   quill.setContents(noteObject.delta);
   titleBar.value = noteObject.title;
 
-  quill.on("text-change", () => {
-    const newDelta = quill.getContents();
-    noteObject.delta = newDelta;
-    saveJournalList(journalList);
-  });
+  quill.on("text-change", quillUpdateTextHandler);
 
-  titleBar.addEventListener("input", () => {
+  titleBar.addEventListener("input", updateTitleHandler);
+
+  function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
     saveJournalList(journalList);
-  });
-}
-function saveJournal(journalList) {
-  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+  }
+
+  function quillUpdateTextHandler() {
+    const newDelta = quill.getContents();
+    noteObject.delta = newDelta;
+    saveJournalList(journalList);
+  }
+
+  function removeJournalEventListeners() {
+    titleBar.removeEventListener("input", updateTitleHandler);
+    quill.off("text-change", quillUpdateTextHandler);
+  }
+
 }
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
