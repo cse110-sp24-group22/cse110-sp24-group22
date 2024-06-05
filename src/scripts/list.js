@@ -24,12 +24,34 @@ function init() {
   // Store the data into localStorage before starting all the things.
   journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
+  const filterButton = document.querySelector(".filter-button");
   displayList(journalList);
 
   setUpSearch();
+
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
+
+  // Animation for the filter dropdown
+  filterButton.addEventListener("click", function () {
+    const filterHeader = document.querySelector('.filter-container');
+    const entryHeader = document.querySelector('.entry-header');
+    if(filterHeader.classList.contains('show')) {
+      filterHeader.classList.remove('show');
+      entryHeader.style.marginTop = '75px'; // adjust based on filterHeader height
+      setTimeout(function() {
+        filterHeader.style.display = 'none';
+      }, 500);
+    } else {
+      filterHeader.style.display = 'grid';
+      setTimeout(() => {
+        filterHeader.classList.add('show');
+        entryHeader.style.marginTop = '105px'; // adjust based on filterHeader height
+      }, 0);
+    }
+  });
+
 }
 
 document.getElementById("sort-name").addEventListener("click", () => {
@@ -117,13 +139,16 @@ function createListItem(item) {
   const itemList = document.getElementById("item-list");
   const listItem = document.createElement("li");
 
+  //Create title container
   const title = document.createElement("div");
+  title.setAttribute("id", "entry-title");
   title.textContent = item.title;
   title.className = "title";
   listItem.appendChild(title);
 
-  // Generate tags
+  //Generate tags and create tag container
   const tagsContainer = document.createElement("div");
+  tagsContainer.setAttribute("id", "entry-tags");
   tagsContainer.textContent = "";
 
   item.tags.forEach((tag) => {
@@ -139,25 +164,36 @@ function createListItem(item) {
 
   listItem.appendChild(tagsContainer);
 
+  //Create timestamp container
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
-  timestampText.textContent = `     ${new Date(timestamp).toLocaleString()}`;
-  timestampText.className = "timestamp";
+
+  timestampText.setAttribute("id", "entry-timestamp");
+  timestampText.textContent = `${new Date(
+    timestamp
+  ).toLocaleString()}`;
+
   listItem.appendChild(timestampText);
 
+  //Create delete button
+  const deleteButtonContainer = document.createElement("div");
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
   deleteButton.className = "delete-button";
-  deleteButton.style.display = "none";
+  deleteButtonContainer.id = "delete-container"
+  deleteButtonContainer.appendChild(deleteButton);  
 
   // EventListener: When clicking delete, delete from page and LocalStorage
   deleteButton.onclick = (event) => {
+    if(window.confirm(`Are you sure you would like to delete the "${item.title}"?`)) {
+      event.stopPropagation();
+      listItem.remove();
+      deleteJournal(timestamp);
+    }
     event.stopPropagation();
-    listItem.remove();
-    deleteJournal(timestamp);
   };
 
-  listItem.appendChild(deleteButton);
+  listItem.appendChild(deleteButtonContainer);
   listItem.onmouseover = () => {
     deleteButton.style.display = "inline";
   };
@@ -303,6 +339,7 @@ function editJournal(id) {
     let title = titleBar.value;
     noteObject.title = title;
 
+
     if (isTitleValid(title)) {
       // don't save if title is empty
       saveJournalList(journalList);
@@ -335,6 +372,7 @@ function editJournal(id) {
     quill.off("text-change", quillUpdateTextHandler);
   }
 }
+
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
  * @param {string} query - exact string to search for
