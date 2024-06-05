@@ -49,15 +49,15 @@ body {
 }
 
 .section1 {
-  background: url("/src/assets/background_top_soil.svg"),
-    url("/src/assets/background_sky.svg");
+  background: url("../assets/background_top_soil.svg"),
+    url("../assets/background_sky.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center top;
 }
 
 .section2 {
-  background: url("/src/assets/background_deep_ground.svg");
+  background: url("../assets/background_deep_ground.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center top;
