@@ -50,14 +50,17 @@
       <button class="new-journal-button">+ New Journal</button>
       <ul class="item-list" id="item-list">
         <!-- Items will be dynamically inserted here -->
+        <img src="../assets/trashcan.png" alt="Delete" class="delete-icon" />
       </ul>
       <div class="modal" id="journalModal">
         <div class="modal-content">
           <input type="text" id="journalTitle" placeholder="Enter title here..." />
           <div id="editor"></div>
-          <button class="close-button" id="cancelModal">Cancel</button>
-          <button class="DeleteJournal">Delete Journal</button>
-          <button class="Save & Close" id="closeModal">Save Changes</button>
+          <div id="butforlist">
+            <button class="close-button" id="cancelModal">Cancel</button>
+            <button class="DeleteJournal">Delete Journal</button>
+            <button class="Save-Close" id="closeModal">Save Changes</button>
+          </div>
         </div>
       </div>
     </main>
