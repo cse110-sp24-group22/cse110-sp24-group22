@@ -186,9 +186,9 @@ header.entry-header {
 
 /* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
 .item-list li #entry-timestamp {
-    margin-left: 1px;
+    margin-left: 100px;
     text-align: right;
-    margin-right: 10px;
+    margin-right: 40px;
     place-self: center;
 }
 
@@ -213,12 +213,12 @@ header.entry-header {
     position: absolute;
     transform: translateY(-50%);
     background-color: #dc3545;
-    background-image: url('trash_can.svg');
     color: white;
     border: none;
-    padding: 50px 10px;
+    padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+    right: 85px;
 }
 
 .delete-button:hover {
@@ -231,6 +231,17 @@ header.entry-header {
 
 .item-list li:hover .delete-button {
     display: inline;
+}
+
+.delete-icon {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    right: 20px;
+    top: 50%;
+    transform: translate
 }
 
 
@@ -270,16 +281,20 @@ header.entry-header {
 
   .modal-content {
     z-index: 3 !important;
+    display:block;  
     background-color: #FFE2B6;
     margin: 15% auto;
     padding: 20px;
+    padding-bottom: 45px;
     border: 1px solid #888;
     width: 80%;
+    height:fit-content;
   }
 
   .close-button {
     bottom: 5%;
     right: 5%;
+    margin-top: 10px;
     background-color: #D9D9D9;
     border-radius: 10px;
     color: #000000;
@@ -294,6 +309,34 @@ header.entry-header {
     text-decoration: none;
     cursor: pointer;
   }
+
+  .DeleteJournal {
+    bottom: 5%;
+    right: 5%;
+    margin-top: 10px;
+    margin: right;
+    background-color: #FF0000;
+    border-radius: 10px;
+    color: #000000;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .Save-Close {
+    bottom: 5%;
+    margin-top: 10px;
+    float: right;
+    background-color: #D0FBBC;
+    border-radius: 10px;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+    
+  }
+
+
+
 
   #editor {
     height: 300px;
@@ -311,7 +354,6 @@ header.entry-header {
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
 .sort-arrow {
-    background-image: url();
     cursor: pointer;
     color: red;
 }
