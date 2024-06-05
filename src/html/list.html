@@ -14,7 +14,7 @@
 </head>
   <body>
     <header class="main-header">
-      <img src="..\assets\TeamIcon_3Diagonal.png", class="logo", height="47", width="47", alt="logo"/>
+      <img src="..\assets\TeamIcon_3Diagonal.png", class="logo", height="55", width="55", alt="logo"/>
       <div class="search-container">
         <input
           type="text"
@@ -43,20 +43,21 @@
      <header class="entry-header">
       <h2>Name  <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
       <h2>Tags</h2>
-      <h2>Last Edited <span class="sort-arrow" id="sort-timestamp">&#9650;</span> </h2>
+      <h2>Last Modified<span class="sort-arrow" id="sort-timestamp">&#9650;</span> </h2>
       <h2>Delete</h2>
     </header>
     <main>
-      <button class="new-journal-button">New Journal</button>
+      <button class="new-journal-button">+ New Journal</button>
       <ul class="item-list" id="item-list">
         <!-- Items will be dynamically inserted here -->
       </ul>
       <div class="modal" id="journalModal">
         <div class="modal-content">
-          <span class="close-button" id="closeModal">&times;</span>
           <input type="text" id="journalTitle" placeholder="Enter title here..." />
           <div id="editor"></div>
-          <button id="saveJournal">Save</button>
+          <button class="close-button" id="cancelModal">Cancel</button>
+          <button class="DeleteJournal">Delete Journal</button>
+          <button class="Save & Close" id="closeModal">Save Changes</button>
         </div>
       </div>
     </main>
