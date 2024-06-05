@@ -172,10 +172,12 @@ function createListItem(item) {
   listItem.appendChild(timestampText);
 
   //Create delete button
+  const deleteButtonContainer = document.createElement("div");
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
   deleteButton.className = "delete-button";
-  deleteButton.style.display = "none";
+  deleteButtonContainer.id = "delete-container"
+  deleteButtonContainer.appendChild(deleteButton);  
 
   // EventListener: When clicking delete, delete from page and LocalStorage
   deleteButton.onclick = (event) => {
@@ -187,7 +189,7 @@ function createListItem(item) {
     event.stopPropagation();
   };
 
-  listItem.appendChild(deleteButton);
+  listItem.appendChild(deleteButtonContainer);
   listItem.onmouseover = () => {
     deleteButton.style.display = "inline";
   };
