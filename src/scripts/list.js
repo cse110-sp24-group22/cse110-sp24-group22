@@ -14,7 +14,7 @@ let quill;
 
 let sortDirection = {
   name: true,
-  timestamp: true
+  timestamp: true,
 };
 
 /**
@@ -87,7 +87,9 @@ function updateSortArrows(category) {
     nameSortArrow.innerHTML = sortDirection.name ? "&#9650;" : "&#9660;";
     timestampSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
   } else if (category === "timestamp") {
-    timestampSortArrow.innerHTML = sortDirection.timestamp ? "&#9650;" : "&#9660;";
+    timestampSortArrow.innerHTML = sortDirection.timestamp
+      ? "&#9650;"
+      : "&#9660;";
     nameSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
   }
 }
@@ -139,9 +141,7 @@ function createListItem(item) {
 
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
-  timestampText.textContent = `     ${new Date(
-    timestamp
-  ).toLocaleString()}`;
+  timestampText.textContent = `     ${new Date(timestamp).toLocaleString()}`;
   timestampText.className = "timestamp";
   listItem.appendChild(timestampText);
 
@@ -249,20 +249,28 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-  closeModal.addEventListener("click", function () {
-    modal.style.display = "none";
-    displayList(journalList);
-    removeJournalEventListeners();
-  }, { once: true });
+  closeModal.addEventListener(
+    "click",
+    function () {
+      modal.style.display = "none";
+      displayList(journalList);
+      removeJournalEventListeners();
+    },
+    { once: true },
+  );
 
-  saveJournal.addEventListener("click", function () {
-    const journalContent = quill.root.innerHTML;
-    console.log(journalContent);
-    modal.style.display = "none";
-    itemList.innerHTML = "";
-    displayList(journalList);
-    removeJournalEventListeners();
-  }, { once: true });
+  saveJournal.addEventListener(
+    "click",
+    function () {
+      const journalContent = quill.root.innerHTML;
+      console.log(journalContent);
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      removeJournalEventListeners();
+    },
+    { once: true },
+  );
 
   let noteObject;
   if (id === undefined) {
@@ -295,7 +303,8 @@ function editJournal(id) {
     let title = titleBar.value;
     noteObject.title = title;
 
-    if (isTitleValid(title)) { // don't save if title is empty
+    if (isTitleValid(title)) {
+      // don't save if title is empty
       saveJournalList(journalList);
 
       saveJournal.disabled = false;
@@ -312,7 +321,8 @@ function editJournal(id) {
     const newDelta = quill.getContents();
     noteObject.delta = newDelta;
 
-    if (isTitleValid(noteObject.title)) { // don't save if title is empty
+    if (isTitleValid(noteObject.title)) {
+      // don't save if title is empty
       saveJournalList(journalList);
     }
   }
@@ -324,7 +334,6 @@ function editJournal(id) {
     titleBar.removeEventListener("input", updateTitleHandler);
     quill.off("text-change", quillUpdateTextHandler);
   }
-
 }
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
@@ -338,8 +347,8 @@ function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
 
   // Filter by tags, case-sensitive
-  tags.forEach(tag => {
-    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
+  tags.forEach((tag) => {
+    filteredList = filteredList.filter((entry) => entry.tags.includes(tag));
   });
 
   // Filter by date range
@@ -347,10 +356,14 @@ function searchJournal(query, tags, startDate, endDate) {
   let endMilliseconds = Date.parse(endDate + "T00:00:00");
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
-    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
+    filteredList = filteredList.filter(
+      (entry) => entry.timestamp >= startMilliseconds,
+    );
   }
   if (!isNaN(endMilliseconds)) {
-    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
+    filteredList = filteredList.filter(
+      (entry) => entry.timestamp <= endMilliseconds,
+    );
   }
 
   return getMatchingEntries(filteredList, query);
@@ -398,7 +411,7 @@ function getTextFromDelta(delta) {
  * @returns array of tags
  */
 function parseTags(tagsString) {
-  return tagsString.split(",").filter(tag => tag.length > 0);
+  return tagsString.split(",").filter((tag) => tag.length > 0);
 }
 
 /**
@@ -414,12 +427,19 @@ function setUpSearch() {
   const itemList = document.getElementById("item-list");
 
   // EventListener: After typing in any input, filter items to those that match search
-  searchElements.forEach(element => {
+  searchElements.forEach((element) => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(searchJournal(searchBar.value, parseTags(tagsBar.value), startDate.value, endDate.value));
+      displayList(
+        searchJournal(
+          searchBar.value,
+          parseTags(tagsBar.value),
+          startDate.value,
+          endDate.value,
+        ),
+      );
     };
   });
 }
 
-export {getTextFromDelta, getMatchingEntries};
+export { getTextFromDelta, getMatchingEntries };
