@@ -1,20 +1,32 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script defer type="module" src="../scripts/list.js"></script>
-  <title>List Page</title>
-  <link rel="stylesheet" href="../css/list.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script defer type="module" src="../scripts/list.js"></script>
+    <title>List Page</title>
+    <link rel="stylesheet" href="../css/list.css" />
 
     <!-- Quill injected CSS & JS -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-</head>
+  </head>
   <body>
     <header class="main-header">
-      <img src="..\assets\TeamIcon_3Diagonal.png", class="logo", height="55", width="55", alt="logo"/>
+      <img
+        src="..\assets\TeamIcon_3Diagonal.png"
+        ,
+        class="logo"
+        ,
+        height="55"
+        ,
+        width="55"
+        ,
+        alt="logo"
+      />
       <div class="search-container">
         <input
           type="text"
@@ -23,12 +35,13 @@
           id="search-bar"
         />
       </div>
-      <button onclick="window.location.href='../../index.html'" class="return-button">
+      <button
+        onclick="window.location.href='../../index.html'"
+        class="return-button"
+      >
         Root View
       </button>
-      <button class="filter-button">
-        Filter
-      </button>
+      <button class="filter-button">Filter</button>
     </header>
     <header class="filter-container">
       <div></div>
@@ -40,10 +53,12 @@
         <input type="date" id="end-date" />
       </div>
     </header>
-     <header class="entry-header">
-      <h2>Name  <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
+    <header class="entry-header">
+      <h2>Name <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
       <h2>Tags</h2>
-      <h2>Last Modified<span class="sort-arrow" id="sort-timestamp">&#9650;</span> </h2>
+      <h2>
+        Last Modified<span class="sort-arrow" id="sort-timestamp">&#9650;</span>
+      </h2>
       <h2>Delete</h2>
     </header>
     <main>
@@ -54,7 +69,11 @@
       </ul>
       <div class="modal" id="journalModal">
         <div class="modal-content">
-          <input type="text" id="journalTitle" placeholder="Enter title here..." />
+          <input
+            type="text"
+            id="journalTitle"
+            placeholder="Enter title here..."
+          />
           <div id="editor"></div>
           <div id="butforlist">
             <button class="close-button" id="cancelModal">Cancel</button>
