@@ -295,6 +295,41 @@ h2 {
     box-sizing: border-box; /* Ensure padding is included in width */
   }
 
+.colored-tag {
+    background-color: #007bff;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: white;
+    text-align: center;
+    height: 20px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.tag-interface {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#tag-plus > button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#tag-plus > button:hover {
+    background-color: #218838;
+}
+
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
 .sort-arrow {
     cursor: pointer;

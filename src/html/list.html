@@ -55,10 +55,30 @@
         <div class="modal-content">
           <span class="close-button" id="closeModal">&times;</span>
           <input type="text" id="journalTitle" placeholder="Enter title here..." />
+          <div class="tags" id="tags">
+            <div class="colored-tag">
+              <span>Tag 1</span>
+            </div>
+            <div class="colored-tag">
+              <span>Tag 2</span>
+            </div>
+            <div class="tag-interface">
+              <div id="tag-plus">
+                <button id="tag-plus-button">+</button>
+              </div>
+              <div id="tag-input">
+                <input type="text" id="tagInput" placeholder="New tag" />
+              </div>
+              <button id="save-tag">Add</button>
+            </div>
+          </div>
+
           <div id="editor"></div>
           <button id="saveJournal">Save</button>
         </div>
       </div>
-    </main>
-  </body>
+
+  </div>
+</body>
+
 </html>

@@ -1,5 +1,8 @@
-// Instantiate list of entries.
-let journalList;
+//Store the data into localStorage before staring all the things.
+let journalList = getJournalList();
+let journalTags = getJournalTags();
+var tagSet = new Set();
+
 document.addEventListener("DOMContentLoaded", init);
 
 /**
@@ -242,6 +245,23 @@ function deleteJournal(timestamp) {
   saveJournalList(journalList);
 }
 
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) {
+    return tagSet;
+  }
+  return JSON.parse(localStorage.getItem("GarlicNotesTags"));
+}
+
+function deleteTag(tag) {
+  journalTags = journalTags.filter((entry) => entry != tag);
+  saveJournalTags(journalTags);
+}
+
+// storage of tags on localStorage
+function saveJournalTags(journalTags) {
+  localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
+}
+
 /**
  * Saves the list of journal entries to localStorage.
  * @param journalList {JournalEntry[]} - list of journal entries
@@ -278,6 +298,9 @@ function editJournal(id) {
   const titleBar = document.getElementById("journalTitle");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
+  const tagInput = document.getElementById("journalTag");
+  const tagList = document.getElementById("tag-list");
+  const tagSave = document.getElementById("save-tag");
 
   modal.style.display = "block";
 
@@ -339,6 +362,37 @@ function editJournal(id) {
     let title = titleBar.value;
     noteObject.title = title;
 
+    saveJournalList(journalList);
+  });
+
+  tagInput.value = noteObject.tags; // populate input bar with tags from the note
+
+  // listen to when users type input
+  tagInput.addEventListener("input", () => {
+    let tagsList = parseTags(tagInput.value);  // parse input into array
+    noteObject.tags = tagsList; // save as note's tags
+    tagsList.forEach(tag => {
+      journalTags.push(tag);
+      const tagItem = document.createElement("option");
+      tagItem.value = tag;
+      tagItem.className = 'tag-item';
+      tagList.appendChild(tagItem);
+    });
+    saveJournalList(journalList); //click then save 
+    saveJournalTags(journalTags);
+  });
+
+  tagSave.addEventListener("click", () => {
+    let tagsList = parseTags(tagInput.value);  // parse input into array
+    tagsList.forEach(tag => {
+      journalTags.add(tag);
+      const tagItem = document.createElement("option");
+      tagItem.value = tag;
+      tagItem.className = 'tag-item';
+      tagList.appendChild(tagItem);
+    });
+    noteObject.tags = tagsList; // save as note's tags
+  })
 
     if (isTitleValid(title)) {
       // don't save if title is empty
@@ -371,11 +425,13 @@ function editJournal(id) {
     titleBar.removeEventListener("input", updateTitleHandler);
     quill.off("text-change", quillUpdateTextHandler);
   }
+
 }
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
  * @param {string} query - exact string to search for
+ * @param {Array.string} tags - list of exact tags to include
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
@@ -479,5 +535,10 @@ function setUpSearch() {
     };
   });
 }
+function onTagPlusButton() {
+
+}
+
+document.getElementById("tag-plus-button").addEventListener("click", onTagPlusButton);
 
 export { getTextFromDelta, getMatchingEntries };
