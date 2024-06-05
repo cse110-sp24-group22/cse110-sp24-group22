@@ -1,27 +1,61 @@
+/* FIX: weird margins for header (seems to be margin on top of content when not
+        specified */
+
+/* body format, sets font family and page to be scrollable */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #FFE2B6;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:grid;
     height: 100vh;
 }
 
-.container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
+/* holds list of entries, inline makes entries spread across page, margin to account for headers */
+main {
+    margin-top: 150px;
+    display: inline;
 }
 
+.logo {
+    place-self: center;
+}
+
+/* general format for headers, placed above all content */
 header {
-    display: flex;
+    display: grid;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    position: fixed;
+    grid-template-columns: .5fr 2fr .5fr .5fr;
+    column-gap: 10px;
+    z-index: 2;
+}
+
+/* general transition for all buttons */
+button {
+    transition: background-color .3s ease;
+}
+
+/* given a height and color */
+.main-header {
+    grid-template-areas: 
+    "logo search root sort";
+    height: 75px;
+    background-color: lightgrey;
+}
+
+/* margin to account for entry-header and transition for filter box */
+.entry-header {
+    margin-top: 75px;
+    height:min-content;
+    background-color: #947665;
+    grid-template-areas: 
+    "name tags last delete";
+    grid-template-columns: 1fr .75fr .75fr .5fr;
+    transition: margin .5s ease;
+    padding: 10px;
 }
 
 h1 {
@@ -30,18 +64,30 @@ h1 {
     color: #333;
 }
 
-.return-button {
-    background-color: #007bff;
+h2 {
+    place-self: center;
+    margin: 0px;
+}
+
+
+
+/* format Root View button and Filter button */
+.return-button, .filter-button{
+    background-color: #4D4D4D;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
+    width: 150px;
+    place-self: center;
+    transition: background-color .3s ease;
 }
 
-.return-button:hover {
-    background-color: #0056b3;
+/* button hover transition */
+.return-button:hover, .filter-button:hover {
+    background-color: #202020;
 }
 
 .search-container {
@@ -51,7 +97,19 @@ h1 {
 }
 
 .filter-container {
-    margin: 20px 0;
+    overflow: hidden;
+    height: 0px;
+    margin-top: 75px;
+    padding: 0px 0px 0px 0px;
+    position: fixed;
+    grid-template-columns: 1fr .75fr .75fr .5fr;
+    background-color: #947665;
+    transition: height 0.5s ease, padding 0.5s ease;
+}
+
+.filter-container.show {
+    height: 30px;
+    padding-bottom: 10px 0px 10px 0px;
 }
 
 .search-bar {
@@ -62,51 +120,89 @@ h1 {
     font-size: 16px;
 }
 
-.new-journal-container {
+.add-button-container {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
 }
 
 .new-journal-button {
-    background-color: #28a745;
-    color: white;
+    bottom: 5%;
+    right: 5%;
+    position: fixed;
+    background-color: #D0FBBC;
+    color: black;
     border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
+    z-index: 2;
 }
 
 .new-journal-button:hover {
-    background-color: #218838;
+    background-color: #659b4c;
 }
 
+/* The item-list rule removes the default list style and padding. */
 .item-list {
     list-style-type: none;
     padding: 0;
+    display: inline;
 }
 
+/* The item-list li rule sets the appearance and layout of the list items. */
 .item-list li {
     position: relative;
-    background: #007bff;
-    color: white;
+    display: grid;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFE2B6;
+    color: black;
     margin: 5px 0;
     padding: 10px;
     border-radius: 4px;
     font-size: 18px;
     transition: background 0.3s ease;
+    grid-template-areas: 
+    "name tags last delete";
+    grid-template-columns: 1fr .75fr .75fr .5fr;
+    column-gap: 10px;
+}
+/* The item-list li div rule sets the flex property of the div within the list items. */
+.item-list li div {
+    flex: 1;
+    display: fixed;
+    flex-wrap: wrap;
 }
 
+/* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
+.item-list li #entry-timestamp {
+    margin-left: 10px;
+    text-align: right;
+    margin-right: 10px;
+    place-self: center;
+}
+
+/* The item-list li .title rule sets the layout of the title within the list items. */
+.item-list li #entry-title{
+    margin-left: 75px;
+    margin-right: 30px;
+}
+
+/* The item-list li .tag rule centers the text of the tag within the list items. */
+.item-list li .tag{
+    text-align: center;
+}
+
+/* The item-list li:hover rule changes the background color of the list items when they're hovered over. */
 .item-list li:hover {
-    background: #0056b3;
+    background: #C1B29B;
 }
 
 .delete-button {
     display: none;
     position: absolute;
-    right: 10px;
-    top: 50%;
     transform: translateY(-50%);
     background-color: #dc3545;
     color: white;
@@ -116,21 +212,32 @@ h1 {
     cursor: pointer;
 }
 
+.delete-button:hover {
+    background-color: #96121f;
+}
+
+#delete-container {
+    place-self: center;
+}
+
 .item-list li:hover .delete-button {
     display: inline;
 }
 
 
+/* The tag rule sets the appearance of the tag, but makes it change when it's hovered over. */
 .tag {
     display: inline-block;
     padding: 2px 5px;
-    border: 1px solid white;
+    border: 1px solid black;
     border-radius: 3px;
-    color: white;
+    color: black;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 12px;
 }
 
+/* The tag:hover rule changes the color and border color of the tag when it's hovered over. */
 .tag:hover {
     color: yellow;
     border-color: yellow;
@@ -226,4 +333,15 @@ h1 {
 
 #tag-input {
     display: none;
+}
+
+/* The .sort-arrow rule sets the appearance of the sort arrow. */
+.sort-arrow {
+    cursor: pointer;
+    color: red;
+}
+
+/* The .sort-arrow:hover rule changes the color of the sort arrow when it's hovered over. */
+.sort-arrow:hover {
+    color: darkred;
 }
