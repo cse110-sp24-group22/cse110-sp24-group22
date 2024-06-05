@@ -282,9 +282,8 @@ const DEFAULT_TITLE = "Untitled";
  */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
-  const closeModal = document.getElementById("closeModal");
   /** @type {HTMLButtonElement} */
-  const saveJournal = document.getElementById("saveJournal");
+  const saveJournal = document.getElementById("closeModal");
   /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
   /** @type {HTMLDivElement} */
@@ -305,7 +304,8 @@ function editJournal(id) {
       editTime: id,
       title: DEFAULT_TITLE,
       tags: [],
-      delta: undefined,
+      //delta: undefined,
+      delta: { ops: [] },
     };
 
     quill.setText("\n");
@@ -315,25 +315,42 @@ function editJournal(id) {
 
   noteObject = getJournalByTimestamp(id);
 
-  contentScreenShot = noteObject.delta;
+  let contentScreenShot = noteObject.delta;
 
   quill.setContents(contentScreenShot);
   titleBar.value = noteObject.title;
 
-  quill.on("text-change", quillUpdateTextHandler());
+  quill.on("text-change", quillUpdateTextHandler);
 
-  titleBar.addEventListener("input", updateTitleHandler());
+  titleBar.addEventListener("input", updateTitleHandler);
 
-  const cancelButton = document.querySelector('.CancelChanges');
 
+  // Cancel changes and revert notebook
+  const cancelButton = document.getElementById('cancelModal');
   cancelButton.addEventListener('click', function () {
+    noteObject.delta = contentScreenShot;
 
+    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)){
+      deleteJournal(noteObject.timestamp);
+    }
+    else if (!isTitleValid(titleBar.value)) {
+      cancelButton.disabled = true;
+    }
+    else {
+      cancelButton.disabled = false;
+    }
+
+    modal.style.display = "none";
+    itemList.innerHTML = "";
+    displayList(journalList);
+    removeJournalEventListeners();
   });
 
 
   saveJournal.addEventListener(
     "click",
     function () {
+      updateTitleHandler();
       quillUpdateTextHandler();
       modal.style.display = "none";
       itemList.innerHTML = "";
@@ -450,6 +467,10 @@ function getMatchingEntries(list, query) {
  * @returns all the text in a Quill delta
  */
 function getTextFromDelta(delta) {
+  if (!delta || !delta.ops) {
+    return '';
+  }
+  
   let text = "";
   delta.ops.forEach((op) => {
     text += op.insert;
