@@ -142,6 +142,7 @@ function editJournal(id) {
   const saveJournal = document.getElementById("saveJournal");
   const titleBar = document.getElementById("journalTitle");
   const itemList = document.getElementById("item-list");
+  const tagAdd = document.getElementById("tag-plus-button");
   const tagInput = document.getElementById("journalTag");
   const tagList = document.getElementById("tag-list");
   const tagSave = document.getElementById("save-tag");
@@ -308,6 +309,17 @@ function parseTags(tagsString) {
 }
 
 /**
+ * Create HTML corresponding to some tags.
+ * @param {string[]} tags 
+ * @returns {string} The corresponding HTML
+ */
+function createTagHtml(tags) {
+
+}
+
+
+
+/**
  * Prepares search functionality on the page.
  */
 function setUpSearch() {
@@ -332,4 +344,13 @@ function onTagPlusButton() {
 
 }
 
+function onSaveTagButton() {
+
+}
+
+function onTagClicked(tag) {
+
+}
+
 document.getElementById("tag-plus-button").addEventListener("click", onTagPlusButton);
+document.getElementById("tag-plus-button").addEventListener("click", onSaveTagButton);

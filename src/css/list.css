@@ -195,6 +195,7 @@ h1 {
     color: white;
     text-align: center;
     height: 20px;
+    margin-right: 10px;
 }
 
 .tags {
@@ -221,4 +222,8 @@ h1 {
 
 #tag-plus > button:hover {
     background-color: #218838;
+}
+
+#tag-input {
+    display: none;
 }
