@@ -14,7 +14,7 @@ let quill;
 
 let sortDirection = {
   name: true,
-  timestamp: true
+  timestamp: true,
 };
 
 /**
@@ -63,7 +63,7 @@ document.getElementById("sort-timestamp").addEventListener("click", () => {
 
 /**
  * Sorts the journal list by the specified category.
- * 
+ *
  * @param {string} category - The category to sort by. This can be "name" or "timestamp".
  * If "name" is specified, the journal list is sorted alphabetically by the title of the journal entries.
  * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
@@ -109,7 +109,9 @@ function updateSortArrows(category) {
     nameSortArrow.innerHTML = sortDirection.name ? "&#9650;" : "&#9660;";
     timestampSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
   } else if (category === "timestamp") {
-    timestampSortArrow.innerHTML = sortDirection.timestamp ? "&#9650;" : "&#9660;";
+    timestampSortArrow.innerHTML = sortDirection.timestamp
+      ? "&#9650;"
+      : "&#9660;";
     nameSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
   }
 }
@@ -165,10 +167,12 @@ function createListItem(item) {
   //Create timestamp container
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
+
   timestampText.setAttribute("id", "entry-timestamp");
   timestampText.textContent = `${new Date(
     timestamp
   ).toLocaleString()}`;
+
   listItem.appendChild(timestampText);
 
   //Create delete button
@@ -247,14 +251,32 @@ function saveJournalList(journalList) {
 }
 
 /**
+ * Checks if a title is valid.
+ * @param title {string} - title of the journal entry
+ * @returns {boolean} - true if title is valid, false otherwise
+ */
+function isTitleValid(title) {
+  return title.trim().length > 0;
+}
+
+/**
+ * Default title for a journal entry.
+ * @type {string}
+ */
+const DEFAULT_TITLE = "Untitled";
+
+/**
  * Opens a modal to edit a journal entry.
  * @param id {number} - unique identifier and time it was created
  */
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
+  /** @type {HTMLButtonElement} */
   const saveJournal = document.getElementById("saveJournal");
+  /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
+  /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
 
   modal.style.display = "block";
@@ -263,31 +285,35 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-  closeModal.addEventListener("click", function () {
-    modal.style.display = "none";
-    displayList(journalList);
-  });
-
-  window.addEventListener("click", function (event) {
-    if (event.target == modal) {
+  closeModal.addEventListener(
+    "click",
+    function () {
       modal.style.display = "none";
-    }
-  });
+      displayList(journalList);
+      removeJournalEventListeners();
+    },
+    { once: true },
+  );
 
-  saveJournal.addEventListener("click", function () {
-    const journalContent = quill.root.innerHTML;
-    console.log(journalContent);
-    modal.style.display = "none";
-    itemList.innerHTML = "";
-    displayList(journalList);
-  });
+  saveJournal.addEventListener(
+    "click",
+    function () {
+      const journalContent = quill.root.innerHTML;
+      console.log(journalContent);
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      removeJournalEventListeners();
+    },
+    { once: true },
+  );
 
   let noteObject;
   if (id === undefined) {
     id = new Date().getTime();
     noteObject = {
       timestamp: id,
-      title: "",
+      title: DEFAULT_TITLE,
       tags: [],
       delta: undefined,
     };
@@ -302,17 +328,49 @@ function editJournal(id) {
   quill.setContents(noteObject.delta);
   titleBar.value = noteObject.title;
 
-  quill.on("text-change", () => {
-    const newDelta = quill.getContents();
-    noteObject.delta = newDelta;
-    saveJournalList(journalList);
-  });
+  quill.on("text-change", quillUpdateTextHandler);
 
-  titleBar.addEventListener("input", () => {
+  titleBar.addEventListener("input", updateTitleHandler);
+
+  /**
+   * Updates journal entry title with current contents in the title input bar.
+   */
+  function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
-    saveJournalList(journalList);
-  });
+
+
+    if (isTitleValid(title)) {
+      // don't save if title is empty
+      saveJournalList(journalList);
+
+      saveJournal.disabled = false;
+    } else {
+      saveJournal.disabled = true;
+      saveJournal.title = "Title cannot be empty";
+    }
+  }
+
+  /**
+   * Updates journal entry with current contents of the Quill editor.
+   */
+  function quillUpdateTextHandler() {
+    const newDelta = quill.getContents();
+    noteObject.delta = newDelta;
+
+    if (isTitleValid(noteObject.title)) {
+      // don't save if title is empty
+      saveJournalList(journalList);
+    }
+  }
+
+  /**
+   * Removes event listeners on input fields for the current journal.
+   */
+  function removeJournalEventListeners() {
+    titleBar.removeEventListener("input", updateTitleHandler);
+    quill.off("text-change", quillUpdateTextHandler);
+  }
 }
 
 /**
@@ -327,8 +385,8 @@ function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
 
   // Filter by tags, case-sensitive
-  tags.forEach(tag => {
-    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
+  tags.forEach((tag) => {
+    filteredList = filteredList.filter((entry) => entry.tags.includes(tag));
   });
 
   // Filter by date range
@@ -336,10 +394,14 @@ function searchJournal(query, tags, startDate, endDate) {
   let endMilliseconds = Date.parse(endDate + "T00:00:00");
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
-    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
+    filteredList = filteredList.filter(
+      (entry) => entry.timestamp >= startMilliseconds,
+    );
   }
   if (!isNaN(endMilliseconds)) {
-    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
+    filteredList = filteredList.filter(
+      (entry) => entry.timestamp <= endMilliseconds,
+    );
   }
 
   return getMatchingEntries(filteredList, query);
@@ -348,7 +410,7 @@ function searchJournal(query, tags, startDate, endDate) {
 /**
  * Searches a list of entries for a case-insensitive string.
  * @param {Array.Object} list - list of entries
- * @param {string} query - exact string to search for 
+ * @param {string} query - exact string to search for
  * @returns matching entries
  */
 function getMatchingEntries(list, query) {
@@ -382,12 +444,12 @@ function getTextFromDelta(delta) {
 }
 
 /**
- * Parses a string of comma-separated tags into an array. 
+ * Parses a string of comma-separated tags into an array.
  * @param {string} tagsString - string of comma-separated tags
  * @returns array of tags
  */
 function parseTags(tagsString) {
-  return tagsString.split(",").filter(tag => tag.length > 0);
+  return tagsString.split(",").filter((tag) => tag.length > 0);
 }
 
 /**
@@ -403,12 +465,19 @@ function setUpSearch() {
   const itemList = document.getElementById("item-list");
 
   // EventListener: After typing in any input, filter items to those that match search
-  searchElements.forEach(element => {
+  searchElements.forEach((element) => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(searchJournal(searchBar.value, parseTags(tagsBar.value), startDate.value, endDate.value));
+      displayList(
+        searchJournal(
+          searchBar.value,
+          parseTags(tagsBar.value),
+          startDate.value,
+          endDate.value,
+        ),
+      );
     };
   });
 }
 
-export {getTextFromDelta, getMatchingEntries};
+export { getTextFromDelta, getMatchingEntries };
