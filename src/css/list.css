@@ -65,8 +65,16 @@ h1 {
 }
 
 h2 {
-    place-self: center;
+    place-self: left;
     margin: 0px;
+}
+
+header.entry-header {
+    padding-left: 83px; 
+}
+
+.header .entry-header h2 {
+    margin: 0;
 }
 
 
@@ -178,7 +186,7 @@ h2 {
 
 /* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
 .item-list li #entry-timestamp {
-    margin-left: 10px;
+    margin-left: 1px;
     text-align: right;
     margin-right: 10px;
     place-self: center;
@@ -205,9 +213,10 @@ h2 {
     position: absolute;
     transform: translateY(-50%);
     background-color: #dc3545;
+    background-image: url('trash_can.svg');
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 50px 10px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -249,7 +258,7 @@ h2 {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 2 !important;
     left: 0;
     top: 0;
     width: 100%;
@@ -260,7 +269,8 @@ h2 {
   }
 
   .modal-content {
-    background-color: #fefefe;
+    z-index: 3 !important;
+    background-color: #FFE2B6;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -268,9 +278,13 @@ h2 {
   }
 
   .close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+    bottom: 5%;
+    right: 5%;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    color: #000000;
+    float: left;
+    font-size: 14px;
     font-weight: bold;
   }
 
@@ -297,6 +311,7 @@ h2 {
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
 .sort-arrow {
+    background-image: url();
     cursor: pointer;
     color: red;
 }
@@ -304,4 +319,15 @@ h2 {
 /* The .sort-arrow:hover rule changes the color of the sort arrow when it's hovered over. */
 .sort-arrow:hover {
     color: darkred;
+}
+.ql-snow * {
+    box-sizing: border-box;
+    background: white;
+}
+.ql-toolbar.ql-snow {
+    border: 1px solid #ccc;
+    background: white;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
 }
