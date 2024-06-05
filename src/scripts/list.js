@@ -215,7 +215,7 @@ function editJournal(id) {
       tagItem.className = 'tag-item';
       tagList.appendChild(tagItem);
     });
-    saveJournalList(journalList);
+    saveJournalList(journalList); //click then save 
     saveJournalTags(journalTags);
   });
 
