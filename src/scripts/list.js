@@ -147,7 +147,7 @@ function createListItem(item) {
   //Generate tags and create tag container
   const tagsContainer = document.createElement("div");
   tagsContainer.setAttribute("id", "entry-tags");
-  tagsContainer.textContent = "Tags: ";
+  tagsContainer.textContent = "";
 
   item.tags.forEach((tag) => {
     const tagElement = document.createElement("span");
