@@ -32,6 +32,7 @@ header {
   z-index: 2;
 }
 
+
 /* general transition for all buttons */
 button {
   transition: background-color 0.3s ease;
@@ -68,7 +69,7 @@ h1 {
 
 h2 {
   place-self: left;
-  margin: 0px;
+  margin: 10px;
 }
 
 header.entry-header {
@@ -206,14 +207,16 @@ header.entry-header {
 .delete-button {
   display: none;
   position: absolute;
-  transform: translateY(-50%);
-  background-color: #dc3545;
-  color: white;
+  transform: translateY(-60%);
+  background-image: url('../assets/trash_can.svg');
+  background-size: 50px;
   border: none;
-  padding: 5px 10px;
+  padding: 10px 5px;
   border-radius: 4px;
   cursor: pointer;
-  right: 85px;
+  right: 90px;
+  background-color: transparent;
+  
 }
 
 #delete-container {
