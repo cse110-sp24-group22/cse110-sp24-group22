@@ -346,7 +346,6 @@ function editJournal(id) {
         `Are you sure you would like to delete the "${noteObject.title}"?`,
       )
     ) {
-      isNewJournal = false;
       deleteJournal(noteID);
       modal.style.display = "none";
       itemList.innerHTML = "";
@@ -364,18 +363,29 @@ function editJournal(id) {
 
     if (isNewJournal) {
       noteObject.title = tempTitle;
-      deleteButton.click();
-      isNewJournal = false;
-    }
 
-    modal.style.display = "none";
-    itemList.innerHTML = "";
-    displayList(journalList);
-    quill.off("text-change", quillUpdateTextHandler);
+      if (
+        window.confirm(
+          `Are you sure you would like to delete the "${noteObject.title}"?`,
+        )
+      ) {
+        deleteJournal(noteID);
+        modal.style.display = "none";
+        itemList.innerHTML = "";
+        displayList(journalList);
+        quill.off("text-change", quillUpdateTextHandler);
+      }
+      event.stopPropagation();
+    }
+    else {
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      quill.off("text-change", quillUpdateTextHandler);
+    }
   }
 
   saveJournal.onclick = (event) => {
-      isNewJournal = false;
       updateTitleHandler();
       quillUpdateTextHandler();
       modal.style.display = "none";
