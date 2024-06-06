@@ -20,6 +20,7 @@ body {
   grid-template-columns: 1fr 2fr 1fr;
   column-gap: 10px;
   background-color: lightgrey;
+  z-index: 100;
   position: fixed;
 }
 
@@ -51,19 +52,25 @@ body {
 
 /*styling different sections of figma assets*/
 .section1 {
-  /* background: url('/src/assets/background_sky.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;*/
   position: relative;
   width: 100%;
-  background-color: red;
   z-index: -2;
 }
 
 /*setting area of sky asset to take up entire div*/
 .section1 img {
   width: 100%;
+  position: relative;
+}
+
+#sun {
+  position: absolute;
+  z-index: -1;
+}
+
+#sun-container {
+  width: 30%;
+  height: auto;
 }
 
 /*styling top soil*/
@@ -79,17 +86,31 @@ body {
 
 #pot {
   position: absolute;
-  right: 40rem;
-  top: 24%;
+  right: 46%;
+  top: 16%;
+  width: 10%;
   z-index: -1;
+}
+
+#pot-container {
+  width: 180%;
+  height: auto;
+}
+
+#can-container {
+  width: 180%;
+  height: auto;
 }
 
 #watering-can {
   position: absolute;
-  right: 18rem;
-  top: 23%;
+  right: 20%;
+  top: 15%;
+  width: 10%;
   z-index: -1;
 }
+
+
 
 /*area of lower soil*/
 .section2 {
