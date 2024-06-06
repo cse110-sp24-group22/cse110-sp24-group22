@@ -169,6 +169,7 @@ function editJournal(id) {
   const tagInputBar = document.getElementById("tag-input-bar");
   const tagList = document.getElementById("tag-list");
   const tagSave = document.getElementById("save-tag");
+  const tagsWrapper = document.getElementById("colored-tag");
 
   modal.style.display = "block";
 
@@ -243,6 +244,10 @@ function editJournal(id) {
     });
     noteObject.tags = tagsList; // save as note's tags
     saveJournalTags([...journalTags]);
+  })
+
+  tagsWrapper.addEventListener("click", () => {
+    tagsWrapper.remove();
   })
 }
 
