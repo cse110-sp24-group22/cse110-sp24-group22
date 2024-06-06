@@ -123,23 +123,22 @@ header.entry-header {
   padding-bottom: 10px 0px 10px 0px;
 }
 
-#filter-inner{
-  display:flex;
+#filter-inner {
+  display: flex;
   flex-direction: row;
   justify-content: start;
 }
 
-#filter-outer{
+#filter-outer {
   width: 100%;
   padding: 1em;
   padding-bottom: 3em;
 }
-#tags-bar{
-  float:left;
-  
+#tags-bar {
+  float: left;
 }
-#date-container{
-  margin-left:40%;
+#date-container {
+  margin-left: 40%;
 }
 
 .search-bar {
