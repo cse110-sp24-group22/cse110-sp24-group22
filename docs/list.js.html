@@ -63,23 +63,22 @@ function init() {
 
   // Animation for the filter dropdown
   filterButton.addEventListener("click", function () {
-    const filterHeader = document.querySelector('.filter-container');
-    const entryHeader = document.querySelector('.entry-header');
-    if (filterHeader.classList.contains('show')) {
-      filterHeader.classList.remove('show');
-      entryHeader.style.marginTop = '75px'; // adjust based on filterHeader height
+    const filterHeader = document.querySelector(".filter-container");
+    const entryHeader = document.querySelector(".entry-header");
+    if (filterHeader.classList.contains("show")) {
+      filterHeader.classList.remove("show");
+      entryHeader.style.marginTop = "75px"; // adjust based on filterHeader height
       setTimeout(function () {
-        filterHeader.style.display = 'none';
+        filterHeader.style.display = "none";
       }, 500);
     } else {
-      filterHeader.style.display = 'grid';
+      filterHeader.style.display = "grid";
       setTimeout(() => {
-        filterHeader.classList.add('show');
-        entryHeader.style.marginTop = '105px'; // adjust based on filterHeader height
+        filterHeader.classList.add("show");
+        entryHeader.style.marginTop = "105px"; // adjust based on filterHeader height
       }, 0);
     }
   });
-
 }
 
 document.getElementById("sort-name").addEventListener("click", () => {
@@ -201,16 +200,18 @@ function createListItem(item) {
   let date = new Date(item.editTime);
 
   let options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false // Use 24-hour time
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, // Use 24-hour time
   };
 
   // Display the formatted date
-  timestampText.textContent = date.toLocaleString('en-GB', options).replace(',', '');
+  timestampText.textContent = date
+    .toLocaleString("en-GB", options)
+    .replace(",", "");
 
   listItem.appendChild(timestampText);
 
@@ -219,12 +220,16 @@ function createListItem(item) {
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
   deleteButton.className = "delete-button";
-  deleteButtonContainer.id = "delete-container"
+  deleteButtonContainer.id = "delete-container";
   deleteButtonContainer.appendChild(deleteButton);
 
   // EventListener: When clicking delete, delete from page and LocalStorage
   deleteButton.onclick = (event) => {
-    if (window.confirm(`Are you sure you would like to delete the "${item.title}"?`)) {
+    if (
+      window.confirm(
+        `Are you sure you would like to delete the "${item.title}"?`,
+      )
+    ) {
       event.stopPropagation();
       listItem.remove();
       deleteJournal(timestamp);
@@ -299,12 +304,6 @@ function isTitleValid(title) {
 }
 
 /**
- * Default title for a journal entry.
- * @type {string}
- */
-const DEFAULT_TITLE = "Untitled";
-
-/**
  * Opens a modal to edit a journal entry.
  * @param id {number} - unique identifier and time it was created
  */
@@ -314,6 +313,10 @@ function editJournal(id) {
   const saveJournal = document.getElementById("closeModal");
   /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
+  /** @type {HTMLButtonElement} */
+  const deleteButton = document.getElementById("deleteModal");
+  /** @type {HTMLButtonElement} */
+  const cancelButton = document.getElementById("cancelModal");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
 
@@ -323,14 +326,16 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-
   let noteObject;
+  let isNewJournal = false;
+
   if (id === undefined) {
+    isNewJournal = true;
     id = new Date().getTime();
     noteObject = {
       timestamp: id,
       editTime: id,
-      title: DEFAULT_TITLE,
+      title: "",
       tags: [],
       //delta: undefined,
       delta: { ops: [] },
@@ -343,6 +348,8 @@ function editJournal(id) {
 
   noteObject = getJournalByTimestamp(id);
 
+  const noteID = noteObject.timestamp;
+
   let contentScreenShot = noteObject.delta;
 
   quill.setContents(contentScreenShot);
@@ -352,19 +359,31 @@ function editJournal(id) {
 
   titleBar.addEventListener("input", updateTitleHandler);
 
+  // Delete current journal
+  deleteButton.onclick = (event) => {
+    if (
+      window.confirm(
+        `Are you sure you would like to delete the "${noteObject.title}"?`,
+      )
+    ) {
+      deleteJournal(noteID);
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      removeJournalEventListeners();
+    }
+    event.stopPropagation();
+  };
 
   // Cancel changes and revert notebook
-  const cancelButton = document.getElementById('cancelModal');
-  cancelButton.addEventListener('click', function () {
+  cancelButton.addEventListener("click", function () {
     noteObject.delta = contentScreenShot;
 
-    if (contentScreenShot.ops == [] &amp;&amp; !isTitleValid(titleBar.value)){
-      deleteJournal(noteObject.timestamp);
-    }
-    else if (!isTitleValid(titleBar.value)) {
+    if (isNewJournal) {
+      deleteJournal(noteID);
+    } else if (!isTitleValid(titleBar.value)) {
       cancelButton.disabled = true;
-    }
-    else {
+    } else {
       cancelButton.disabled = false;
     }
 
@@ -373,7 +392,6 @@ function editJournal(id) {
     displayList(journalList);
     removeJournalEventListeners();
   });
-
 
   saveJournal.addEventListener(
     "click",
@@ -388,14 +406,12 @@ function editJournal(id) {
     { once: true },
   );
 
-
   /**
    * Updates journal entry title with current contents in the title input bar.
    */
   function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
-
 
     if (isTitleValid(title)) {
       // don't save if title is empty
@@ -496,9 +512,9 @@ function getMatchingEntries(list, query) {
  */
 function getTextFromDelta(delta) {
   if (!delta || !delta.ops) {
-    return '';
+    return "";
   }
-  
+
   let text = "";
   delta.ops.forEach((op) => {
     text += op.insert;
@@ -554,13 +570,13 @@ export { getTextFromDelta, getMatchingEntries };
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createListItem">createListItem</a></li><li><a href="global.html#DEFAULT_TITLE">DEFAULT_TITLE</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortByCategory">sortByCategory</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createListItem">createListItem</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortByCategory">sortByCategory</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jun 05 2024 06:02:12 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Jun 06 2024 00:33:58 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
