@@ -246,7 +246,7 @@ function deleteJournal(timestamp) {
 }
 
 function getJournalTags() {
-  if(!localStorage.getItem("GarlicNotesTags")) {
+  if(!localStorage.getItem("GarlicNotesTags")) { 
     return tagSet;
   }
   return JSON.parse(localStorage.getItem("GarlicNotesTags"));
@@ -257,7 +257,7 @@ function deleteTag(tag) {
   saveJournalTags(journalTags);
 }
 
-// storage of tags on localStorage
+// storage of tags on localStorage 
 function saveJournalTags(journalTags) {
   localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
 }
@@ -364,12 +364,12 @@ function editJournal(id) {
     noteObject.title = title;
 
     saveJournalList(journalList);
-  });
+  };
 
   tagInput.value = noteObject.tags; // populate input bar with tags from the note
 
   // listen to when users type input
-  tagInput.addEventListener("input", () => {
+  tagInput.addEventListener("input", () => { 
     let tagsList = parseTags(tagInput.value);  // parse input into array
     noteObject.tags = tagsList; // save as note's tags
     tagsList.forEach(tag => {
@@ -427,11 +427,11 @@ function editJournal(id) {
     quill.off("text-change", quillUpdateTextHandler);
   }
 
-}
+
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
- * @param {string} query - exact string to search for
+ * @param {string} query - exact string to search for 
  * @param {Array.string} tags - list of exact tags to include
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
@@ -467,7 +467,7 @@ function searchJournal(query, tags, startDate, endDate) {
 /**
  * Searches a list of entries for a case-insensitive string.
  * @param {Array.Object} list - list of entries
- * @param {string} query - exact string to search for
+ * @param {string} query - exact string to search for 
  * @returns matching entries
  */
 function getMatchingEntries(list, query) {
@@ -501,7 +501,7 @@ function getTextFromDelta(delta) {
 }
 
 /**
- * Parses a string of comma-separated tags into an array.
+ * Parses a string of comma-separated tags into an array. 
  * @param {string} tagsString - string of comma-separated tags
  * @returns array of tags
  */
