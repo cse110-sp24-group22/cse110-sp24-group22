@@ -11,6 +11,7 @@ body {
   margin: 0;
 }
 
+/*Header Styling */
 .top-section {
     width: 100%;
     height: 75px;
@@ -27,6 +28,7 @@ body {
     z-index: 5;
 }
 
+/*setting area of header components and style*/
 .top-section img {
     grid-area: logo;
 }
@@ -50,6 +52,7 @@ body {
     border: none;
 }
 
+/*styling different sections of figma assets*/
 .section1 {
    /* background: url('/src/assets/background_sky.svg');
     background-repeat: no-repeat;
@@ -61,11 +64,12 @@ body {
     z-index: -2;
 }
 
-
+/*setting area of sky asset to take up entire div*/
 .section1 img {
     width: 100%; 
 }
 
+/*styling top soil*/
 .section3 {
     /*margin-top: -65%;
     background: url('/src/assets/background_top_soil.svg');
@@ -90,7 +94,7 @@ body {
     z-index: -1;
 }
 
-
+/*area of lower soil*/
 .section2 {
   background: url("/src/assets/background_deep_ground.svg");
   background-repeat: no-repeat;
