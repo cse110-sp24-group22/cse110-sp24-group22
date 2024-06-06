@@ -161,6 +161,7 @@ header.entry-header {
 }
 
 .new-journal-button {
+  font-family: Single Day;
   bottom: 5%;
   right: 5%;
   position: fixed;
@@ -170,7 +171,7 @@ header.entry-header {
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
   z-index: 2;
 }
 
