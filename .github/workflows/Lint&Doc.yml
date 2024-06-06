@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
         - main
-    types: [opened, synchronized, reopened, review_requested]
+    types: [opened, synchronize, reopened, review_requested]
 
 jobs:
   prettier-linting:
