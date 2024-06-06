@@ -7,13 +7,13 @@ body {
   background-color: #ffe2b6;
   margin: 0;
   padding: 0;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 }
 
 /* holds list of entries, inline makes entries spread across page, margin to account for headers */
 main {
-  margin-top: 150px;
   display: inline;
 }
 
@@ -27,7 +27,6 @@ header {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  position: fixed;
   grid-template-columns: 0.5fr 2fr 0.5fr 0.5fr;
   column-gap: 10px;
   z-index: 2;
@@ -52,7 +51,7 @@ button:hover {
 
 /* margin to account for entry-header and transition for filter box */
 .entry-header {
-  margin-top: 75px;
+  display: grid;
   height: min-content;
   background-color: #947665;
   grid-template-areas: "name tags last delete";
@@ -107,9 +106,7 @@ header.entry-header {
 .filter-container {
   overflow: hidden;
   height: 0px;
-  margin-top: 75px;
   padding: 0px 0px 0px 0px;
-  position: fixed;
   grid-template-columns: 1fr 0.75fr 0.75fr 0.5fr;
   background-color: #947665;
   transition:
@@ -118,7 +115,7 @@ header.entry-header {
 }
 
 .filter-container.show {
-  height: 30px;
+  height: 3.5em;
   padding-bottom: 10px 0px 10px 0px;
 }
 

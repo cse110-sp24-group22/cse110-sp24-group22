@@ -38,17 +38,10 @@ function init() {
     const filterHeader = document.querySelector('.filter-container');
     const entryHeader = document.querySelector('.entry-header');
     if (filterHeader.classList.contains('show')) {
-      filterHeader.classList.remove('show');
-      entryHeader.style.marginTop = '75px'; // adjust based on filterHeader height
-      setTimeout(function () {
-        filterHeader.style.display = 'none';
-      }, 500);
+      filterHeader.classList.remove("show");
     } else {
-      filterHeader.style.display = 'grid';
-      setTimeout(() => {
-        filterHeader.classList.add('show');
-        entryHeader.style.marginTop = '105px'; // adjust based on filterHeader height
-      }, 0);
+      filterHeader.style.display = 'flex';
+      filterHeader.classList.add("show");
     }
   });
 
@@ -470,7 +463,7 @@ function getTextFromDelta(delta) {
   if (!delta || !delta.ops) {
     return '';
   }
-  
+
   let text = "";
   delta.ops.forEach((op) => {
     text += op.insert;
