@@ -137,6 +137,27 @@ function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Display tag buttons
+ * @param {string[]} tags 
+ */
+function createTags(tags) {
+  const tagsWrapper = document.getElementById("tags");
+
+  const children = [...tagsWrapper.children];
+  for (let i = 0; i < children.length - 1; ++i) {
+    children[i].remove();
+  }
+
+  for (let tagName of tags.reverse()) {
+    const tagElement = document.createElement("div");
+    tagElement.classList.add("colored-tag");
+    tagElement.innerText = tagName;
+
+    tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
+  }
+}
+
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
@@ -213,7 +234,6 @@ function editJournal(id) {
 
   tagSave.addEventListener("click", () => {
     tagsList = parseTags(tagInputBar.value);  // parse input into array
-    alert(tagsList);
     tagsList.forEach(tag => {
       journalTags.add(tag);
       const tagItem = document.createElement("option");
@@ -222,7 +242,7 @@ function editJournal(id) {
       tagList.appendChild(tagItem);
     });
     noteObject.tags = tagsList; // save as note's tags
-    saveJournalTags(journalTags);
+    saveJournalTags([...journalTags]);
   })
 }
 
