@@ -270,11 +270,7 @@ function isTitleValid(title) {
   return title.trim().length > 0;
 }
 
-/**
- * Default title for a journal entry.
- * @type {string}
- */
-const DEFAULT_TITLE = "Untitled";
+
 
 /**
  * Opens a modal to edit a journal entry.
@@ -286,6 +282,10 @@ function editJournal(id) {
   const saveJournal = document.getElementById("closeModal");
   /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
+  /** @type {HTMLButtonElement} */
+  const deleteButton = document.getElementById("deleteModal");
+  /** @type {HTMLButtonElement} */
+  const cancelButton = document.getElementById('cancelModal');
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
 
@@ -297,12 +297,15 @@ function editJournal(id) {
 
 
   let noteObject;
+  let isNewJournal = false;
+
   if (id === undefined) {
+    isNewJournal = true;
     id = new Date().getTime();
     noteObject = {
       timestamp: id,
       editTime: id,
-      title: DEFAULT_TITLE,
+      title: "",
       tags: [],
       //delta: undefined,
       delta: { ops: [] },
@@ -315,6 +318,8 @@ function editJournal(id) {
 
   noteObject = getJournalByTimestamp(id);
 
+  const noteID = noteObject.timestamp;
+
   let contentScreenShot = noteObject.delta;
 
   quill.setContents(contentScreenShot);
@@ -325,13 +330,25 @@ function editJournal(id) {
   titleBar.addEventListener("input", updateTitleHandler);
 
 
+  // Delete current journal
+  deleteButton.onclick = (event) => {
+    if (window.confirm(`Are you sure you would like to delete the "${noteObject.title}"?`)) {
+      deleteJournal(noteID);
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      removeJournalEventListeners();
+    }
+    event.stopPropagation();
+  };
+
+
   // Cancel changes and revert notebook
-  const cancelButton = document.getElementById('cancelModal');
   cancelButton.addEventListener('click', function () {
     noteObject.delta = contentScreenShot;
 
-    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)){
-      deleteJournal(noteObject.timestamp);
+    if (isNewJournal){
+      deleteJournal(noteID);
     }
     else if (!isTitleValid(titleBar.value)) {
       cancelButton.disabled = true;
