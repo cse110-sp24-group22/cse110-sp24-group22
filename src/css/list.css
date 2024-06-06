@@ -38,6 +38,12 @@ button {
   transition: background-color 0.3s ease;
 }
 
+/* Allows all buttons on the page to have an interactive when there is a hover. Darkens the button by 85% */
+button:hover {
+  filter: brightness(85%);
+}
+
+
 /* given a height and color */
 .main-header {
   grid-template-areas: "logo search root sort";
@@ -210,9 +216,6 @@ header.entry-header {
   border-radius: 4px;
   cursor: pointer;
   right: 85px;
-}
-button:hover {
-  filter: brightness(85%);
 }
 
 #delete-container {
