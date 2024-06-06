@@ -296,7 +296,7 @@ header.entry-header {
     right: 5%;
     margin-top: 10px;
     background-color: #D9D9D9;
-    border-radius: 10px;
+    border-radius: 6px;
     color: #000000;
     float: left;
     font-size: 14px;
@@ -315,20 +315,20 @@ header.entry-header {
     margin-top: 10px;
     float: right;
     background-color: #D0FBBC;
-    border-radius: 10px;
+    border-radius: 6px;
     color: #000000;
     font-size: 14px;
     font-weight: bold;
     
   }
   .DeleteJournal {
-    margin-right: 15%;
+    margin-left: 5%;
     margin-top: 10px;
     background-color: #ff000052;
-    border-radius: 10px;
+    border-radius: 6px;
     color: #000000;
     font-size: 14px;
-    float: right;
+    float: left;
     font-weight: bold;
   }
   
