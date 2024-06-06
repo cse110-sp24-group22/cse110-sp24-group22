@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script defer type="module" src="../scripts/list.js"></script>
+  <script defer src="../scripts/list.js"></script>
   <title>List Page</title>
   <link rel="stylesheet" href="../css/list.css" />
 
@@ -12,63 +12,50 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
-  <body>
-    <header class="main-header">
-      <img src="..\assets\TeamIcon_3Diagonal.png", class="logo", height="47", width="47", alt="logo"/>
-      <div class="search-container">
-        <input
-          type="text"
-          placeholder="Search..."
-          class="search-bar"
-          id="search-bar"
-        />
-      </div>
+
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Item List</h1>
       <button onclick="location.href='main.html'" class="return-button">
-        Root View
-      </button>
-      <button class="filter-button">
-        Filter
+        Return to Main Page
       </button>
     </header>
-    <header class="filter-container">
-      <div></div>
+    <div class="search-container">
+      <input type="text" placeholder="Search..." class="search-bar" id="search-bar" />
+    </div>
+    <div class="filter-container">
       <input type="text" placeholder="Enter tags to filter by" id="tags-bar" />
-      <div id="date-container">
-        <label for="start-date">From: </label>
-        <input type="date" id="start-date" />
-        <label for="start-date">To: </label>
-        <input type="date" id="end-date" />
-      </div>
-    </header>
-     <header class="entry-header">
-      <h2>Name  <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
-      <h2>Tags</h2>
-      <h2>Last Edited <span class="sort-arrow" id="sort-timestamp">&#9650;</span> </h2>
-      <h2>Delete</h2>
-    </header>
-    <main>
+      <label for="start-date">Start Date</label>
+      <input type="date" id="start-date" />
+      <label for="start-date">End Date</label>
+      <input type="date" id="end-date" />
+    </div>
+    <div class="add-button-container">
       <button class="new-journal-button">New Journal</button>
-      <ul class="item-list" id="item-list">
-        <!-- Items will be dynamically inserted here -->
-      </ul>
+    </div>
+    <ul class="item-list" id="item-list">
+      <!-- Items will be dynamically inserted here -->
+    </ul>
+
       <div class="modal" id="journalModal">
         <div class="modal-content">
           <span class="close-button" id="closeModal">&times;</span>
           <input type="text" id="journalTitle" placeholder="Enter title here..." />
           <div class="tags" id="tags">
-            <!-- Added tags will be displayed -->
-            <!-- <button class="colored-tag">Tag 1</button>  
-            <button class="colored-tag">Tag 2</button> -->
+            <div class="colored-tag">
+              <span>Tag 1</span>
+            </div>
+            <div class="colored-tag">
+              <span>Tag 2</span>
+            </div>
             <div class="tag-interface">
               <div id="tag-plus">
                 <button id="tag-plus-button">+</button>
               </div>
-              <!-- For inputting tags -->
               <div id="tag-input">
-                <input list="tagList" type="text" name="tags" id="tagInput" placeholder="New tag" />
-                <!-- Dropdown list for tags-->
-                <datalist id="tagList">
-                </datalist>
+                <input type="text" id="tagInput" placeholder="New tag" />
               </div>
               <button id="save-tag">Add</button>
             </div>
