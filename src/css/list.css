@@ -38,6 +38,11 @@ button {
   transition: background-color 0.3s ease;
 }
 
+/* Allows all buttons on the page to have an interactive when there is a hover. Darkens the button by 85% */
+button:hover {
+  filter: brightness(85%);
+}
+
 /* given a height and color */
 .main-header {
   grid-template-areas: "logo search root sort";
@@ -90,12 +95,6 @@ header.entry-header {
   transition: background-color 0.3s ease;
 }
 
-/* button hover transition */
-.return-button:hover,
-.filter-button:hover {
-  background-color: #202020;
-}
-
 .search-container {
   margin: 20px 0;
   display: flex;
@@ -146,10 +145,6 @@ header.entry-header {
   cursor: pointer;
   font-size: 14px;
   z-index: 2;
-}
-
-.new-journal-button:hover {
-  background-color: #659b4c;
 }
 
 /* The item-list rule removes the default list style and padding. */
@@ -220,10 +215,6 @@ header.entry-header {
   right: 85px;
 }
 
-.delete-button:hover {
-  background-color: #96121f;
-}
-
 #delete-container {
   place-self: center;
 }
@@ -291,32 +282,17 @@ header.entry-header {
   bottom: 5%;
   right: 5%;
   margin-top: 10px;
-  background-color: #d9d9d9;
-  border-radius: 10px;
+  background-color: #d9d9d9a4;
+  border-radius: 6px;
   color: #000000;
   float: left;
   font-size: 14px;
-  font-weight: bold;
 }
 
-.close-button:hover,
 .close-button:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-.DeleteJournal {
-  bottom: 5%;
-  right: 5%;
-  margin-top: 10px;
-  margin: right;
-  background-color: #ff0000;
-  border-radius: 10px;
-  color: #000000;
-  float: left;
-  font-size: 14px;
-  font-weight: bold;
 }
 
 .Save-Close {
@@ -324,10 +300,18 @@ header.entry-header {
   margin-top: 10px;
   float: right;
   background-color: #d0fbbc;
-  border-radius: 10px;
+  border-radius: 6px;
   color: #000000;
   font-size: 14px;
-  font-weight: bold;
+}
+.DeleteJournal {
+  margin-left: 5%;
+  margin-top: 10px;
+  background-color: #ff7070;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 14px;
+  float: left;
 }
 
 #editor {
@@ -335,7 +319,7 @@ header.entry-header {
 }
 
 #journalTitle {
-  width: calc(100% - 20px); /* Adjust width to fit within padding */
+  width: 100%; /* Adjust width to fit within padding */
   margin: 10px 0;
   padding: 10px;
   font-size: 18px;
