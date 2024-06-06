@@ -1,10 +1,9 @@
 name: Prettier Linting & JS Doc Generation
 
 on:
-  pull_request:
+  push:
     branches:
         - main
-    types: [opened, synchronize, reopened, review_requested]
 
 jobs:
   prettier-linting:
