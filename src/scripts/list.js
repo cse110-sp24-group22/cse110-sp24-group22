@@ -137,32 +137,6 @@ function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
-/**
- * Display tag buttons
- * @param {string[]} tags 
- */
-function createTags(tags) {
-  const tagsWrapper = document.getElementById("tags");
-
-  const children = [...tagsWrapper.children];
-  for (let i = 0; i < children.length - 1; ++i) {
-    children[i].remove();
-  }
-
-  for (let tagName of tags.reverse()) {
-    const tagElement = document.createElement("div");
-    tagElement.classList.add("colored-tag");
-    tagElement.innerText = tagName;
-
-    // let tagNameCopy = tagName;
-    // tagElement.onclick = () => {
-    //   removeTag(tagNameCopy); //CHECK
-    // };
-
-    tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
-  }
-}
-
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   const closeModal = document.getElementById("closeModal");
@@ -233,11 +207,28 @@ function editJournal(id) {
     saveJournalList(journalList);
   }; 
 
-  tagInput.value = noteObject.tags; // populate input bar with tags from the note
-
   tagAdd.onclick = () => {
     tagInput.style.display = "block";
   };
+
+  while (tagsWrapper.firstChild && tagsWrapper.firstChild.className === "colored-tag") {
+    tagsWrapper.removeChild(tagsWrapper.firstChild);
+  }
+  
+  noteObject.tags.forEach(tag => {
+    const tagElement = document.createElement("div");
+    tagElement.className = "colored-tag";
+    tagElement.textContent = tag;
+    tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
+
+    tagElement.onclick = function() {
+      if (window.confirm(`Are you sure you would like to delete the "${tagElement.textContent}"?`)) {
+        tagElement.remove();
+        noteObject.tags = noteObject.tags.filter(t => t !== tagElement.textContent);
+        saveJournalList(journalList);
+      }
+    }
+  });
 
   tagSave.onclick = () => {
     tagsList = parseTags(tagInputBar.value);  // parse input into array
@@ -256,14 +247,45 @@ function editJournal(id) {
       // remove tag buttons when clicked
       newTagElement.onclick = function() {
         if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+          noteObject.tags = noteObject.tags.filter(t => t !== newTagElement.textContent);
           newTagElement.remove();
         }
       }
     });
     noteObject.tags = [...new Set([...noteObject.tags, ...tagsList])]; // save as note's tags
+    // createTags(noteObject.tags)
     saveJournalTags([...journalTags]);
+    saveJournalList(journalList);
   };
 }
+
+// /**
+//  * Create and tag buttons
+//  * @param {string[]} tags 
+//  * @returns {string[]} tags 
+//  */
+// function createTags(tags) {
+//   const tagsWrapper = document.getElementById("tags");
+
+//   while (tagsWrapper.firstChild && tagsWrapper.firstChild.className === "colored-tag") {
+//     tagsWrapper.removeChild(tagsWrapper.firstChild);
+//   }
+
+//   tags.forEach(tag => {
+//     const tagElement = document.createElement("div");
+//     tagElement.className = "colored-tag";
+//     tagElement.textContent = tag;
+//     tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
+
+//     tagElement.onclick = function() {
+//       if (window.confirm(`Are you sure you would like to delete the "${tagElement.textContent}"?`)) {
+//         tagElement.remove();
+//         tags = tags.filter(t => t !== tagElement.textContent);
+//       }
+//     }
+//   });
+//   return tags;
+// }
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
@@ -369,18 +391,3 @@ function setUpSearch() {
     };
   });
 }
-
-function onTagPlusButton() {
-
-}
-
-function onSaveTagButton() {
-
-}
-
-function onTagClicked(tag) {
-
-}
-
-document.getElementById("tag-plus-button").addEventListener("click", onTagPlusButton);
-document.getElementById("tag-plus-button").addEventListener("click", onSaveTagButton);
