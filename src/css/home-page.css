@@ -13,95 +13,93 @@ body {
 
 /*Header Styling */
 .top-section {
-    width: 100%;
-    height: 75px;
-    display: grid;
-    grid-template-areas: 
-    "logo search list";
-    grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: auto;
-    place-items: center;
-    justify-content: center;
-    column-gap: 10px;
-    background-color: #f3f2e7;
-    position: fixed;
-    z-index: 5;
+  width: 100%;
+  height: 75px;
+  display: grid;
+  grid-template-areas: "logo search list";
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: auto;
+  place-items: center;
+  justify-content: center;
+  column-gap: 10px;
+  background-color: #f3f2e7;
+  position: fixed;
+  z-index: 5;
 }
 
 /*setting area of header components and style*/
 .top-section img {
-    grid-area: logo;
+  grid-area: logo;
 }
 
 #search-bar {
-    border-radius: 2rem;
-    grid-area: search;
-    border: none;
-    height: 30px;
-    width: 70%;
-    font-size: 15px;
-    box-sizing: border-box;
-    padding: 5px 20px;
+  border-radius: 2rem;
+  grid-area: search;
+  border: none;
+  height: 30px;
+  width: 70%;
+  font-size: 15px;
+  box-sizing: border-box;
+  padding: 5px 20px;
 }
 
 .top-section button {
-    grid-area: list;
-    height: 30px;
-    width: 100px;
-    border-radius: 30px;
-    border: none;
+  grid-area: list;
+  height: 30px;
+  width: 100px;
+  border-radius: 30px;
+  border: none;
 }
 
 /*styling different sections of figma assets*/
 .section1 {
-   /* background: url('/src/assets/background_sky.svg');
+  /* background: url('/src/assets/background_sky.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center top;*/
-    position: relative;
-    width: 100%;
-    background-color: red;
-    z-index: -2;
+  position: relative;
+  width: 100%;
+  background-color: red;
+  z-index: -2;
 }
 
 /*setting area of sky asset to take up entire div*/
 .section1 img {
-    width: 100%; 
+  width: 100%;
 }
 
 /*styling top soil*/
 .section3 {
-    /*margin-top: -65%;
+  /*margin-top: -65%;
     background: url('/src/assets/background_top_soil.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center top;*/
-    position: relative;
-    margin-top: -65%;
+  position: relative;
+  margin-top: -65%;
 }
 
 #pot {
-    position: absolute;
-    right: 40rem;
-    top: 24%;   
-    z-index: -1;
+  position: absolute;
+  right: 40rem;
+  top: 24%;
+  z-index: -1;
 }
 
 #watering-can {
-    position: absolute;
-    right: 18rem;
-    top: 23%;   
-    z-index: -1;
+  position: absolute;
+  right: 18rem;
+  top: 23%;
+  z-index: -1;
 }
 
 /*area of lower soil*/
 .section2 {
-  background: url("/src/assets/background_deep_ground.svg");
+  background: url("../assets/background_deep_ground.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center top;
 }
-
 
 @media screen and (max-width: 560px) {
   .background {
