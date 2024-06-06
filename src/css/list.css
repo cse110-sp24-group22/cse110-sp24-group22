@@ -91,10 +91,8 @@ header.entry-header {
 }
 
 /* button hover transition */
-.return-button:hover,
-.filter-button:hover {
-  background-color: #202020;
-}
+
+
 
 .search-container {
   margin: 20px 0;
@@ -148,9 +146,8 @@ header.entry-header {
   z-index: 2;
 }
 
-.new-journal-button:hover {
-  background-color: #659b4c;
-}
+
+
 
 /* The item-list rule removes the default list style and padding. */
 .item-list {
@@ -219,10 +216,10 @@ header.entry-header {
   cursor: pointer;
   right: 85px;
 }
-
-.delete-button:hover {
-  background-color: #96121f;
+button:hover{
+  filter: brightness(85%);
 }
+
 
 #delete-container {
   place-self: center;
@@ -291,15 +288,14 @@ header.entry-header {
   bottom: 5%;
   right: 5%;
   margin-top: 10px;
-  background-color: #d9d9d9;
+  background-color: #d9d9d9a4;
   border-radius: 6px;
   color: #000000;
   float: left;
   font-size: 14px;
-  font-weight: bold;
+  
 }
 
-.close-button:hover,
 .close-button:focus {
   color: black;
   text-decoration: none;
@@ -314,17 +310,17 @@ header.entry-header {
   border-radius: 6px;
   color: #000000;
   font-size: 14px;
-  font-weight: bold;
+  
 }
 .DeleteJournal {
   margin-left: 5%;
   margin-top: 10px;
-  background-color: #ff000052;
+  background-color: #ff7070;
   border-radius: 6px;
   color: #000000;
   font-size: 14px;
   float: left;
-  font-weight: bold;
+  
 }
 
 #editor {
