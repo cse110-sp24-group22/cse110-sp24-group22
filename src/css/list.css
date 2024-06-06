@@ -95,8 +95,6 @@ header.entry-header {
   transition: background-color 0.3s ease;
 }
 
-/* button hover transition */
-
 .search-container {
   margin: 20px 0;
   display: flex;
