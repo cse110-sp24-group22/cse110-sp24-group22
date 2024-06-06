@@ -92,8 +92,6 @@ header.entry-header {
 
 /* button hover transition */
 
-
-
 .search-container {
   margin: 20px 0;
   display: flex;
@@ -145,9 +143,6 @@ header.entry-header {
   font-size: 14px;
   z-index: 2;
 }
-
-
-
 
 /* The item-list rule removes the default list style and padding. */
 .item-list {
@@ -216,10 +211,9 @@ header.entry-header {
   cursor: pointer;
   right: 85px;
 }
-button:hover{
+button:hover {
   filter: brightness(85%);
 }
-
 
 #delete-container {
   place-self: center;
@@ -293,7 +287,6 @@ button:hover{
   color: #000000;
   float: left;
   font-size: 14px;
-  
 }
 
 .close-button:focus {
@@ -310,7 +303,6 @@ button:hover{
   border-radius: 6px;
   color: #000000;
   font-size: 14px;
-  
 }
 .DeleteJournal {
   margin-left: 5%;
@@ -320,7 +312,6 @@ button:hover{
   color: #000000;
   font-size: 14px;
   float: left;
-  
 }
 
 #editor {
