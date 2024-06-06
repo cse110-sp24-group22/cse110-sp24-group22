@@ -1,4 +1,4 @@
-//Store the data into localStorage before staring all the things.
+// store the data into localStorage before starting
 let journalList = getJournalList();
 let journalTags = getJournalTags();
 var tagSet = new Set();
@@ -137,25 +137,40 @@ function saveJournalList(journalList) {
   localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
 }
 
+/**
+ * Displays modal and edits journal entry
+ * @param {*} id 
+ */
 function editJournal(id) {
-  const modal = document.getElementById("journalModal");
-  const closeModal = document.getElementById("closeModal");
-  const saveJournal = document.getElementById("saveJournal");
-  const titleBar = document.getElementById("journalTitle");
-  const itemList = document.getElementById("item-list");
-  const tagAdd = document.getElementById("tag-plus-button");
-  const tagInput = document.getElementById("tag-input");
-  const tagInputBar = document.getElementById("tag-input-bar");
-  const tagList = document.getElementById("tag-list");
-  const tagSave = document.getElementById("save-tag");
-  const tagsWrapper = document.getElementById("tags");
 
+  /* Journal Modal */
+  const modal = document.getElementById("journalModal");        // journal modal
+  const closeModal = document.getElementById("closeModal");     // button for closing modal
+  const saveJournal = document.getElementById("saveJournal");   // button for saving modal
+
+  /* Title HTML */ 
+  const titleBar = document.getElementById("journalTitle");     // input bar for title
+
+  /* Journal List */
+  const itemList = document.getElementById("item-list");        // lists of journal
+
+  /* Tags */
+  const tagAdd = document.getElementById("tag-plus-button");    // button for adding tags
+  const tagInput = document.getElementById("tag-input");        // tags input segment
+  const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags 
+  const tagList = document.getElementById("tag-list");          // dropdown list for global tags
+  const tagSave = document.getElementById("save-tag");          // button for saving tags 
+  const tagsWrapper = document.getElementById("tags");          // tag buttons segment
+
+  /* Displays modal */
   modal.style.display = "block";
 
+  /* Opens Quill */
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
+  /* Closes modal */
   closeModal.addEventListener("click", function () {
     modal.style.display = "none";
     displayList(journalList);
@@ -167,6 +182,7 @@ function editJournal(id) {
     }
   });
 
+  /* Saves journal */
   saveJournal.addEventListener("click", function () {
     const journalContent = quill.root.innerHTML;
     console.log(journalContent);
@@ -176,6 +192,7 @@ function editJournal(id) {
     displayList(journalList);
   });
 
+  /* Uses timestamp as id, Creates new noteObject*/
   if (id === undefined) {
     id = new Date().getTime();
     let noteObject = {
@@ -201,91 +218,71 @@ function editJournal(id) {
     saveJournalList(journalList);
   });
 
-  titleBar.onclick = () => {
+  /* Adds or modifies title */
+  titleBar.onchange = () => {
     let title = titleBar.value;
     noteObject.title = title;
     saveJournalList(journalList);
   }; 
 
+  /* Adds or modifies tags */
   tagAdd.onclick = () => {
     tagInput.style.display = "block";
-  };
-
-  while (tagsWrapper.firstChild && tagsWrapper.firstChild.className === "colored-tag") {
-    tagsWrapper.removeChild(tagsWrapper.firstChild);
-  }
-  
-  noteObject.tags.forEach(tag => {
-    const tagElement = document.createElement("div");
-    tagElement.className = "colored-tag";
-    tagElement.textContent = tag;
-    tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
-
-    tagElement.onclick = function() {
-      if (window.confirm(`Are you sure you would like to delete the "${tagElement.textContent}"?`)) {
-        tagElement.remove();
-        noteObject.tags = noteObject.tags.filter(t => t !== tagElement.textContent);
-        saveJournalList(journalList);
-      }
-    }
-  });
-
-  tagSave.onclick = () => {
-    tagsList = parseTags(tagInputBar.value);  // parse input into array
-    tagsList.forEach(tag => {
-      journalTags.add(tag); // add tag to global set
+    journalTags.forEach(tag => {
       const tagItem = document.createElement("option"); // display tag as part of the dropdown list 
       // populate tag with info 
       tagItem.value = tag;  
       tagItem.className = "tag-item";
       tagList.appendChild(tagItem);
-      // create new tag buttons and populate with info
-      const newTagElement = document.createElement("div");
-      newTagElement.className = "colored-tag";
-      newTagElement.textContent = tag;
-      tagsWrapper.insertBefore(newTagElement, tagsWrapper.firstChild);
-      // remove tag buttons when clicked
-      newTagElement.onclick = function() {
-        if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
-          noteObject.tags = noteObject.tags.filter(t => t !== newTagElement.textContent);
-          newTagElement.remove();
-        }
+    })
+  };
+
+  /* Displays tag buttons */
+  while (tagsWrapper.firstChild && tagsWrapper.firstChild.className === "colored-tag") {
+    tagsWrapper.removeChild(tagsWrapper.firstChild);
+  }
+  
+  noteObject.tags.forEach(tag => {
+    createTag(tag, tagsWrapper, noteObject);
+  });
+
+  /* Saves tags to each entry and globally */
+  tagSave.onclick = () => {
+    tagsList = parseTags(tagInputBar.value);  // parse input into array
+    tagsList.forEach(tag => {
+      journalTags.add(tag); // add tag to global set
+      if(noteObject.tags.includes(tag)) { // check if tags already added to the entry
+        alert(`${tag} already added!`);
+        return;
       }
+      createTag(tag, tagsWrapper, noteObject);  // create new tag buttons and populate with info
     });
     noteObject.tags = [...new Set([...noteObject.tags, ...tagsList])]; // save as note's tags
-    // createTags(noteObject.tags)
     saveJournalTags([...journalTags]);
     saveJournalList(journalList);
+    tagInputBar.value = ""; // clear input bar
   };
 }
 
-// /**
-//  * Create and tag buttons
-//  * @param {string[]} tags 
-//  * @returns {string[]} tags 
-//  */
-// function createTags(tags) {
-//   const tagsWrapper = document.getElementById("tags");
-
-//   while (tagsWrapper.firstChild && tagsWrapper.firstChild.className === "colored-tag") {
-//     tagsWrapper.removeChild(tagsWrapper.firstChild);
-//   }
-
-//   tags.forEach(tag => {
-//     const tagElement = document.createElement("div");
-//     tagElement.className = "colored-tag";
-//     tagElement.textContent = tag;
-//     tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
-
-//     tagElement.onclick = function() {
-//       if (window.confirm(`Are you sure you would like to delete the "${tagElement.textContent}"?`)) {
-//         tagElement.remove();
-//         tags = tags.filter(t => t !== tagElement.textContent);
-//       }
-//     }
-//   });
-//   return tags;
-// }
+/**
+ * Creates tag buttons 
+ * @param {string} tag - tag name
+ * @param {object} tagsWrapper - HTML element
+ * @param {object} noteObject - entry
+ */
+function createTag(tag, tagsWrapper, noteObject) {
+  const newTagElement = document.createElement("div");  // creates HTML element
+  newTagElement.className = "colored-tag";
+  newTagElement.textContent = tag;
+  tagsWrapper.insertBefore(newTagElement, tagsWrapper.firstChild);
+  
+  newTagElement.onclick = function() {  // remove tag buttons when clicked
+    if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+      noteObject.tags = noteObject.tags.filter(t => t !== newTagElement.textContent);
+      newTagElement.remove();
+    }
+  }
+}
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
@@ -360,15 +357,6 @@ function getTextFromDelta(delta) {
  */
 function parseTags(tagsString) {
   return tagsString.split(",").filter(tag => tag.length > 0);
-}
-
-/**
- * Create HTML corresponding to some tags.
- * @param {string[]} tags 
- * @returns {string} The corresponding HTML
- */
-function createTagHtml(tags) {
-
 }
 
 /**
