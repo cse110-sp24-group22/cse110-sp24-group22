@@ -115,8 +115,27 @@ header.entry-header {
 }
 
 .filter-container.show {
-  height: 3.5em;
+  height: 5em;
   padding-bottom: 10px 0px 10px 0px;
+}
+
+#filter-inner{
+  display:flex;
+  flex-direction: row;
+  justify-content: start;
+}
+
+#filter-outer{
+  width: 100%;
+  padding: 1em;
+  padding-bottom: 3em;
+}
+#tags-bar{
+  float:left;
+  
+}
+#date-container{
+  margin-left:40%;
 }
 
 .search-bar {
