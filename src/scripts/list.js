@@ -198,6 +198,7 @@ function editJournal(id) {
     console.log(journalContent);
     modal.style.display = "none";
     itemList.innerHTML = "";
+    tagInput.style.display = "none";
     displayList(journalList);
   });
 
@@ -226,26 +227,26 @@ function editJournal(id) {
     saveJournalList(journalList);
   });
 
-  titleBar.addEventListener("input", () => {
+  titleBar.onclick = () => {
     let title = titleBar.value;
     noteObject.title = title;
     saveJournalList(journalList);
-  }); 
+  }; 
 
   tagInput.value = noteObject.tags; // populate input bar with tags from the note
 
-  tagAdd.addEventListener("click", () => {
+  tagAdd.onclick = () => {
     tagInput.style.display = "block";
-  });
+  };
 
-  tagSave.addEventListener("click", () => {
+  tagSave.onclick = () => {
     tagsList = parseTags(tagInputBar.value);  // parse input into array
     tagsList.forEach(tag => {
       journalTags.add(tag); // add tag to global set
       const tagItem = document.createElement("option"); // display tag as part of the dropdown list 
       // populate tag with info 
       tagItem.value = tag;  
-      tagItem.className = 'tag-item';
+      tagItem.className = "tag-item";
       tagList.appendChild(tagItem);
       // create new tag buttons and populate with info
       const newTagElement = document.createElement("div");
@@ -259,9 +260,9 @@ function editJournal(id) {
         }
       }
     });
-    noteObject.tags = tagsList; // save as note's tags
+    noteObject.tags = [...new Set([...noteObject.tags, ...tagsList])]; // save as note's tags
     saveJournalTags([...journalTags]);
-  })
+  };
 }
 
 /**
