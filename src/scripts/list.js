@@ -2,6 +2,7 @@
 let journalList = getJournalList();
 let journalTags = getJournalTags();
 var tagSet = new Set();
+let tagsList = [];
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -119,7 +120,7 @@ function getJournalTags() {
   if(!localStorage.getItem("GarlicNotesTags")) {
     return tagSet;
   }
-  return JSON.parse(localStorage.getItem("GarlicNotesTags"));
+  return new Set(JSON.parse(localStorage.getItem("GarlicNotesTags")));
 }
 
 function deleteTag(tag) {
@@ -143,7 +144,8 @@ function editJournal(id) {
   const titleBar = document.getElementById("journalTitle");
   const itemList = document.getElementById("item-list");
   const tagAdd = document.getElementById("tag-plus-button");
-  const tagInput = document.getElementById("journalTag");
+  const tagInput = document.getElementById("tag-input");
+  const tagInputBar = document.getElementById("tag-input-bar");
   const tagList = document.getElementById("tag-list");
   const tagSave = document.getElementById("save-tag");
 
@@ -205,23 +207,13 @@ function editJournal(id) {
 
   tagInput.value = noteObject.tags; // populate input bar with tags from the note
 
-  // listen to when users type input
-  tagInput.addEventListener("input", () => {
-    let tagsList = parseTags(tagInput.value);  // parse input into array
-    noteObject.tags = tagsList; // save as note's tags
-    tagsList.forEach(tag => {
-      journalTags.push(tag);
-      const tagItem = document.createElement("option");
-      tagItem.value = tag;
-      tagItem.className = 'tag-item';
-      tagList.appendChild(tagItem);
-    });
-    saveJournalList(journalList); //click then save 
-    saveJournalTags(journalTags);
+  tagAdd.addEventListener("click", () => {
+    tagInput.style.display = "block";
   });
 
   tagSave.addEventListener("click", () => {
-    let tagsList = parseTags(tagInput.value);  // parse input into array
+    tagsList = parseTags(tagInputBar.value);  // parse input into array
+    alert(tagsList);
     tagsList.forEach(tag => {
       journalTags.add(tag);
       const tagItem = document.createElement("option");
@@ -230,6 +222,7 @@ function editJournal(id) {
       tagList.appendChild(tagItem);
     });
     noteObject.tags = tagsList; // save as note's tags
+    saveJournalTags(journalTags);
   })
 }
 

@@ -44,6 +44,7 @@
           <span class="close-button" id="closeModal">&times;</span>
           <input type="text" id="journalTitle" placeholder="Enter title here..." />
           <div class="tags" id="tags">
+            <!-- Added tags will be shown here -->
             <div class="colored-tag">
               <span>Tag 1</span>
             </div>
@@ -55,9 +56,13 @@
                 <button id="tag-plus-button">+</button>
               </div>
               <div id="tag-input">
-                <input type="text" id="tagInput" placeholder="New tag" />
+                <!-- Should remain hidden until add button is clicked-->
+                <input list="tag-list" type="text" id="tag-input-bar" placeholder="New tag" />
+                <button id="save-tag">Add</button>
+                <!-- Dropdown menu for available tags-->
+                <datalist id="tag-list">
+                </datalist>
               </div>
-              <button id="save-tag">Add</button>
             </div>
           </div>
 

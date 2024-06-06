@@ -195,6 +195,11 @@ h1 {
     color: white;
     text-align: center;
     height: 20px;
+    margin: 5px;
+}
+
+.colored-tag:hover {
+    background-color: rgb(157, 60, 60);
 }
 
 .tags {
@@ -217,8 +222,14 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin: 5px;
 }
 
 #tag-plus > button:hover {
     background-color: #218838;
+}
+
+#tag-input {
+    margin: 5px;
+    display: none;
 }
