@@ -154,6 +154,11 @@ function createTags(tags) {
     tagElement.classList.add("colored-tag");
     tagElement.innerText = tagName;
 
+    // let tagNameCopy = tagName;
+    // tagElement.onclick = () => {
+    //   removeTag(tagNameCopy); //CHECK
+    // };
+
     tagsWrapper.insertBefore(tagElement, tagsWrapper.firstChild);
   }
 }
@@ -169,7 +174,7 @@ function editJournal(id) {
   const tagInputBar = document.getElementById("tag-input-bar");
   const tagList = document.getElementById("tag-list");
   const tagSave = document.getElementById("save-tag");
-  const tagsWrapper = document.getElementById("colored-tag");
+  const tagsWrapper = document.getElementById("tags");
 
   modal.style.display = "block";
 
@@ -225,7 +230,7 @@ function editJournal(id) {
     let title = titleBar.value;
     noteObject.title = title;
     saveJournalList(journalList);
-  });
+  }); 
 
   tagInput.value = noteObject.tags; // populate input bar with tags from the note
 
@@ -236,18 +241,26 @@ function editJournal(id) {
   tagSave.addEventListener("click", () => {
     tagsList = parseTags(tagInputBar.value);  // parse input into array
     tagsList.forEach(tag => {
-      journalTags.add(tag);
-      const tagItem = document.createElement("option");
-      tagItem.value = tag;
+      journalTags.add(tag); // add tag to global set
+      const tagItem = document.createElement("option"); // display tag as part of the dropdown list 
+      // populate tag with info 
+      tagItem.value = tag;  
       tagItem.className = 'tag-item';
       tagList.appendChild(tagItem);
+      // create new tag buttons and populate with info
+      const newTagElement = document.createElement("div");
+      newTagElement.className = "colored-tag";
+      newTagElement.textContent = tag;
+      tagsWrapper.insertBefore(newTagElement, tagsWrapper.firstChild);
+      // remove tag buttons when clicked
+      newTagElement.onclick = function() {
+        if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+          newTagElement.remove();
+        }
+      }
     });
     noteObject.tags = tagsList; // save as note's tags
     saveJournalTags([...journalTags]);
-  })
-
-  tagsWrapper.addEventListener("click", () => {
-    tagsWrapper.remove();
   })
 }
 
@@ -334,8 +347,6 @@ function parseTags(tagsString) {
 function createTagHtml(tags) {
 
 }
-
-
 
 /**
  * Prepares search functionality on the page.
