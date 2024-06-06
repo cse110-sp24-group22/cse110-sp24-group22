@@ -339,6 +339,7 @@ function editJournal(id) {
 
   titleBar.oninput = updateTitleHandler;
 
+
   // Delete current journal
   deleteButton.onclick = (event) => {
     if (
@@ -384,6 +385,7 @@ function editJournal(id) {
       quill.off("text-change", quillUpdateTextHandler);
     }
   }
+
 
   saveJournal.onclick = (event) => {
       updateTitleHandler();
