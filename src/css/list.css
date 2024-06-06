@@ -65,8 +65,16 @@ h1 {
 }
 
 h2 {
-    place-self: center;
+    place-self: left;
     margin: 0px;
+}
+
+header.entry-header {
+    padding-left: 83px; 
+}
+
+.header .entry-header h2 {
+    margin: 0;
 }
 
 
@@ -178,9 +186,9 @@ h2 {
 
 /* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
 .item-list li #entry-timestamp {
-    margin-left: 10px;
+    margin-left: 100px;
     text-align: right;
-    margin-right: 10px;
+    margin-right: 40px;
     place-self: center;
 }
 
@@ -210,6 +218,7 @@ h2 {
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+    right: 85px;
 }
 
 .delete-button:hover {
@@ -222,6 +231,17 @@ h2 {
 
 .item-list li:hover .delete-button {
     display: inline;
+}
+
+.delete-icon {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    right: 20px;
+    top: 50%;
+    transform: translate
 }
 
 
@@ -249,7 +269,7 @@ h2 {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 2 !important;
     left: 0;
     top: 0;
     width: 100%;
@@ -260,17 +280,26 @@ h2 {
   }
 
   .modal-content {
-    background-color: #fefefe;
+    z-index: 3 !important;
+    display:block;  
+    background-color: #FFE2B6;
     margin: 15% auto;
     padding: 20px;
+    padding-bottom: 45px;
     border: 1px solid #888;
     width: 80%;
+    height:fit-content;
   }
 
   .close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+    bottom: 5%;
+    right: 5%;
+    margin-top: 10px;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    color: #000000;
+    float: left;
+    font-size: 14px;
     font-weight: bold;
   }
 
@@ -280,6 +309,34 @@ h2 {
     text-decoration: none;
     cursor: pointer;
   }
+
+  .DeleteJournal {
+    bottom: 5%;
+    right: 5%;
+    margin-top: 10px;
+    margin: right;
+    background-color: #FF0000;
+    border-radius: 10px;
+    color: #000000;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .Save-Close {
+    bottom: 5%;
+    margin-top: 10px;
+    float: right;
+    background-color: #D0FBBC;
+    border-radius: 10px;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+    
+  }
+
+
+
 
   #editor {
     height: 300px;
@@ -339,4 +396,15 @@ h2 {
 /* The .sort-arrow:hover rule changes the color of the sort arrow when it's hovered over. */
 .sort-arrow:hover {
     color: darkred;
+}
+.ql-snow * {
+    box-sizing: border-box;
+    background: white;
+}
+.ql-toolbar.ql-snow {
+    border: 1px solid #ccc;
+    background: white;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
 }
