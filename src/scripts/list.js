@@ -25,7 +25,7 @@ function init() {
   journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
   const filterButton = document.querySelector(".filter-button");
-  displayList(journalList);
+  updateDisplay();
 
   setUpSearch();
 
@@ -62,28 +62,20 @@ document.getElementById("sort-timestamp").addEventListener("click", () => {
  * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
  * The sort direction (ascending or descending) is toggled each time the function is called with the same category.
  */
+
+/** @type {"none"|"name"|"timestamp"} */
+let sortMode = "none";
+
 function sortByCategory(category) {
   if (category === "name") {
-    journalList.sort((a, b) => {
-      if (sortDirection.name) {
-        return a.title.localeCompare(b.title);
-      } else {
-        return b.title.localeCompare(a.title);
-      }
-    });
+    sortMode = "name";
     sortDirection.name = !sortDirection.name;
   } else if (category === "timestamp") {
-    journalList.sort((a, b) => {
-      if (sortDirection.editTime) {
-        return a.editTime - b.editTime;
-      } else {
-        return b.editTime - a.editTime;
-      }
-    });
+    sortMode = "timestamp";
     sortDirection.editTime = !sortDirection.editTime;
   }
   updateSortArrows(category);
-  displayList(journalList);
+  updateDisplay();
 }
 
 /**
@@ -403,7 +395,7 @@ function editJournal(id) {
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns matching entries
+ * @returns {any} matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
@@ -481,13 +473,52 @@ function parseTags(tagsString) {
 }
 
 /**
+ * Gets the search field value.
+ * @returns {string} - search field value
+ */
+function getSearchField() {
+  return searchBar.value.trim();
+}
+
+/** @type {HTMLInputElement} */
+const searchBar = document.getElementById("search-bar");
+const tagsBar = document.getElementById("tags-bar");
+const startDate = document.getElementById("start-date");
+const endDate = document.getElementById("end-date");
+
+function updateDisplay() {
+  const searchResults = searchJournal(
+      searchBar.value,
+      parseTags(tagsBar.value),
+      startDate.value,
+      endDate.value,
+  );
+
+  if (sortMode === "name") {
+    searchResults.sort((a, b) => {
+      if (sortDirection.name) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+  } else if (sortMode === "timestamp") {
+    searchResults.sort((a, b) => {
+      if (sortDirection.editTime) {
+        return a.editTime - b.editTime;
+      } else {
+        return b.editTime - a.editTime;
+      }
+    });
+  }
+
+  displayList(searchResults);
+}
+
+/**
  * Prepares search functionality on the page.
  */
 function setUpSearch() {
-  const searchBar = document.getElementById("search-bar");
-  const tagsBar = document.getElementById("tags-bar");
-  const startDate = document.getElementById("start-date");
-  const endDate = document.getElementById("end-date");
 
   const searchElements = [searchBar, tagsBar, startDate, endDate];
   const itemList = document.getElementById("item-list");
@@ -496,14 +527,7 @@ function setUpSearch() {
   searchElements.forEach((element) => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(
-        searchJournal(
-          searchBar.value,
-          parseTags(tagsBar.value),
-          startDate.value,
-          endDate.value,
-        ),
-      );
+      updateDisplay();
     };
   });
 }
