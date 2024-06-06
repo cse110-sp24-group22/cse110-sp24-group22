@@ -1,101 +1,71 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    overscroll-behavior: none;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
 }
 
 .background {
-    height: 75vw;
-    padding: 0;
-    margin: 0;
+  height: 75vw;
+  padding: 0;
+  margin: 0;
 }
 
 .top-section {
-    width: 100%;
-    height: 75px;
-    display: grid;
-    grid-template-areas: 
-    "logo search list";
-    grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: auto;
-    place-items: center;
-    justify-content: center;
-    column-gap: 10px;
-    background-color: #f3f2e7;
-    position: fixed;
-    z-index: 5;
-}
-
-.top-section img {
-    grid-area: logo;
+  width: 100%;
+  height: 50px;
+  display: grid;
+  grid-template-areas: "logo search list";
+  grid-template-columns: 1fr 2fr 1fr;
+  column-gap: 10px;
+  background-color: lightgrey;
+  position: fixed;
 }
 
 #search-bar {
-    border-radius: 2rem;
-    grid-area: search;
-    border: none;
-    height: 30px;
-    width: 70%;
-    font-size: 15px;
-    box-sizing: border-box;
-    padding: 5px 20px;
+  border-radius: 2rem;
+  padding: 5px;
+  grid-area: search;
+  border: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 17px;
+}
+
+#logo {
+  height: 40px;
+  width: 40px;
+  padding-left: 25px;
+  padding-top: 5px;
 }
 
 .top-section button {
-    grid-area: list;
-    height: 30px;
-    width: 100px;
-    border-radius: 30px;
-    border: none;
+  grid-area: list;
+  height: 40px;
+  width: 100px;
+  place-self: center;
+  border-radius: 30px;
+  border: none;
 }
 
 .section1 {
-   /* background: url('/src/assets/background_sky.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;*/
-    position: relative;
-    width: 100%;
-    background-color: red;
-    z-index: -2;
-}
-
-
-.section1 img {
-    width: 100%; 
-}
-
-.section3 {
-    /*margin-top: -65%;
-    background: url('/src/assets/background_top_soil.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;*/
-    position: relative;
-    margin-top: -65%;
-}
-
-#pot {
-    position: absolute;
-    right: 40rem;
-    top: 24%;   
-    z-index: -1;
-}
-
-#watering-can {
-    position: absolute;
-    right: 18rem;
-    top: 23%;   
-    z-index: -1;
+  background: url("/src/assets/background_top_soil.svg"),
+    url("/src/assets/background_sky.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
 }
 
 
 .section2 {
-    background: url('/src/assets/background_deep_ground.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;
+  background: url("/src/assets/background_deep_ground.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
 }
 
-
-
+@media screen and (max-width: 560px) {
+  .background {
+    height: 420px;
+  }
+}
