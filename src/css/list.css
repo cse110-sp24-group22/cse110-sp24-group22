@@ -97,7 +97,9 @@ header.entry-header {
 .search-container {
   margin: 20px 0;
   display: flex;
+  color: white;
   justify-content: center;
+  
 }
 
 .filter-container {
@@ -122,7 +124,10 @@ header.entry-header {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  background-color: black;
+  color: white;
+  opacity: 40%;
+  border-radius: 10px;
   font-size: 16px;
 }
 
