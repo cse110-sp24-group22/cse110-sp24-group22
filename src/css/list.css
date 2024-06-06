@@ -38,6 +38,11 @@ button {
   transition: background-color 0.3s ease;
 }
 
+/* Allows all buttons on the page to have an interactive when there is a hover. Darkens the button by 85% */
+button:hover {
+  filter: brightness(85%);
+}
+
 /* given a height and color */
 .main-header {
   grid-template-areas: "logo search root sort";
@@ -92,14 +97,11 @@ header.entry-header {
 
 /* button hover transition */
 
-
-
 .search-container {
   margin: 20px 0;
   display: flex;
   color: white;
   justify-content: center;
-  
 }
 
 .filter-container {
@@ -150,9 +152,6 @@ header.entry-header {
   font-size: 14px;
   z-index: 2;
 }
-
-
-
 
 /* The item-list rule removes the default list style and padding. */
 .item-list {
@@ -221,10 +220,6 @@ header.entry-header {
   cursor: pointer;
   right: 85px;
 }
-button:hover{
-  filter: brightness(85%);
-}
-
 
 #delete-container {
   place-self: center;
@@ -298,7 +293,6 @@ button:hover{
   color: #000000;
   float: left;
   font-size: 14px;
-  
 }
 
 .close-button:focus {
@@ -315,7 +309,6 @@ button:hover{
   border-radius: 6px;
   color: #000000;
   font-size: 14px;
-  
 }
 .DeleteJournal {
   margin-left: 5%;
@@ -325,7 +318,6 @@ button:hover{
   color: #000000;
   font-size: 14px;
   float: left;
-  
 }
 
 #editor {
