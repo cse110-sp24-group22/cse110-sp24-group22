@@ -35,16 +35,22 @@ function init() {
 
   // Animation for the filter dropdown
   filterButton.addEventListener("click", function () {
-    const filterHeader = document.querySelector('.filter-container');
-    const entryHeader = document.querySelector('.entry-header');
-    if (filterHeader.classList.contains('show')) {
+    const filterHeader = document.querySelector(".filter-container");
+    const entryHeader = document.querySelector(".entry-header");
+    if (filterHeader.classList.contains("show")) {
       filterHeader.classList.remove("show");
+      entryHeader.style.marginTop = "75px"; // adjust based on filterHeader height
+      setTimeout(function () {
+        filterHeader.style.display = "none";
+      }, 500);
     } else {
-      filterHeader.style.display = 'flex';
-      filterHeader.classList.add("show");
+      filterHeader.style.display = "grid";
+      setTimeout(() => {
+        filterHeader.classList.add("show");
+        entryHeader.style.marginTop = "105px"; // adjust based on filterHeader height
+      }, 0);
     }
   });
-
 }
 
 document.getElementById("sort-name").addEventListener("click", () => {
@@ -166,16 +172,18 @@ function createListItem(item) {
   let date = new Date(item.editTime);
 
   let options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false // Use 24-hour time
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, // Use 24-hour time
   };
 
   // Display the formatted date
-  timestampText.textContent = date.toLocaleString('en-GB', options).replace(',', '');
+  timestampText.textContent = date
+    .toLocaleString("en-GB", options)
+    .replace(",", "");
 
   listItem.appendChild(timestampText);
 
@@ -184,12 +192,16 @@ function createListItem(item) {
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
   deleteButton.className = "delete-button";
-  deleteButtonContainer.id = "delete-container"
+  deleteButtonContainer.id = "delete-container";
   deleteButtonContainer.appendChild(deleteButton);
 
   // EventListener: When clicking delete, delete from page and LocalStorage
   deleteButton.onclick = (event) => {
-    if (window.confirm(`Are you sure you would like to delete the "${item.title}"?`)) {
+    if (
+      window.confirm(
+        `Are you sure you would like to delete the "${item.title}"?`,
+      )
+    ) {
       event.stopPropagation();
       listItem.remove();
       deleteJournal(timestamp);
@@ -288,7 +300,6 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-
   let noteObject;
   if (id === undefined) {
     id = new Date().getTime();
@@ -317,19 +328,16 @@ function editJournal(id) {
 
   titleBar.addEventListener("input", updateTitleHandler);
 
-
   // Cancel changes and revert notebook
-  const cancelButton = document.getElementById('cancelModal');
-  cancelButton.addEventListener('click', function () {
+  const cancelButton = document.getElementById("cancelModal");
+  cancelButton.addEventListener("click", function () {
     noteObject.delta = contentScreenShot;
 
-    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)){
+    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) {
       deleteJournal(noteObject.timestamp);
-    }
-    else if (!isTitleValid(titleBar.value)) {
+    } else if (!isTitleValid(titleBar.value)) {
       cancelButton.disabled = true;
-    }
-    else {
+    } else {
       cancelButton.disabled = false;
     }
 
@@ -338,7 +346,6 @@ function editJournal(id) {
     displayList(journalList);
     removeJournalEventListeners();
   });
-
 
   saveJournal.addEventListener(
     "click",
@@ -353,14 +360,12 @@ function editJournal(id) {
     { once: true },
   );
 
-
   /**
    * Updates journal entry title with current contents in the title input bar.
    */
   function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
-
 
     if (isTitleValid(title)) {
       // don't save if title is empty
@@ -461,7 +466,7 @@ function getMatchingEntries(list, query) {
  */
 function getTextFromDelta(delta) {
   if (!delta || !delta.ops) {
-    return '';
+    return "";
   }
 
   let text = "";
