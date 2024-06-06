@@ -228,6 +228,7 @@ function editJournal(id) {
   /* Adds or modifies tags */
   tagAdd.onclick = () => {
     tagInput.style.display = "block";
+    tagAdd.style.display = "none";
     journalTags.forEach(tag => {
       const tagItem = document.createElement("option"); // display tag as part of the dropdown list 
       // populate tag with info 
@@ -261,6 +262,8 @@ function editJournal(id) {
     saveJournalTags([...journalTags]);
     saveJournalList(journalList);
     tagInputBar.value = ""; // clear input bar
+    tagInput.style.display = "none";
+    tagAdd.style.display = "block";
   };
 }
 
