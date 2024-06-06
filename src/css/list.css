@@ -310,19 +310,6 @@ header.entry-header {
     cursor: pointer;
   }
 
-  .DeleteJournal {
-    bottom: 5%;
-    right: 5%;
-    margin-top: 10px;
-    margin: right;
-    background-color: #FF0000;
-    border-radius: 10px;
-    color: #000000;
-    float: left;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
   .Save-Close {
     bottom: 5%;
     margin-top: 10px;
@@ -334,6 +321,18 @@ header.entry-header {
     font-weight: bold;
     
   }
+  .DeleteJournal {
+    margin-right: 15%;
+    margin-top: 10px;
+    background-color: #ff000052;
+    border-radius: 10px;
+    color: #000000;
+    font-size: 14px;
+    float: right;
+    font-weight: bold;
+  }
+  
+
 
 
 
@@ -343,7 +342,7 @@ header.entry-header {
   }
 
   #journalTitle {
-    width: calc(100% - 20px); /* Adjust width to fit within padding */
+    width: 100%; /* Adjust width to fit within padding */
     margin: 10px 0;
     padding: 10px;
     font-size: 18px;
