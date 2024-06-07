@@ -31,7 +31,7 @@ header {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  grid-template-columns: 0.5fr 2fr 0.5fr 0.5fr;
+  grid-template-columns: 100px minmax(1px,2fr) 150px 150px;
   column-gap: 10px;
   z-index: 2;
 }
