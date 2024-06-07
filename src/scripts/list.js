@@ -42,15 +42,13 @@ function init() {
     const entryHeader = document.querySelector(".entry-header");
     if (filterHeader.classList.contains("show")) {
       filterHeader.classList.remove("show");
-      entryHeader.style.marginTop = "75px"; // adjust based on filterHeader height
       setTimeout(function () {
         filterHeader.style.display = "none";
       }, 500);
     } else {
-      filterHeader.style.display = "grid";
+      filterHeader.style.display = "flex";
       setTimeout(() => {
         filterHeader.classList.add("show");
-        entryHeader.style.marginTop = "105px"; // adjust based on filterHeader height
       }, 0);
     }
   };
@@ -281,12 +279,6 @@ function saveJournalList(journalList) {
 function isTitleValid(title) {
   return title.trim().length > 0;
 }
-
-
-
-
-
-
 
 /**
  * Opens a modal to edit a journal entry.

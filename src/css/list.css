@@ -64,12 +64,14 @@ button:hover {
   padding: 10px;
 }
 
+/* styling for main header text */
 h1 {
   margin: 0;
   font-size: 24px;
   color: #333;
 }
 
+/* styling for subheading text */
 h2 {
   place-self: left;
   margin: 0px;
@@ -98,6 +100,54 @@ header.entry-header {
   transition: background-color 0.3s ease;
 }
 
+
+
+/* style filter container, includes animation mechanic */
+.filter-container {
+  overflow: hidden;
+  height: 0px;
+  padding: 0px 0px 0px 0px;
+  background-color: #947665;
+  transition:
+    height 0.5s ease,
+    padding 0.5s ease;
+}
+
+/* style for when the filter container is showing */
+.filter-container.show {
+  height: 3em;
+  padding-bottom: 10px 0px 10px 0px;
+}
+
+/* container layout within filter-container */
+#filter-outer {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  width: 100%;
+  padding: 1em;
+  padding-bottom: 1em;
+}
+
+/* Sets height and layout for tags text input */
+#tags-bar {
+  float: left;
+  height: 1em;
+}
+
+/* Sets formatting for filter sub-heading text */
+#filter-text {
+  margin: 0;
+  padding-right: 10px;
+}
+
+/* Sets position of the date filtering section */
+#date-container {
+  margin-left: 40%;
+  width: 20em;
+}
+
+/* layout for search bar container */
 .search-container {
   margin: 20px 0;
   display: flex;
@@ -105,40 +155,7 @@ header.entry-header {
   justify-content: center;
 }
 
-.filter-container {
-  overflow: hidden;
-  height: 0px;
-  padding: 0px 0px 0px 0px;
-  grid-template-columns: 1fr 0.75fr 0.75fr 0.5fr;
-  background-color: #947665;
-  transition:
-    height 0.5s ease,
-    padding 0.5s ease;
-}
-
-.filter-container.show {
-  height: 5em;
-  padding-bottom: 10px 0px 10px 0px;
-}
-
-#filter-inner {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-}
-
-#filter-outer {
-  width: 100%;
-  padding: 1em;
-  padding-bottom: 3em;
-}
-#tags-bar {
-  float: left;
-}
-#date-container {
-  margin-left: 40%;
-}
-
+/* stylizes the search bar and its input */
 .search-bar {
   width: 100%;
   padding: 10px;
@@ -150,12 +167,14 @@ header.entry-header {
   font-size: 16px;
 }
 
+/* sets layout for the new journal button container */
 .add-button-container {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 20px;
 }
 
+/* sets format for the new journal button */
 .new-journal-button {
   bottom: 5%;
   right: 5%;
