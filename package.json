@@ -1,13 +1,11 @@
 {
   "dependencies": {
-    "http-server": "^14.1.1",
     "jest-environment-jsdom": "^29.7.0",
     "madr": "^3.0.0",
     "quill": "^2.0.2"
   },
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "build": "http-server -p 8080 </dev/null",
     "test:e2e": "jest --maxWorkers=1 --config .github/workflows/jest.e2e.cjs"
   },
   "type": "module",
