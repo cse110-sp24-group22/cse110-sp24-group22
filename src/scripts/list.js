@@ -445,7 +445,7 @@ function searchJournal(query, tags, startDate, endDate) {
 
   // Filter by date range
   let startMilliseconds = Date.parse(startDate + "T00:00:00"); // Use user's local timezone
-  let endMilliseconds = Date.parse(endDate + "T00:00:00");
+  let endMilliseconds = Date.parse(endDate + "T23:59:59"); // End before 12:00AM of the next day
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
     filteredList = filteredList.filter(
