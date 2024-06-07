@@ -160,7 +160,7 @@ function editJournal(id) {
   const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags 
   const tagList = document.getElementById("tag-list");          // dropdown list for global tags
   const tagSave = document.getElementById("save-tag");          // button for saving tags 
-  const tagsWrapper = document.getElementById("tags");          // tag buttons segment
+  const tagsWrapper = document.getElementById("tag-plus");          // tag buttons segment
 
   /* Displays modal */
   modal.style.display = "block";
@@ -239,12 +239,17 @@ function editJournal(id) {
   };
 
   /* Displays tag buttons */
-  while (tagsWrapper.firstChild && tagsWrapper.firstChild.className === "colored-tag") {
-    tagsWrapper.removeChild(tagsWrapper.firstChild);
+  const tagsTextNode = tagsWrapper.childNodes[0]; // Get the "Tags: " text node
+
+  let currentNode = tagsTextNode.nextSibling; // Iterate over child nodes and remove dynamically added tags
+  while (currentNode && currentNode !== tagAdd) {
+      const nextNode = currentNode.nextSibling;
+      tagsWrapper.removeChild(currentNode);
+      currentNode = nextNode;
   }
   
   noteObject.tags.forEach(tag => {
-    createTag(tag, tagsWrapper, noteObject);
+    createTag(tag, tagsWrapper, noteObject, tagAdd);
   });
 
   /* Saves tags to each entry and globally */
@@ -256,7 +261,7 @@ function editJournal(id) {
         alert(`${tag} already added!`);
         return;
       }
-      createTag(tag, tagsWrapper, noteObject);  // create new tag buttons and populate with info
+      createTag(tag, tagsWrapper, noteObject, tagAdd);  // create new tag buttons and populate with info
     });
     noteObject.tags = [...new Set([...noteObject.tags, ...tagsList])]; // save as note's tags
     saveJournalTags([...journalTags]);
@@ -272,12 +277,13 @@ function editJournal(id) {
  * @param {string} tag - tag name
  * @param {object} tagsWrapper - HTML element
  * @param {object} noteObject - entry
+ * @param {obkect} tagAdd - tag plus button
  */
-function createTag(tag, tagsWrapper, noteObject) {
+function createTag(tag, tagsWrapper, noteObject, tagAdd) {
   const newTagElement = document.createElement("div");  // creates HTML element
   newTagElement.className = "colored-tag";
   newTagElement.textContent = tag;
-  tagsWrapper.insertBefore(newTagElement, tagsWrapper.firstChild);
+  tagsWrapper.insertBefore(newTagElement, tagAdd);
   
   newTagElement.onclick = function() {  // remove tag buttons when clicked
     if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {

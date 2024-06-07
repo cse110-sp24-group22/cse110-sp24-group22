@@ -233,3 +233,8 @@ h1 {
     margin: 5px;
     display: none;
 }
+
+#tag-plus {
+    display: flex;
+    align-items: center;
+}
