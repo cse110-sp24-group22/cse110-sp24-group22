@@ -277,7 +277,7 @@ function editJournal(id) {
  * @param {string} tag - tag name
  * @param {object} tagsWrapper - HTML element
  * @param {object} noteObject - entry
- * @param {obkect} tagAdd - tag plus button
+ * @param {object} tagAdd - tag plus button
  */
 function createTag(tag, tagsWrapper, noteObject, tagAdd) {
   const newTagElement = document.createElement("div");  // creates HTML element
@@ -287,8 +287,9 @@ function createTag(tag, tagsWrapper, noteObject, tagAdd) {
   
   newTagElement.onclick = function() {  // remove tag buttons when clicked
     if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
-      noteObject.tags = noteObject.tags.filter(t => t !== newTagElement.textContent);
+      noteObject.tags = noteObject.tags.filter(t => t != tag);
       newTagElement.remove();
+      saveJournalList(journalList);
     }
   }
 }
