@@ -25,6 +25,20 @@ body {
   position: fixed;
 }
 
+.date-section {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  margin-top: 50px;
+  z-index: 100;
+}
+
+#date {
+  color: white;
+}
+
 #search-bar {
   border-radius: 2rem;
   padding: 5px;
