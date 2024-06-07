@@ -292,18 +292,14 @@ function editJournal(id) {
     }
   });
 
+  /* Deletes journal inside modal */
   deleteModal.onclick = () => {
-    if (
-      window.confirm(
-        `Are you sure you would like to delete ${titleBar.value}?`,
-      )
-    ) {
-      // event.stopPropagation();
+    if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
-      deleteJournal(id);  //FIX
+      deleteJournal(id);  
       saveJournalList(journalList);
+      displayList(journalList);
     }
-    // event.stopPropagation();
   }
 
   /* Saves journal */
