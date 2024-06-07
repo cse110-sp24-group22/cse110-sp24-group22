@@ -53,6 +53,7 @@ button:hover {
   grid-template-areas: "logo search root sort";
   height: 75px;
   background-color: lightgrey;
+  width: 100%;
 }
 
 /* margin to account for entry-header and transition for filter box */
@@ -152,10 +153,11 @@ header.entry-header {
 
 /* layout for search bar container */
 .search-container {
-  margin: 20px 0;
   display: flex;
   color: white;
   justify-content: center;
+  max-width: 1000px;
+  
 }
 
 /* stylizes the search bar and its input */
