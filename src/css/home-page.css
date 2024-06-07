@@ -30,13 +30,14 @@ body {
   position:fixed;
   align-items: center;
   z-index: 2;
+  column-gap: 10px;
 }
 
 .search-container {
-  margin: 20px 0;
   display: flex;
   color: white;
   justify-content: center;
+  max-width: 1000px;
 }
 
 .search-contain{
@@ -61,7 +62,6 @@ body {
   display: flex;
   margin-left: 20%;
   justify-content:center;
-
 
 }
 .button-contain{
