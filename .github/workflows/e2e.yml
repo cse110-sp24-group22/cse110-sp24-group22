@@ -1,6 +1,9 @@
 name: E2E Test
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   e2e-test:
@@ -22,7 +25,7 @@ jobs:
       run: npm install -g http-server
 
     - name: Start http-server
-      run: http-server -p 5500 &
+      run: http-server -p 5501 &
       # The ampersand (&) runs http-server in the background
 
     - name: Run E2E tests
