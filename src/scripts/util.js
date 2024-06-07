@@ -1,8 +1,5 @@
-// Import journalList as read-only, which only main.js can modify
-import { journalList } from "./main.js";
-
 // Export utility functions
-export { getMatchingEntries, saveJournalList, getJournalByTimestamp, deleteJournal, isTitleValid, getJournalList };
+export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList };
 
 // Search-related utility functions
 
@@ -13,20 +10,20 @@ export { getMatchingEntries, saveJournalList, getJournalByTimestamp, deleteJourn
  * @returns matching entries
  */
 function getMatchingEntries(list, query) {
-    query = query.toLowerCase();
+  query = query.toLowerCase();
 
-    let matchingEntriesByTitle = [];
-    let matchingEntriesByContent = [];
+  let matchingEntriesByTitle = [];
+  let matchingEntriesByContent = [];
 
-    list.forEach((entry) => {
-        if (entry.title.toLowerCase().includes(query)) {
-            matchingEntriesByTitle.push(entry);
-        } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
-            matchingEntriesByContent.push(entry);
-        }
-    });
+  list.forEach((entry) => {
+    if (entry.title.toLowerCase().includes(query)) {
+      matchingEntriesByTitle.push(entry);
+    } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
+      matchingEntriesByContent.push(entry);
+    }
+  });
 
-    return matchingEntriesByTitle.concat(matchingEntriesByContent);
+  return matchingEntriesByTitle.concat(matchingEntriesByContent);
 }
 
 /**
@@ -35,44 +32,18 @@ function getMatchingEntries(list, query) {
  * @returns all the text in a Quill delta
  */
 function getTextFromDelta(delta) {
-    if (!delta || !delta.ops) {
-        return "";
-    }
+  if (!delta || !delta.ops) {
+    return "";
+  }
 
-    let text = "";
-    delta.ops.forEach((op) => {
-        text += op.insert;
-    });
-    return text;
+  let text = "";
+  delta.ops.forEach((op) => {
+    text += op.insert;
+  });
+  return text;
 }
 
-// journalList/editing-related utility functions
-
-/**
- * Saves the list of journal entries to localStorage.
- * @param journalList {JournalEntry[]} - list of journal entries
- */
-function saveJournalList(journalList) {
-    localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
-}
-
-/**
- * Retrieves a journal entry by its timestamp.
- * @param timestamp {number} - unique identifier and time it was created
- * @returns {JournalEntry|undefined} - journal entry or undefined if not found
- */
-function getJournalByTimestamp(timestamp) {
-    let journal = journalList.find((entry) => entry.timestamp == timestamp);
-    if (journal === undefined) {
-        console.error(`Error: No journal entry found with timestamp ${timestamp}`);
-        return undefined;
-    } else return journal;
-}
-
-function deleteJournal(timestamp) {
-    journalList = journalList.filter((entry) => entry.timestamp != timestamp);
-    saveJournalList(journalList);
-}
+// journalList/editing-related utility functions. These functions don't require looking into a global journalList object.
 
 /**
 * Checks if a title is valid.
@@ -80,18 +51,25 @@ function deleteJournal(timestamp) {
 * @returns {boolean} - true if title is valid, false otherwise
 */
 function isTitleValid(title) {
-    return title.trim().length > 0;
+  return title.trim().length > 0;
 }
-
 
 /**
  * Retrieves the list of journal entries from localStorage.
  * @returns {JournalEntry[]} - list of journal entries
  */
 function getJournalList() {
-    if (!localStorage.getItem("GarlicNotes")) {
-        return [];
-    } else {
-        return JSON.parse(localStorage.getItem("GarlicNotes"));
-    }
+  if (!localStorage.getItem("GarlicNotes")) {
+    return [];
+  } else {
+    return JSON.parse(localStorage.getItem("GarlicNotes"));
+  }
+}
+
+/**
+ * Saves the list of journal entries to localStorage.
+ * @param list {JournalEntry[]} - list of journal entries
+ */
+function saveJournalList(list) {
+  localStorage.setItem("GarlicNotes", JSON.stringify(list));
 }

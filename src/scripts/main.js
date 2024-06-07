@@ -1,8 +1,6 @@
 // Import utility functions
-import { getMatchingEntries, saveJournalList, getJournalByTimestamp, deleteJournal, isTitleValid, getJournalList } from "./util.js";
+import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList } from "./util.js";
 
-// Export journalList as read-only
-export {journalList};
 /**
  * Dummy function for JSDoc
  */
@@ -306,3 +304,25 @@ function editJournal(id) {
       }
     }
   }
+
+/**
+* Retrieves a journal entry by its timestamp.
+* @param timestamp {number} - unique identifier and time it was created
+* @returns {JournalEntry|undefined} - journal entry or undefined if not found
+*/
+function getJournalByTimestamp(timestamp) {
+  let journal = journalList.find((entry) => entry.timestamp == timestamp);
+  if (journal === undefined) {
+    console.error(`Error: No journal entry found with timestamp ${timestamp}`);
+    return undefined;
+  } else return journal;
+}
+
+/**
+ * Deletes a journal entry by its timestamp.
+ * @param timestamp {number} - unique identifier and time it was created
+ */
+function deleteJournal(timestamp) {
+  journalList = journalList.filter((entry) => entry.timestamp != timestamp);
+  saveJournalList(journalList);
+}
