@@ -159,62 +159,85 @@ function updateDropdown() {
  * @param id {number} - unique identifier and time it was created
  */
 function editJournal(id) {
-    const modal = document.getElementById("journalModal");
-    /** @type {HTMLButtonElement} */
-    const saveJournal = document.getElementById("closeModal");
-    /** @type {HTMLInputElement} */
-    const titleBar = document.getElementById("journalTitle");
-    /** @type {HTMLButtonElement} */
-    const deleteButton = document.getElementById("deleteModal");
-    /** @type {HTMLButtonElement} */
-    const cancelButton = document.getElementById("cancelModal");
-    /** @type {HTMLDivElement} */
-  
-    modal.style.display = "block";
-    saveJournal.disabled = true;
-  
-    if (!quill) {
-      quill = new Quill("#editor", { theme: "snow" });
+  const modal = document.getElementById("journalModal");
+  /** @type {HTMLButtonElement} */
+  const saveJournal = document.getElementById("closeModal");
+  /** @type {HTMLInputElement} */
+  const titleBar = document.getElementById("journalTitle");
+  /** @type {HTMLButtonElement} */
+  const deleteButton = document.getElementById("deleteModal");
+  /** @type {HTMLButtonElement} */
+  const cancelButton = document.getElementById("cancelModal");
+  /** @type {HTMLDivElement} */
+
+  modal.style.display = "block";
+  saveJournal.disabled = true;
+
+  if (!quill) {
+    quill = new Quill("#editor", { theme: "snow" });
+  }
+
+  let noteObject;
+  let isNewJournal = false;
+
+  if (id === undefined) {
+    isNewJournal = true;
+    id = new Date().getTime();
+    noteObject = {
+      timestamp: id,
+      editTime: id,
+      title: "",
+      tags: [],
+      //delta: undefined,
+      delta: { ops: [] },
+    };
+
+    quill.setText("\n");
+    journalList.push(noteObject);
+    saveJournalList(journalList);
+  }
+
+  noteObject = getJournalByTimestamp(id);
+
+  const noteID = noteObject.timestamp;
+
+  let contentScreenShot = noteObject.delta;
+  let titleScreenshot = noteObject.title;
+  let editTimeScreenshot = noteObject.editTime;
+
+  quill.setContents(contentScreenShot);
+  titleBar.value = noteObject.title;
+
+  quill.on("text-change", quillUpdateTextHandler);
+
+  titleBar.oninput = updateTitleHandler;
+
+
+  // Delete current journal
+  deleteButton.onclick = (event) => {
+    if (
+      window.confirm(
+        `Are you sure you would like to delete the "${noteObject.title}"?`,
+      )
+    ) {
+      deleteJournal(noteID);
+      modal.style.display = "none";
+      quill.off("text-change", quillUpdateTextHandler);
+      updateDropdown();
     }
-  
-    let noteObject;
-    let isNewJournal = false;
-  
-    if (id === undefined) {
-      isNewJournal = true;
-      id = new Date().getTime();
-      noteObject = {
-        timestamp: id,
-        editTime: id,
-        title: "",
-        tags: [],
-        //delta: undefined,
-        delta: { ops: [] },
-      };
-  
-      quill.setText("\n");
-      journalList.push(noteObject);
-      saveJournalList(journalList);
-    }
-  
-    noteObject = getJournalByTimestamp(id);
-  
-    const noteID = noteObject.timestamp;
-  
-    let contentScreenShot = noteObject.delta;
-    let titleScreenshot = noteObject.title;
-    let editTimeScreenshot = noteObject.editTime;
-  
-    quill.setContents(contentScreenShot);
-    titleBar.value = noteObject.title;
-  
-    quill.on("text-change", quillUpdateTextHandler);
-  
-    titleBar.oninput = updateTitleHandler;
-  
-  
-    // Delete current journal
-    deleteButton.onclick = (event) => {
+    event.stopPropagation();
+  };
+
+  // Cancel changes and revert notebook
+  cancelButton.onclick = (event) => {
+    let tempTitle = noteObject.title;
+    noteObject.delta = contentScreenShot;
+    noteObject.title = titleScreenshot;
+    noteObject.editTime = editTimeScreenshot;
+
+    if (isNewJournal) {
+      noteObject.title = tempTitle;
+
       if (
         window.confirm(
           `Are you sure you would like to delete the "${noteObject.title}"?`,
@@ -223,87 +246,64 @@ function editJournal(id) {
         deleteJournal(noteID);
         modal.style.display = "none";
         quill.off("text-change", quillUpdateTextHandler);
-        updateDropdown();
       }
       event.stopPropagation();
-    };
-  
-    // Cancel changes and revert notebook
-    cancelButton.onclick = (event) => {
-      let tempTitle = noteObject.title;
-      noteObject.delta = contentScreenShot;
-      noteObject.title = titleScreenshot;
-      noteObject.editTime = editTimeScreenshot;
-  
-      if (isNewJournal) {
-        noteObject.title = tempTitle;
-  
-        if (
-          window.confirm(
-            `Are you sure you would like to delete the "${noteObject.title}"?`,
-          )
-        ) {
-          deleteJournal(noteID);
-          modal.style.display = "none";
-          quill.off("text-change", quillUpdateTextHandler);
-        }
-        event.stopPropagation();
-      }
-      else {
-        modal.style.display = "none";
-        quill.off("text-change", quillUpdateTextHandler);
-      }
     }
-  
-  
-    saveJournal.onclick = (event) => {
-        updateTitleHandler();
-        quillUpdateTextHandler();
-        modal.style.display = "none";
-        quill.off("text-change", quillUpdateTextHandler);
-        updateDropdown();
-    };
-  
-    /**
-     * Updates journal entry title with current contents in the title input bar.
-     */
-    function updateTitleHandler() {
-      let title = titleBar.value;
-      noteObject.title = title;
-  
-      if (isTitleValid(title)) {
-        // don't save if title is empty
-        noteObject.editTime = new Date().getTime();
-        saveJournalList(journalList);
-  
-        saveJournal.disabled = false;
-      } else {
-        saveJournal.disabled = true;
-        saveJournal.title = "Title cannot be empty";
-      }
-    }
-  
-    /**
-     * Updates journal entry with current contents of the Quill editor.
-     */
-    function quillUpdateTextHandler() {
-      const newDelta = quill.getContents();
-      let title = titleBar.value;
-      
-      noteObject.delta = newDelta;
-  
-      if (isTitleValid(title)) {
-        // don't save if title is empty
-        noteObject.editTime = new Date().getTime();
-        saveJournalList(journalList);
-  
-        saveJournal.disabled = false;
-      } else {
-        saveJournal.disabled = true;
-        saveJournal.title = "Title cannot be empty";
-      }
+    else {
+      modal.style.display = "none";
+      quill.off("text-change", quillUpdateTextHandler);
     }
   }
+
+
+  saveJournal.onclick = (event) => {
+    updateTitleHandler();
+    quillUpdateTextHandler();
+    modal.style.display = "none";
+    quill.off("text-change", quillUpdateTextHandler);
+    updateDropdown();
+  };
+
+  /**
+   * Updates journal entry title with current contents in the title input bar.
+   */
+  function updateTitleHandler() {
+    let title = titleBar.value;
+    noteObject.title = title;
+
+    if (isTitleValid(title)) {
+      // don't save if title is empty
+      noteObject.editTime = new Date().getTime();
+      saveJournalList(journalList);
+
+      saveJournal.disabled = false;
+    } else {
+      saveJournal.disabled = true;
+      saveJournal.title = "Title cannot be empty";
+    }
+  }
+
+  /**
+   * Updates journal entry with current contents of the Quill editor.
+   */
+  function quillUpdateTextHandler() {
+    const newDelta = quill.getContents();
+    let title = titleBar.value;
+
+    noteObject.delta = newDelta;
+
+    if (isTitleValid(title)) {
+      // don't save if title is empty
+      noteObject.editTime = new Date().getTime();
+      saveJournalList(journalList);
+
+      saveJournal.disabled = false;
+    } else {
+      saveJournal.disabled = true;
+      saveJournal.title = "Title cannot be empty";
+    }
+  }
+}
 
 /**
 * Retrieves a journal entry by its timestamp.
