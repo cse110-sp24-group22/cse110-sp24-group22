@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function() {
     init()
 });
 
+/**
+ * Called on page load.
+ */
 function init() {
     const dateElement = document.getElementById('date');
     journalList = getJournalList();
@@ -34,6 +37,9 @@ function init() {
     setUpHomeSearch();
 }
 
+/**
+ * Set up click on watering can to bring up editJournal modal.
+ */
 function newListOnCanClick() {
     let can = document.getElementById("can-container");
     can.onclick = () => {
@@ -87,6 +93,8 @@ function createEntryDropdownItem(item) {
   entryItem.appendChild(timestampText);
 
   let timestamp = item.timestamp;
+
+  // Set up click and Space/Enter on entry dropdown item to bring up editJournal modal
   entryItem.onclick = () => {
     editJournal(timestamp);
   };
