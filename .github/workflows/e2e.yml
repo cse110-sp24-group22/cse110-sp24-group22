@@ -31,5 +31,5 @@ jobs:
         CC_TEST_REPORTER_ID: ${{secrets.CC_ID}}
       with:
         coverageCommand: npm run test:e2e
-        coverageLocations: ${{ github.workspace }}/coverage/clover.xml:clover
+        coverageLocations: ${{ github.workspace }}/coverage/lcov.info:lcov
         debug: true
