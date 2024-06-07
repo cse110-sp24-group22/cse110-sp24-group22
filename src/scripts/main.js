@@ -234,6 +234,7 @@ function editJournal(id) {
   
     let contentScreenShot = noteObject.delta;
     let titleScreenshot = noteObject.title;
+    let editTimeScreenshot = noteObject.editTime;
   
     quill.setContents(contentScreenShot);
     titleBar.value = noteObject.title;
@@ -263,6 +264,7 @@ function editJournal(id) {
       let tempTitle = noteObject.title;
       noteObject.delta = contentScreenShot;
       noteObject.title = titleScreenshot;
+      noteObject.editTime = editTimeScreenshot;
   
       if (isNewJournal) {
         noteObject.title = tempTitle;
