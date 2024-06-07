@@ -35,7 +35,7 @@ body {
   column-gap: 10px;
 }
 
-.search-bar-container {
+.search-container {
   display: flex;
   color: white;
   justify-content: left;
