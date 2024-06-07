@@ -76,7 +76,7 @@ function createEntryDropdownItem(item) {
 
   entryItem.appendChild(title);
 
-  //Create timestamp container
+  // Create timestamp container
   const timestampText = document.createElement("div");
   timestampText.setAttribute("id", "entry-timestamp");
   displayDateModified();
