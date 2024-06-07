@@ -259,6 +259,7 @@ function editJournal(id) {
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
   const cancelButton = document.getElementById("cancelModal");
+  const deleteModal = document.getElementById("deleteModal");
 
   /* Tags */
   const tagAdd = document.getElementById("tag-plus-button");    // button for adding tags
@@ -279,7 +280,7 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-  /* Closes modal */
+  /* Closes modal */    //FIX
   closeModal.addEventListener("click", function () {
     modal.style.display = "none";
     displayList(journalList);
@@ -291,9 +292,23 @@ function editJournal(id) {
     }
   });
 
+  deleteModal.onclick = () => {
+    if (
+      window.confirm(
+        `Are you sure you would like to delete ${titleBar.value}?`,
+      )
+    ) {
+      // event.stopPropagation();
+      modal.style.display = "none";
+      deleteJournal(id);  //FIX
+      saveJournalList(journalList);
+    }
+    // event.stopPropagation();
+  }
+
   /* Saves journal */
   saveJournal.onclick = () => {
-    updateTitleHandler();
+    // updateTitleHandler(); FIX
     const journalContent = quill.root.innerHTML;
     console.log(journalContent);
     modal.style.display = "none";
@@ -359,13 +374,13 @@ function editJournal(id) {
   cancelButton.onclick = () => {
     noteObject.delta = contentScreenShot;
 
-    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) {
-      deleteJournal(noteObject.timestamp);
-    } else if (!isTitleValid(titleBar.value)) {
-      cancelButton.disabled = true;
-    } else {
-      cancelButton.disabled = false;
-    }
+    // if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) { //FIX: no isTitleValid function
+    //   deleteJournal(noteObject.timestamp);
+    // } else if (!isTitleValid(titleBar.value)) {
+    //   cancelButton.disabled = true;
+    // } else {
+    //   cancelButton.disabled = false;
+    // }
 
     modal.style.display = "none";
     itemList.innerHTML = "";
