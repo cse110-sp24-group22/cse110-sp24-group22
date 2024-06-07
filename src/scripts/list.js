@@ -1,3 +1,5 @@
+// TODO: check need for delete button container, line 200
+
 // Instantiate list of entries.
 let journalList;
 document.addEventListener("DOMContentLoaded", init);

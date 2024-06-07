@@ -22,6 +22,7 @@ main {
   display: inline;
 }
 
+/* place logo in the center of its grid cell */
 .logo {
   place-self: center;
 }
@@ -241,6 +242,7 @@ header.entry-header {
   background: #c1b29b;
 }
 
+/* set button shape and location */
 .delete-button {
   display: none;
   position: absolute;
@@ -255,6 +257,7 @@ header.entry-header {
   margin-right:5%;
 }
 
+/* set delete button width and location on entry */
 #delete-container {
   place-self: center;
   width: 100%;
@@ -298,7 +301,7 @@ header.entry-header {
 .modal {
   display: none;
   position: fixed;
-  z-index: 2 !important;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -308,8 +311,10 @@ header.entry-header {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+
 .modal-content {
-  z-index: 3 !important;
+  position: relative;
+  z-index: 3;
   display: block;
   background-color: #ffe2b6;
   margin: 15% auto;
