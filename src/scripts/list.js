@@ -25,19 +25,16 @@ function init() {
   journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
   const filterButton = document.querySelector(".filter-button");
-
-  updateDisplay();
+  displayList(journalList);
 
   setUpSearch();
 
-  window.onload = parseUrlAndSearch();
-
-  newJournalButton.onclick = () => {
+  newJournalButton.addEventListener("click", function () {
     editJournal();
-  };
+  });
 
   // Animation for the filter dropdown
-  filterButton.onclick = () => {
+  filterButton.addEventListener("click", function () {
     const filterHeader = document.querySelector(".filter-container");
     const entryHeader = document.querySelector(".entry-header");
     if (filterHeader.classList.contains("show")) {
@@ -53,27 +50,14 @@ function init() {
         entryHeader.style.marginTop = "105px"; // adjust based on filterHeader height
       }, 0);
     }
-  };
+  });
   document.getElementById("sort-name").addEventListener("click", () => {
     sortByCategory("name");
   });
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
-  });
+  });  
 }
-
-
-function parseUrlAndSearch() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const query = urlParams.get('query') || '';
-  const tags = urlParams.get('tags') ? urlParams.get('tags').split(',') : [];
-  const startDate = urlParams.get('startDate') || '';
-  const endDate = urlParams.get('endDate') || '';
-
-  const results = searchJournal(query, tags, startDate, endDate);
-  displayList(results);
-}
-
 
 /**
  * Sorts the journal list by the specified category.
@@ -83,20 +67,28 @@ function parseUrlAndSearch() {
  * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
  * The sort direction (ascending or descending) is toggled each time the function is called with the same category.
  */
-
-/** @type {"none"|"name"|"timestamp"} */
-let sortMode = "none";
-
 function sortByCategory(category) {
   if (category === "name") {
-    sortMode = "name";
+    journalList.sort((a, b) => {
+      if (sortDirection.name) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
     sortDirection.name = !sortDirection.name;
   } else if (category === "timestamp") {
-    sortMode = "timestamp";
+    journalList.sort((a, b) => {
+      if (sortDirection.editTime) {
+        return a.editTime - b.editTime;
+      } else {
+        return b.editTime - a.editTime;
+      }
+    });
     sortDirection.editTime = !sortDirection.editTime;
   }
   updateSortArrows(category);
-  updateDisplay();
+  displayList(journalList);
 }
 
 /**
@@ -282,11 +274,11 @@ function isTitleValid(title) {
   return title.trim().length > 0;
 }
 
-
-
-
-
-
+/**
+ * Default title for a journal entry.
+ * @type {string}
+ */
+const DEFAULT_TITLE = "Untitled";
 
 /**
  * Opens a modal to edit a journal entry.
@@ -298,30 +290,22 @@ function editJournal(id) {
   const saveJournal = document.getElementById("closeModal");
   /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
-  /** @type {HTMLButtonElement} */
-  const deleteButton = document.getElementById("deleteModal");
-  /** @type {HTMLButtonElement} */
-  const cancelButton = document.getElementById("cancelModal");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
 
   modal.style.display = "block";
-  saveJournal.disabled = true;
 
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
   let noteObject;
-  let isNewJournal = false;
-
   if (id === undefined) {
-    isNewJournal = true;
     id = new Date().getTime();
     noteObject = {
       timestamp: id,
       editTime: id,
-      title: "",
+      title: DEFAULT_TITLE,
       tags: [],
       //delta: undefined,
       delta: { ops: [] },
@@ -334,74 +318,46 @@ function editJournal(id) {
 
   noteObject = getJournalByTimestamp(id);
 
-  const noteID = noteObject.timestamp;
-
   let contentScreenShot = noteObject.delta;
-  let titleScreenshot = noteObject.title;
 
   quill.setContents(contentScreenShot);
   titleBar.value = noteObject.title;
 
   quill.on("text-change", quillUpdateTextHandler);
 
-  titleBar.oninput = updateTitleHandler;
-
-
-  // Delete current journal
-  deleteButton.onclick = (event) => {
-    if (
-      window.confirm(
-        `Are you sure you would like to delete the "${noteObject.title}"?`,
-      )
-    ) {
-      deleteJournal(noteID);
-      modal.style.display = "none";
-      itemList.innerHTML = "";
-      displayList(journalList);
-      quill.off("text-change", quillUpdateTextHandler);
-    }
-    event.stopPropagation();
-  };
+  titleBar.addEventListener("input", updateTitleHandler);
 
   // Cancel changes and revert notebook
-  cancelButton.onclick = (event) => {
-    let tempTitle = noteObject.title;
+  const cancelButton = document.getElementById("cancelModal");
+  cancelButton.addEventListener("click", function () {
     noteObject.delta = contentScreenShot;
-    noteObject.title = titleScreenshot;
 
-    if (isNewJournal) {
-      noteObject.title = tempTitle;
-
-      if (
-        window.confirm(
-          `Are you sure you would like to delete the "${noteObject.title}"?`,
-        )
-      ) {
-        deleteJournal(noteID);
-        modal.style.display = "none";
-        itemList.innerHTML = "";
-        displayList(journalList);
-        quill.off("text-change", quillUpdateTextHandler);
-      }
-      event.stopPropagation();
+    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) {
+      deleteJournal(noteObject.timestamp);
+    } else if (!isTitleValid(titleBar.value)) {
+      cancelButton.disabled = true;
+    } else {
+      cancelButton.disabled = false;
     }
-    else {
-      modal.style.display = "none";
-      itemList.innerHTML = "";
-      displayList(journalList);
-      quill.off("text-change", quillUpdateTextHandler);
-    }
-  }
 
+    modal.style.display = "none";
+    itemList.innerHTML = "";
+    displayList(journalList);
+    removeJournalEventListeners();
+  });
 
-  saveJournal.onclick = (event) => {
+  saveJournal.addEventListener(
+    "click",
+    function () {
       updateTitleHandler();
       quillUpdateTextHandler();
       modal.style.display = "none";
       itemList.innerHTML = "";
       displayList(journalList);
-      quill.off("text-change", quillUpdateTextHandler);
-  };
+      removeJournalEventListeners();
+    },
+    { once: true },
+  );
 
   /**
    * Updates journal entry title with current contents in the title input bar.
@@ -426,20 +382,22 @@ function editJournal(id) {
    */
   function quillUpdateTextHandler() {
     const newDelta = quill.getContents();
-    let title = titleBar.value;
-    
     noteObject.delta = newDelta;
 
-    if (isTitleValid(title)) {
+    if (isTitleValid(noteObject.title)) {
       // don't save if title is empty
       saveJournalList(journalList);
-
-      saveJournal.disabled = false;
-    } else {
-      saveJournal.disabled = true;
-      saveJournal.title = "Title cannot be empty";
     }
+
     noteObject.editTime = new Date().getTime();
+  }
+
+  /**
+   * Removes event listeners on input fields for the current journal.
+   */
+  function removeJournalEventListeners() {
+    titleBar.removeEventListener("input", updateTitleHandler);
+    quill.off("text-change", quillUpdateTextHandler);
   }
 }
 
@@ -449,7 +407,7 @@ function editJournal(id) {
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns {any} matching entries
+ * @returns matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
@@ -461,7 +419,7 @@ function searchJournal(query, tags, startDate, endDate) {
 
   // Filter by date range
   let startMilliseconds = Date.parse(startDate + "T00:00:00"); // Use user's local timezone
-  let endMilliseconds = Date.parse(endDate + "T23:59:59"); // End before 12:00AM of the next day
+  let endMilliseconds = Date.parse(endDate + "T00:00:00");
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
     filteredList = filteredList.filter(
@@ -527,52 +485,13 @@ function parseTags(tagsString) {
 }
 
 /**
- * Gets the search field value.
- * @returns {string} - search field value
- */
-function getSearchField() {
-  return searchBar.value.trim();
-}
-
-/** @type {HTMLInputElement} */
-const searchBar = document.getElementById("search-bar");
-const tagsBar = document.getElementById("tags-bar");
-const startDate = document.getElementById("start-date");
-const endDate = document.getElementById("end-date");
-
-function updateDisplay() {
-  const searchResults = searchJournal(
-      searchBar.value,
-      parseTags(tagsBar.value),
-      startDate.value,
-      endDate.value,
-  );
-
-  if (sortMode === "name") {
-    searchResults.sort((a, b) => {
-      if (sortDirection.name) {
-        return a.title.localeCompare(b.title);
-      } else {
-        return b.title.localeCompare(a.title);
-      }
-    });
-  } else if (sortMode === "timestamp") {
-    searchResults.sort((a, b) => {
-      if (sortDirection.editTime) {
-        return a.editTime - b.editTime;
-      } else {
-        return b.editTime - a.editTime;
-      }
-    });
-  }
-
-  displayList(searchResults);
-}
-
-/**
  * Prepares search functionality on the page.
  */
 function setUpSearch() {
+  const searchBar = document.getElementById("search-bar");
+  const tagsBar = document.getElementById("tags-bar");
+  const startDate = document.getElementById("start-date");
+  const endDate = document.getElementById("end-date");
 
   const searchElements = [searchBar, tagsBar, startDate, endDate];
   const itemList = document.getElementById("item-list");
@@ -581,7 +500,14 @@ function setUpSearch() {
   searchElements.forEach((element) => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      updateDisplay();
+      displayList(
+        searchJournal(
+          searchBar.value,
+          parseTags(tagsBar.value),
+          startDate.value,
+          endDate.value,
+        ),
+      );
     };
   });
 }
