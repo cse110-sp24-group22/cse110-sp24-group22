@@ -3,7 +3,7 @@ name: Prettier Linting & JS Doc Generation
 on:
   push:
     branches:
-        - main
+        - main-doc
 
 jobs:
   prettier-linting:
