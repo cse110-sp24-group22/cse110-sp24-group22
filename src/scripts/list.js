@@ -255,9 +255,14 @@ function saveJournalList(journalList) {
 }
 
 /**
- * Displays modal and edits journal entry
- * @param {*} id 
-/**
+ * Checks if a title is valid.
+ * @param title {string} - title of the journal entry
+ * @returns {boolean} - true if title is valid, false otherwise
+ */
+function isTitleValid(title) {
+  return title.trim().length > 0;
+}
+/** 
  * Opens a modal to edit a journal entry.
  * @param id {number} - unique identifier and time it was created
  */
@@ -273,16 +278,22 @@ function editJournal(id) {
   const cancelButton = document.getElementById("cancelModal");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
-  const cancelButton = document.getElementById("cancelModal");
+  /** @type {HTMLButtonElement} */
   const deleteModal = document.getElementById("deleteModal");
 
   /* Tags */
+  /** @type {HTMLButtonElement} */
   const tagAdd = document.getElementById("tag-plus-button");    // button for adding tags
+  /** @type {HTMLDivElement} */
   const tagInput = document.getElementById("tag-input");        // tags input segment
+  /** @type {HTMLInputElement} */
   const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags 
+  /** @type {HTMLDataListElement} */
   const tagList = document.getElementById("tag-list");          // dropdown list for global tags
+  /** @type {HTMLButtonElement} */
   const tagSave = document.getElementById("save-tag");          // button for saving tags 
-  const tagsWrapper = document.getElementById("tag-plus");          // tag buttons segment
+  /** @type {HTMLDivElement} */
+  const tagsWrapper = document.getElementById("tag-plus");      // tag buttons segment
 
   tagInput.style.display = "none";
   tagAdd.style.display = "block";
@@ -296,7 +307,7 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-  /* Closes modal */    //FIX
+  /* Closes modal */
   closeModal.addEventListener("click", function () {
     modal.style.display = "none";
     displayList(journalList);
@@ -320,26 +331,13 @@ function editJournal(id) {
 
   /* Saves journal */
   saveJournal.onclick = () => {
-    // updateTitleHandler(); FIX
-    const journalContent = quill.root.innerHTML;
-    console.log(journalContent);
+    updateTitleHandler();
+    quillUpdateTextHandler();
     modal.style.display = "none";
     itemList.innerHTML = "";
     displayList(journalList);
+    quill.off("text-change", quillUpdateTextHandler);
   };
-
-  // saveJournal.addEventListener(
-  //   "click",
-  //   function () {
-  //     updateTitleHandler();
-  //     quillUpdateTextHandler();
-  //     modal.style.display = "none";
-  //     itemList.innerHTML = "";
-  //     displayList(journalList);
-  //     //removeJournalEventListeners();
-  //   },
-  //   { once: true },
-  // );
 
   /* Uses timestamp as id, Creates new noteObject*/
 
@@ -388,7 +386,7 @@ function editJournal(id) {
   deleteButton.onclick = (event) => {
     if (
       window.confirm(
-        `Are you sure you would like to delete the "${noteObject.title}"?`,
+        `Are you sure you would like to delete "${noteObject.title}"?`,
       )
     ) {
       deleteJournal(noteID);
@@ -411,7 +409,7 @@ function editJournal(id) {
 
       if (
         window.confirm(
-          `Are you sure you would like to delete the "${noteObject.title}"?`,
+          `Are you sure you would like to delete "${noteObject.title}"?`,
         )
       ) {
         deleteJournal(noteID);
@@ -430,19 +428,12 @@ function editJournal(id) {
     }
   }
 
-  saveJournal.onclick = (event) => {
-      updateTitleHandler();
-      quillUpdateTextHandler();
-      modal.style.display = "none";
-      itemList.innerHTML = "";
-      displayList(journalList);
-      quill.off("text-change", quillUpdateTextHandler);
-  };
-
   /**
    * Updates journal entry title with current contents in the title input bar.
    */
   function updateTitleHandler() {
+    let title = titleBar.value;
+    noteObject.title = title;
     if (isTitleValid(title)) {
       // don't save if title is empty
       saveJournalList(journalList);
@@ -453,6 +444,27 @@ function editJournal(id) {
       saveJournal.title = "Title cannot be empty";
     }
   }; 
+
+  /**
+   * Updates journal entry with current contents of the Quill editor.
+   */
+  function quillUpdateTextHandler() {
+    const newDelta = quill.getContents();
+    let title = titleBar.value;
+    
+    noteObject.delta = newDelta;
+
+    if (isTitleValid(title)) {
+      // don't save if title is empty
+      saveJournalList(journalList);
+
+      saveJournal.disabled = false;
+    } else {
+      saveJournal.disabled = true;
+      saveJournal.title = "Title cannot be empty";
+    }
+    noteObject.editTime = new Date().getTime();
+  }
 
   /* Adds or modifies tags */
   tagAdd.onclick = () => {
@@ -521,26 +533,7 @@ function createTag(tag, tagsWrapper, noteObject, tagAdd) {
     if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
       noteObject.tags = noteObject.tags.filter(t => t != tag);
       newTagElement.remove();
-
-  /**
-   * Updates journal entry with current contents of the Quill editor.
-   */
-  function quillUpdateTextHandler() {
-    const newDelta = quill.getContents();
-    let title = titleBar.value;
-    
-    noteObject.delta = newDelta;
-
-    if (isTitleValid(title)) {
-      // don't save if title is empty
-      saveJournalList(journalList);
-
-      saveJournal.disabled = false;
-    } else {
-      saveJournal.disabled = true;
-      saveJournal.title = "Title cannot be empty";
     }
-    noteObject.editTime = new Date().getTime();
   }
 }
 
@@ -662,7 +655,6 @@ function updateDisplay() {
       }
     });
   }
-
   displayList(searchResults);
 }
 
