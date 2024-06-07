@@ -1,3 +1,5 @@
+// TODO: check need for delete button container, line 200
+
 // Instantiate list of entries.
 let journalList;
 document.addEventListener("DOMContentLoaded", init);
@@ -52,14 +54,15 @@ function init() {
       }, 0);
     }
   };
+
+  // Sorting function for name and recently edited
   document.getElementById("sort-name").addEventListener("click", () => {
     sortByCategory("name");
   });
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
-  });
+  });  
 }
-
 
 function parseUrlAndSearch() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -71,7 +74,6 @@ function parseUrlAndSearch() {
   const results = searchJournal(query, tags, startDate, endDate);
   displayList(results);
 }
-
 
 /**
  * Sorts the journal list by the specified category.
