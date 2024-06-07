@@ -54,12 +54,8 @@ function init() {
       }, 0);
     }
   };
-  document.getElementById("sort-name").addEventListener("click", () => {
-    sortByCategory("name");
-  });
-  document.getElementById("sort-timestamp").addEventListener("click", () => {
-    sortByCategory("timestamp");
-  });
+
+  // Sorting function for name and recently edited
   document.getElementById("sort-name").addEventListener("click", () => {
     sortByCategory("name");
   });
