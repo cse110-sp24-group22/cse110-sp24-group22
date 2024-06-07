@@ -12,6 +12,7 @@ body {
   overscroll-behavior: none;
 }
 
+
 .background {
   height: 75vw;
   padding: 0;
@@ -27,7 +28,7 @@ body {
   grid-template-areas: "logo search list";
   grid-template-columns: 100px minmax(1px,1fr) 300px;
   background-color: lightgrey;
-  position:fixed;
+  position: fixed;
   align-items: center;
   z-index: 2;
   column-gap: 10px;
@@ -40,12 +41,29 @@ body {
   max-width: 1000px;
 }
 
-.search-contain{
+.search-contain {
   display: flex;
   color: white;
   justify-content: left;
   max-width: 100%;
 }
+
+/*Styling Dates*/
+.date-section {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  margin-top: 50px;
+  z-index: 1;
+}
+
+#date {
+  color: white;
+}
+
+/*Header components*/
 #search-bar {
   font-family: Single Day;
   width: 100%;
@@ -85,54 +103,88 @@ body {
   float:left;
 }
 
-/*styling different sections of figma assets*/
+/*Sky Asset Container*/
 .section1 {
-  /* background: url('/src/assets/background_sky.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;*/
   position: relative;
+  z-index: -4;
   width: 100%;
-  background-color: red;
-  z-index: -2;
+  pointer-events: none;
 }
 
-/*setting area of sky asset to take up entire div*/
+/*Setting up Sky Asset to take up Entire Width*/
 .section1 img {
   width: 100%;
+  pointer-events: none;
 }
 
-/*styling top soil*/
+/*Styling Sun Div Container and Image Element*/
+#sun {
+  position: absolute;
+  right: 15%;
+  top: -5%;
+  width: 10%;
+  z-index: -1;
+}
+
+#sun-container {
+  width: 140%;
+  height: auto;
+}
+
+/*Styling Can Div Container and Image Element*/
+#can:hover {
+  cursor: pointer;
+}
+
+/*Setting Top Soil Location*/
 .section3 {
-  /*margin-top: -65%;
-    background: url('/src/assets/background_top_soil.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;*/
   position: relative;
   margin-top: -65%;
+  pointer-events: none;
 }
 
+#top-soil {
+  pointer-events: none;
+}
+
+/*Set Up Pot position and image*/
 #pot {
   position: absolute;
-  right: 40rem;
-  top: 24%;
+  right: 46%;
+  top: 16%;
+  width: 10%;
   z-index: -1;
+}
+
+#pot-container {
+  width: 180%;
+  height: auto;
+}
+
+/*Watering Can Styles*/
+#can-container {
+  pointer-events: auto;
+  width: 180%;
+  height: auto;
+  z-index: 2;
+}
+
+#can-container:hover {
+  cursor: pointer;
 }
 
 #watering-can {
   position: absolute;
-  right: 18rem;
-  top: 23%;
-  z-index: -1;
+  right: 20%;
+  top: 15%;
+  width: 10%;
+  z-index: 2;
 }
 
-/*area of lower soil*/
-.section2 {
-  background: url("../assets/background_deep_ground.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center top;
+/*Area of Lower Soil*/
+.section2 img {
+  width: 100%;
+  margin-top: -1%;
 }
 
 @media screen and (max-width: 560px) {
