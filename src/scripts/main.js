@@ -79,7 +79,7 @@ function createEntryDropdownItem(item) {
   //Create timestamp container
   const timestampText = document.createElement("div");
   timestampText.setAttribute("id", "entry-timestamp");
-  displayEntryDate();
+  displayDateModified();
 
   entryItem.appendChild(timestampText);
 
@@ -99,9 +99,9 @@ function createEntryDropdownItem(item) {
   }
   
   /**
-   * Displays the current entry's date.
+   * Displays the current entry's last modified date.
    */
-  function displayEntryDate() {
+  function displayDateModified() {
     let date = new Date(item.editTime);
     let options = {
       year: "numeric",
@@ -112,7 +112,7 @@ function createEntryDropdownItem(item) {
       hour12: false, // Use 24-hour time
     };
     // Display the formatted date
-    timestampText.textContent = date
+    timestampText.textContent = "Edited " + date
       .toLocaleString("en-GB", options)
       .replace(",", "");
   }
