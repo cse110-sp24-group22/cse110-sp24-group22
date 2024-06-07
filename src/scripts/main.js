@@ -33,9 +33,9 @@ function init() {
 
 function newListOnCanClick() {
     let can = document.getElementById("can-container");
-    can.addEventListener("click", () => {
+    can.onclick = () => {
         editJournal();
-    })
+    };
 }
 
 // DROPDOWN FUNCTIONS
@@ -63,10 +63,10 @@ function displayEntryDropdownList(list) {
  */
 function createEntryDropdownItem(item) {
   // Get the essential elements for the dropdown
-  const entryItem = document.createElement("li");
+  const entryItem = document.createElement("button");
   
   // Make interactable entry keyboard-focusable for accessibility
-  entryItem.setAttribute("tabindex", "0");
+  // entryItem.setAttribute("tabindex", "0");
   
   // Create title container
   const title = document.createElement("div");
