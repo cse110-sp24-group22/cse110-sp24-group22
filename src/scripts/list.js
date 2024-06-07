@@ -60,20 +60,13 @@ function init() {
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
   });
+  document.getElementById("sort-name").addEventListener("click", () => {
+    sortByCategory("name");
+  });
+  document.getElementById("sort-timestamp").addEventListener("click", () => {
+    sortByCategory("timestamp");
+  });  
 }
-
-
-function parseUrlAndSearch() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const query = urlParams.get('query') || '';
-  const tags = urlParams.get('tags') ? urlParams.get('tags').split(',') : [];
-  const startDate = urlParams.get('startDate') || '';
-  const endDate = urlParams.get('endDate') || '';
-
-  const results = searchJournal(query, tags, startDate, endDate);
-  displayList(results);
-}
-
 
 /**
  * Sorts the journal list by the specified category.
