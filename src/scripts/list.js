@@ -25,9 +25,12 @@ function init() {
   journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
   const filterButton = document.querySelector(".filter-button");
+
   updateDisplay();
 
   setUpSearch();
+
+  window.onload = parseUrlAndSearch();
 
   newJournalButton.onclick = () => {
     editJournal();
@@ -58,6 +61,19 @@ function init() {
     sortByCategory("timestamp");
   });
 }
+
+
+function parseUrlAndSearch() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('query') || '';
+  const tags = urlParams.get('tags') ? urlParams.get('tags').split(',') : [];
+  const startDate = urlParams.get('startDate') || '';
+  const endDate = urlParams.get('endDate') || '';
+
+  const results = searchJournal(query, tags, startDate, endDate);
+  displayList(results);
+}
+
 
 /**
  * Sorts the journal list by the specified category.
