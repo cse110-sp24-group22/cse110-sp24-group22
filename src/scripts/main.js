@@ -39,6 +39,7 @@ function newListOnCanClick() {
 }
 
 // DROPDOWN FUNCTIONS
+/** @type {HTMLDivElement} */
 const entryDropdownList = document.getElementById("entry-dropdown");
 
 /**
@@ -54,6 +55,10 @@ function displayEntryDropdownList(list) {
   });
 }
 
+/**
+ * Creates a list item for a journal entry within home page dropdown.
+ * @param item {JournalEntry} - journal entry
+ */
 function createEntryDropdownItem(item) {
   // Get the essential elements for the dropdown
   const entryItem = document.createElement("li");
@@ -96,6 +101,9 @@ function createEntryDropdownItem(item) {
   entryDropdownList.appendChild(entryItem);
 }
 
+/**
+ * Prepares search bar functionality for displaying dropdown with matching entries.
+ */
 function setUpHomeSearch() {
   const searchBar = document.getElementById("search-bar");
 
@@ -103,10 +111,12 @@ function setUpHomeSearch() {
     let query = searchBar.value;
     let matchingEntries = getMatchingEntries(journalList, query);
     if (query.length > 0 && matchingEntries.length > 0) {
+      // Display dropdown with the search bar looking connected to the dropdown through shifting where the border roundness/radius is.
       entryDropdownList.style.display = "inline";
       searchBar.style.borderRadius = "12px 12px 0px 0px";
       displayEntryDropdownList(matchingEntries);
     } else {
+      // Hide dropdown and reset the border radius to normal.
       entryDropdownList.style.display = "none";
       searchBar.style.borderRadius = "12px";
     }
