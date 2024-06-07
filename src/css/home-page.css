@@ -30,7 +30,7 @@ body {
   background-color: lightgrey;
   position: fixed;
   align-items: center;
-  z-index: 2;
+  z-index: 3;
   column-gap: 10px;
 }
 
@@ -55,12 +55,13 @@ body {
   display: flex;
   justify-content: flex-start;
   position: fixed;
-  margin-top: 50px;
+  margin-top: 5%;
   z-index: 1;
 }
 
 #date {
   color: white;
+  font-size: 20px;
 }
 
 /*Header components*/
