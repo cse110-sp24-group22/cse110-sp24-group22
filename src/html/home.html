@@ -16,11 +16,23 @@
   </head>
   <body>
     <div class="top-section">
-      <img id="logo" alt="logo" src="../assets/TeamIcon_3Diagonal.png">
-      <input type="text" placeholder="Search Entries..." id="search-bar">
-      <button type="button" onclick="window.location.href ='./list.html'">
+      <img src="..\assets\TeamIcon_3Diagonal.png"
+      ,
+      class="logo"
+      ,
+      height="55"
+      ,
+      width="55"
+      ,
+      alt="logo" />
+      <div class="search-contain">
+      <input type="text" placeholder="Search..." id="search-bar" />
+      </div>
+      <div class ="button-contain">
+        <button type="button" onclick="window.location.href ='./list.html'">
         List View
-      </button>
+        </button>
+      </div>
     </div>
     <div class="date-section">
       <div id="date"></div>
@@ -64,6 +76,8 @@
           <button class="Save-Close" id="closeModal">Save Changes</button>
         </div>
       </div>
+    </div>
+    <div id="plant" class="plant" src="" alt="Plant"> 
     </div>
   </body>
 </html>
