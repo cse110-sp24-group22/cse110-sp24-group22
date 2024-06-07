@@ -86,7 +86,13 @@ function createEntryDropdownItem(item) {
   let timestamp = item.timestamp;
   entryItem.onclick = () => {
     editJournal(timestamp);
-  }
+  };
+  entryItem.onkeydown = (event) => {
+    if (event.code == "Space" || event.key == "Enter") {
+      event.preventDefault();
+      editJournal(timestamp);
+    }
+  };
   
   // Add entry to dropdown container
   entryDropdownList.appendChild(entryItem);
