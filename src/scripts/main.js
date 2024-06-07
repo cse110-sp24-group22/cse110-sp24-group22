@@ -63,8 +63,11 @@ function displayEntryDropdownList(list) {
  */
 function createEntryDropdownItem(item) {
   // Get the essential elements for the dropdown
-  const entryItem = document.createElement("button");
+  const entryItem = document.createElement("li");
   
+  // Add accessibility through tabindex
+  entryItem.setAttribute("tabindex", "0");
+
   // Create title container
   const title = document.createElement("div");
   title.setAttribute("id", "entry-title");
