@@ -1,5 +1,7 @@
+// Import utility functions
 import { getMatchingEntries, saveJournalList, getJournalByTimestamp, deleteJournal, isTitleValid, getJournalList } from "./util.js";
 
+// Export journalList as read-only
 export {journalList};
 /**
  * Dummy function for JSDoc
@@ -41,7 +43,7 @@ function newListOnCanClick() {
     };
 }
 
-// DROPDOWN FUNCTIONS
+// Dropdown functions
 /** @type {HTMLDivElement} */
 const entryDropdownList = document.getElementById("entry-dropdown");
 /** @type {HTMLInputElement} */
@@ -152,7 +154,7 @@ function updateDropdown() {
   }
 }
 
-// MODAL FUNCTIONS
+// Modal functions
 
 /**
  * Opens a modal to edit a journal entry.

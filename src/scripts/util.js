@@ -1,6 +1,8 @@
+// Import journalList as read-only, which only main.js can modify
 import { journalList } from "./main.js";
 
-export { getMatchingEntries, saveJournalList, getJournalByTimestamp, deleteJournal, isTitleValid, getJournalList, journalList };
+// Export utility functions
+export { getMatchingEntries, saveJournalList, getJournalByTimestamp, deleteJournal, isTitleValid, getJournalList };
 
 // Search-related utility functions
 
