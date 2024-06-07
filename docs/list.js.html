@@ -1,4 +1,32 @@
-// Instantiate list of entries.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: list.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: list.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Instantiate list of entries.
 let journalList;
 document.addEventListener("DOMContentLoaded", init);
 
@@ -25,7 +53,7 @@ function init() {
   journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
   const filterButton = document.querySelector(".filter-button");
-  updateDisplay();
+  displayList(journalList);
 
   setUpSearch();
 
@@ -51,13 +79,14 @@ function init() {
       }, 0);
     }
   });
-  document.getElementById("sort-name").addEventListener("click", () => {
-    sortByCategory("name");
-  });
-  document.getElementById("sort-timestamp").addEventListener("click", () => {
-    sortByCategory("timestamp");
-  });  
 }
+
+document.getElementById("sort-name").addEventListener("click", () => {
+  sortByCategory("name");
+});
+document.getElementById("sort-timestamp").addEventListener("click", () => {
+  sortByCategory("timestamp");
+});
 
 /**
  * Sorts the journal list by the specified category.
@@ -67,20 +96,28 @@ function init() {
  * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
  * The sort direction (ascending or descending) is toggled each time the function is called with the same category.
  */
-
-/** @type {"none"|"name"|"timestamp"} */
-let sortMode = "none";
-
 function sortByCategory(category) {
   if (category === "name") {
-    sortMode = "name";
+    journalList.sort((a, b) => {
+      if (sortDirection.name) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
     sortDirection.name = !sortDirection.name;
   } else if (category === "timestamp") {
-    sortMode = "timestamp";
+    journalList.sort((a, b) => {
+      if (sortDirection.editTime) {
+        return a.editTime - b.editTime;
+      } else {
+        return b.editTime - a.editTime;
+      }
+    });
     sortDirection.editTime = !sortDirection.editTime;
   }
   updateSortArrows(category);
-  updateDisplay();
+  displayList(journalList);
 }
 
 /**
@@ -96,13 +133,13 @@ function updateSortArrows(category) {
   const timestampSortArrow = document.getElementById("sort-timestamp");
 
   if (category === "name") {
-    nameSortArrow.innerHTML = sortDirection.name ? "&#9650;" : "&#9660;";
-    timestampSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
+    nameSortArrow.innerHTML = sortDirection.name ? "&amp;#9650;" : "&amp;#9660;";
+    timestampSortArrow.innerHTML = "&amp;#9650;"; // Reset the other arrow
   } else if (category === "timestamp") {
     timestampSortArrow.innerHTML = sortDirection.editTime
-      ? "&#9650;"
-      : "&#9660;";
-    nameSortArrow.innerHTML = "&#9650;"; // Reset the other arrow
+      ? "&amp;#9650;"
+      : "&amp;#9660;";
+    nameSortArrow.innerHTML = "&amp;#9650;"; // Reset the other arrow
   }
 }
 
@@ -324,7 +361,7 @@ function editJournal(id) {
   cancelButton.addEventListener("click", function () {
     noteObject.delta = contentScreenShot;
 
-    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) {
+    if (contentScreenShot.ops == [] &amp;&amp; !isTitleValid(titleBar.value)) {
       deleteJournal(noteObject.timestamp);
     } else if (!isTitleValid(titleBar.value)) {
       cancelButton.disabled = true;
@@ -399,7 +436,7 @@ function editJournal(id) {
  * @param {string[]} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns {any} matching entries
+ * @returns matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
@@ -420,7 +457,7 @@ function searchJournal(query, tags, startDate, endDate) {
   }
   if (!isNaN(endMilliseconds)) {
     filteredList = filteredList.filter(
-      (entry) => entry.timestamp <= endMilliseconds,
+      (entry) => entry.timestamp &lt;= endMilliseconds,
     );
   }
 
@@ -477,52 +514,13 @@ function parseTags(tagsString) {
 }
 
 /**
- * Gets the search field value.
- * @returns {string} - search field value
- */
-function getSearchField() {
-  return searchBar.value.trim();
-}
-
-/** @type {HTMLInputElement} */
-const searchBar = document.getElementById("search-bar");
-const tagsBar = document.getElementById("tags-bar");
-const startDate = document.getElementById("start-date");
-const endDate = document.getElementById("end-date");
-
-function updateDisplay() {
-  const searchResults = searchJournal(
-      searchBar.value,
-      parseTags(tagsBar.value),
-      startDate.value,
-      endDate.value,
-  );
-
-  if (sortMode === "name") {
-    searchResults.sort((a, b) => {
-      if (sortDirection.name) {
-        return a.title.localeCompare(b.title);
-      } else {
-        return b.title.localeCompare(a.title);
-      }
-    });
-  } else if (sortMode === "timestamp") {
-    searchResults.sort((a, b) => {
-      if (sortDirection.editTime) {
-        return a.editTime - b.editTime;
-      } else {
-        return b.editTime - a.editTime;
-      }
-    });
-  }
-
-  displayList(searchResults);
-}
-
-/**
  * Prepares search functionality on the page.
  */
 function setUpSearch() {
+  const searchBar = document.getElementById("search-bar");
+  const tagsBar = document.getElementById("tags-bar");
+  const startDate = document.getElementById("start-date");
+  const endDate = document.getElementById("end-date");
 
   const searchElements = [searchBar, tagsBar, startDate, endDate];
   const itemList = document.getElementById("item-list");
@@ -531,9 +529,39 @@ function setUpSearch() {
   searchElements.forEach((element) => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      updateDisplay();
+      displayList(
+        searchJournal(
+          searchBar.value,
+          parseTags(tagsBar.value),
+          startDate.value,
+          endDate.value,
+        ),
+      );
     };
   });
 }
 
 export { getTextFromDelta, getMatchingEntries };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createListItem">createListItem</a></li><li><a href="global.html#DEFAULT_TITLE">DEFAULT_TITLE</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortByCategory">sortByCategory</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Jun 06 2024 03:28:44 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
