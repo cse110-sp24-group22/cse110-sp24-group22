@@ -206,21 +206,19 @@ header.entry-header {
 
 .delete-button {
   display: none;
-  position: absolute;
-  transform: translateY(-60%);
+  position:absolute;
   background-image: url('../assets/trash_can.svg');
-  background-size: 50px;
   border: none;
-  padding: 10px 5px;
-  border-radius: 4px;
   cursor: pointer;
-  right: 90px;
   background-color: transparent;
-  
+  width: 35px;
+  height: 35px;
+  margin-left: 2%;
+  margin-top: -1.25%;
 }
 
 #delete-container {
-  place-self: center;
+  place-self: left;
 }
 
 .item-list li:hover .delete-button {
