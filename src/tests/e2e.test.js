@@ -3,4 +3,7 @@ describe('Basic user flow for Website', () => {
     beforeAll(async () => {
       await page.goto('http://127.0.0.1:5501/src/html/list.html');
     });
+    test("dummy", () => {
+      
+    });
 });

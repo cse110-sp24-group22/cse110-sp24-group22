@@ -28,28 +28,36 @@
       ,
       alt="logo"
     />
-    <div class="search-container">
-      <input
-        type="text"
-        placeholder="Search..."
-        class="search-bar"
-        id="search-bar"
-      />
-    </div>
-    <button
-      onclick="window.location.href='./home.html'"
-      class="return-button"
-    >
-      Root View
-    </button>
-    <button class="filter-button" id="filter-button">Filter</button>
-    <div class="filter-container">
-      <input type="text" placeholder="Enter tags to filter by" id="tags-bar" />
-      <div id="date-container">
-        <label for="start-date">From: </label>
-        <input type="date" id="start-date" />
-        <label for="start-date">To: </label>
-        <input type="date" id="end-date" />
+      <div class="search-container">
+        <input
+          type="text"
+          placeholder="Search..."
+          class="search-bar"
+          id="search-bar"
+        />
+      </div>
+      <button
+        onclick="window.location.href='./home.html'"
+        class="return-button"
+      >
+        Root View
+      </button>
+      <button class="filter-button">Filter</button>
+    </header>
+    <header class="filter-container">
+      <div id="filter-outer">
+        <h3 id="filter-text">Filter By:</h3> 
+        <input
+          type="text"
+          placeholder="Enter tags to filter by"
+          id="tags-bar"
+        />
+        <div id="date-container">
+          <label for="start-date">From: </label>
+          <input type="date" id="start-date" />
+          <label for="end-date">To: </label>
+          <input type="date" id="end-date" />
+        </div>
       </div>
     </div>
   </header>
@@ -93,9 +101,10 @@
           <div id="butforlist">
             <!-- Need js for this button -->
             <button class="close-button" id="cancelModal">Cancel</button>
+            <button class="DeleteJournal" id="deleteModal">
+              Delete Journal
+            </button>
             <button class="Save-Close" id="closeModal">Save Changes</button>
-            <!-- Need js for this button -->
-            <button class="DeleteJournal" id="deleteModal">Delete Journal</button>
           </div>
         </div>
       </div>

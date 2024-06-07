@@ -3,34 +3,23 @@ name: Prettier Linting & JS Doc Generation
 on:
   push:
     branches:
-      - main
+        - main-doc
 
 jobs:
   prettier-linting:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.3
-        with:
-          prettier_options: --write **/*.{js,md,html,css}
-          only_changed: True
-          github_token: ${{ secrets.GH_PAT }}
-          commit_message: "Code Formatted by GitHub Action"
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          git push origin HEAD:${{ github.ref_name }}
-
+        - name: Checkout
+          uses: actions/checkout@v4
+  
+        - name: Prettify code
+          uses: creyD/prettier_action@v4.3
+          with:
+            prettier_options: --write **/*.{js,md,html,css}
+            only_changed: True
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            commit_message: "Code Formatted by GitHub Action"
+  
   JSDoc-generation:
     needs: prettier-linting
     runs-on: ubuntu-latest
@@ -44,15 +33,10 @@ jobs:
           source_dir: ./src/scripts
           output_dir: ./docs
 
-      - name: Configure Git
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
       - name: Commit and push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          git add .
-          git commit -m "JSDoc updated by GitHub Action [ci skip]" --author "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-          git push origin HEAD:${{ github.ref_name }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: JSDoc updated by GitHub Action
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          push: origin HEAD:${{github.ref_name}}
