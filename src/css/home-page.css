@@ -21,12 +21,13 @@ body {
 
 /*Header Styling */
 .top-section {
-  overflow:auto;
+  overflow: visible;
   width: 100%;
   height: 75px;
-  display:grid;
+  display: grid;
   grid-template-areas: "logo search list";
   grid-template-columns: 100px minmax(1px,1fr) 300px;
+  grid-template-rows: 17.5px 40px 17.5px auto;
   background-color: lightgrey;
   position: fixed;
   align-items: center;
@@ -37,15 +38,11 @@ body {
 .search-container {
   display: flex;
   color: white;
-  justify-content: center;
-  max-width: 1000px;
-}
-
-.search-contain {
-  display: flex;
-  color: white;
   justify-content: left;
+  grid-column: 2;
+  grid-row: 1 / 4;
   max-width: 100%;
+  height: 40px;
 }
 
 /*Styling Dates*/
@@ -68,28 +65,31 @@ body {
 #search-bar {
   font-family: Single Day;
   width: 100%;
-  padding: 10px;
   border-width: 0px;
   background-color: rgb(71, 71, 71);
   color: white;
   opacity: 40%;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 18px;
+  padding: 10px 40px;
 }
 
 .logo {
   display: flex;
   margin-left: 20%;
   justify-content:center;
+  grid-row-start: span 3;
 
 }
-.button-contain{
+
+.button-contain {
   display: flex;
   color: white;
   justify-content: center;
+  grid-row-start: span 3;
 }
 
-.top-section button {
+.button-contain button {
   font-family: Single Day;
   background-color: #4d4d4d;
   color: white;
@@ -97,7 +97,7 @@ body {
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 18px;
   width: 50%;
   place-self: center;
   transition: background-color 0.3s ease;
