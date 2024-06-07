@@ -1,9 +1,11 @@
 
 /* Pop-up Styles */
+
+/* Modal background */
 .modal {
     display: none;
     position: fixed;
-    z-index: 2 !important;
+    z-index: 2 !important; /* Overlay background over all content */
     left: 0;
     top: 0;
     width: 100%;
@@ -13,8 +15,9 @@
     background-color: rgba(0, 0, 0, 0.4);
   }
   
+  /* Modal pop-up */
   .modal-content {
-    z-index: 3 !important;
+    z-index: 3 !important; /* Overlay modal over background */
     display: block;
     background-color: #ffe2b6;
     margin: 15% auto;
@@ -25,6 +28,7 @@
     height: fit-content;
   }
   
+  /* Cancel button */
   .close-button {
     bottom: 5%;
     right: 5%;
@@ -42,6 +46,7 @@
     cursor: pointer;
   }
   
+  /* Save button */
   .Save-Close {
     bottom: 5%;
     margin-top: 10px;
@@ -51,6 +56,8 @@
     color: #000000;
     font-size: 14px;
   }
+
+  /* Delete button */
   .DeleteJournal {
     margin-left: 5%;
     margin-top: 10px;
@@ -60,11 +67,8 @@
     font-size: 14px;
     float: left;
   }
-  
-  #editor {
-    height: 300px;
-  }
-  
+
+  /* Editor */
   #journalTitle {
     width: 100%; /* Adjust width to fit within padding */
     margin: 10px 0;
@@ -75,10 +79,20 @@
     box-sizing: border-box; /* Ensure padding is included in width */
   }
 
+  /* Quill-specific Styles */
+
+  /* Quill editor */
+  #editor {
+    height: 300px;
+  }
+
+  /* Editor background */
   .ql-snow * {
     box-sizing: border-box;
     background: white;
   }
+
+  /* Editor toolbar */
   .ql-toolbar.ql-snow {
     border: 1px solid #ccc;
     background: white;

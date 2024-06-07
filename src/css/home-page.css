@@ -33,7 +33,7 @@ body {
   justify-content: flex-start;
   position: fixed;
   margin-top: 50px;
-  z-index: 100;
+  z-index: 1;
 }
 
 #date {
