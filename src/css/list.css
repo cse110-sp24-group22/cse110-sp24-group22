@@ -56,7 +56,7 @@ button:hover {
   height: min-content;
   background-color: #947665;
   grid-template-areas: "name tags last delete";
-  grid-template-columns: 0.75px auto auto auto;
+  grid-template-columns: 1fr 0.75fr 0.75fr 0.5fr;
   transition: margin 0.5s ease;
   padding: 10px;
 }
