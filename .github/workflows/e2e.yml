@@ -1,0 +1,29 @@
+name: E2E Test
+
+on: [push]
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install http-server
+      run: npm install -g http-server
+
+    - name: Start http-server
+      run: http-server -p 5500 &
+      # The ampersand (&) runs http-server in the background
+
+    - name: Run E2E tests
+      run: npm run test:e2e
