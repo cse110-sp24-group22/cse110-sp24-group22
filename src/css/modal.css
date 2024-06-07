@@ -18,6 +18,7 @@
   /* Modal pop-up */
   .modal-content {
     z-index: 5 !important; /* Overlay modal over background */
+    position: relative;
     display: block;
     background-color: #ffe2b6;
     margin: 10% auto;
