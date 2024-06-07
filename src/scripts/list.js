@@ -338,6 +338,7 @@ function editJournal(id) {
 
   let contentScreenShot = noteObject.delta;
   let titleScreenshot = noteObject.title;
+  noteObject.editTime = editTimeScreenshot;
 
   quill.setContents(contentScreenShot);
   titleBar.value = noteObject.title;
@@ -368,6 +369,7 @@ function editJournal(id) {
     let tempTitle = noteObject.title;
     noteObject.delta = contentScreenShot;
     noteObject.title = titleScreenshot;
+    noteObject.editTime = editTimeScreenshot;
 
     if (isNewJournal) {
       noteObject.title = tempTitle;
@@ -412,8 +414,8 @@ function editJournal(id) {
 
     if (isTitleValid(title)) {
       // don't save if title is empty
+      noteObject.editTime = new Date().getTime();
       saveJournalList(journalList);
-
       saveJournal.disabled = false;
     } else {
       saveJournal.disabled = true;
@@ -432,6 +434,7 @@ function editJournal(id) {
 
     if (isTitleValid(title)) {
       // don't save if title is empty
+      noteObject.editTime = new Date().getTime();
       saveJournalList(journalList);
 
       saveJournal.disabled = false;
@@ -439,7 +442,6 @@ function editJournal(id) {
       saveJournal.disabled = true;
       saveJournal.title = "Title cannot be empty";
     }
-    noteObject.editTime = new Date().getTime();
   }
 }
 
