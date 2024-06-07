@@ -42,20 +42,18 @@
     >
       Root View
     </button>
-    <button class="filter-button">Filter</button
-  <div class="search-container">
-    <input type="text" placeholder="Search..." class="search-bar" id="search-bar" />
-  </div>
-  <div class="filter-container">
-    <input type="text" placeholder="Enter tags to filter by" id="tags-bar" />
-
-    <div id="date-container">
-      <label for="start-date">From: </label>
-      <input type="date" id="start-date" />
-      <label for="start-date">To: </label>
-      <input type="date" id="end-date" />
+    <button class="filter-button" id="filter-button">Filter</button>
+    <div class="filter-container">
+      <input type="text" placeholder="Enter tags to filter by" id="tags-bar" />
+      <div id="date-container">
+        <label for="start-date">From: </label>
+        <input type="date" id="start-date" />
+        <label for="start-date">To: </label>
+        <input type="date" id="end-date" />
+      </div>
     </div>
   </header>
+  
   <div class="entry-header">
     <h2>Name <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
     <h2>Tags</h2>
@@ -70,10 +68,10 @@
         <!-- Items will be dynamically inserted here -->
         <img src="../assets/trashcan.png" alt="Delete" class="delete-icon" />
       </ul>
-      
+
       <div class="modal" id="journalModal">
         <div class="modal-content">
-          <span class="close-button" id="closeModal">&times;</span>
+          <!-- <span class="close-button" id="closeModal">&times;</span> -->
           <input type="text" id="journalTitle" placeholder="Enter title here..." />
           <div class="tags" id="tags"> 
             <div class="tag-interface">
@@ -93,12 +91,15 @@
           </div>
           <div id="editor"></div>
           <div id="butforlist">
+            <!-- Need js for this button -->
             <button class="close-button" id="cancelModal">Cancel</button>
             <button class="Save-Close" id="closeModal">Save Changes</button>
+            <!-- Need js for this button -->
             <button class="DeleteJournal">Delete Journal</button>
           </div>
         </div>
       </div>
+      
     </main>
   </div>
 </body>

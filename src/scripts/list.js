@@ -3,6 +3,7 @@ let journalList = getJournalList();
 let journalTags = getJournalTags();
 var tagSet = new Set();
 let tagsList = [];
+let DEFAULT_TITLE = "Untitled";
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -16,10 +17,10 @@ function init() {
   newJournalButton.addEventListener("click", function () {
     editJournal();
   });
-}
 
   // Animation for the filter dropdown
-  filterButton.addEventListener("click", function () {
+  const filterButton = document.getElementById("filter-button");
+  filterButton.onclick = () => {
     const filterHeader = document.querySelector(".filter-container");
     const entryHeader = document.querySelector(".entry-header");
     if (filterHeader.classList.contains("show")) {
@@ -35,7 +36,8 @@ function init() {
         entryHeader.style.marginTop = "105px"; // adjust based on filterHeader height
       }, 0);
     }
-  });
+  };
+
   document.getElementById("sort-name").addEventListener("click", () => {
     sortByCategory("name");
   });
@@ -124,14 +126,6 @@ function createListItem(item) {
 
   const details = document.createElement("div");
   details.style.fontSize = "small";
-
-  let timestamp = parseInt(item.timestamp);
-  const timestampText = document.createElement("div");
-  timestampText.textContent = `Timestamp: ${new Date(
-    timestamp
-  ).toLocaleString()}`;
-  details.appendChild(timestampText);
-
   // Generate tags
   const tagsContainer = document.createElement("div");
   tagsContainer.textContent = "Tags: ";
@@ -150,11 +144,6 @@ function createListItem(item) {
   details.appendChild(tagsContainer);
   listItem.appendChild(details);
 
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  deleteButton.className = "delete-button";
-  deleteButton.style.display = "none";
-  //Create timestamp container
   let timestamp = parseInt(item.timestamp);
   const timestampText = document.createElement("div");
 
@@ -224,7 +213,7 @@ function getJournalList() {
 }
 
 function getJournalByTimestamp(timestamp) {
-  journal = journalList.find((entry) => entry.timestamp == timestamp);
+  const journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
     return undefined;
@@ -269,17 +258,7 @@ function editJournal(id) {
   const titleBar = document.getElementById("journalTitle");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
-
-  /* Journal Modal */
-  const modal = document.getElementById("journalModal");        // journal modal
-  const closeModal = document.getElementById("closeModal");     // button for closing modal
-  const saveJournal = document.getElementById("saveJournal");   // button for saving modal
-
-  /* Title HTML */ 
-  const titleBar = document.getElementById("journalTitle");     // input bar for title
-
-  /* Journal List */
-  const itemList = document.getElementById("item-list");        // lists of journal
+  const cancelButton = document.getElementById("cancelModal");
 
   /* Tags */
   const tagAdd = document.getElementById("tag-plus-button");    // button for adding tags
@@ -288,6 +267,9 @@ function editJournal(id) {
   const tagList = document.getElementById("tag-list");          // dropdown list for global tags
   const tagSave = document.getElementById("save-tag");          // button for saving tags 
   const tagsWrapper = document.getElementById("tag-plus");          // tag buttons segment
+
+  tagInput.style.display = "none";
+  tagAdd.style.display = "block";
 
   /* Displays modal */
   modal.style.display = "block";
@@ -310,14 +292,27 @@ function editJournal(id) {
   });
 
   /* Saves journal */
-  saveJournal.addEventListener("click", function () {
+  saveJournal.onclick = () => {
+    updateTitleHandler();
     const journalContent = quill.root.innerHTML;
     console.log(journalContent);
     modal.style.display = "none";
     itemList.innerHTML = "";
-    tagInput.style.display = "none";
     displayList(journalList);
-  });
+  };
+
+  // saveJournal.addEventListener(
+  //   "click",
+  //   function () {
+  //     updateTitleHandler();
+  //     quillUpdateTextHandler();
+  //     modal.style.display = "none";
+  //     itemList.innerHTML = "";
+  //     displayList(journalList);
+  //     //removeJournalEventListeners();
+  //   },
+  //   { once: true },
+  // );
 
   /* Uses timestamp as id, Creates new noteObject*/
 
@@ -361,8 +356,7 @@ function editJournal(id) {
   }
 
   // Cancel changes and revert notebook
-  const cancelButton = document.getElementById("cancelModal");
-  cancelButton.addEventListener("click", function () {
+  cancelButton.onclick = () => {
     noteObject.delta = contentScreenShot;
 
     if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) {
@@ -376,21 +370,7 @@ function editJournal(id) {
     modal.style.display = "none";
     itemList.innerHTML = "";
     displayList(journalList);
-    removeJournalEventListeners();
-  });
-
-  saveJournal.addEventListener(
-    "click",
-    function () {
-      updateTitleHandler();
-      quillUpdateTextHandler();
-      modal.style.display = "none";
-      itemList.innerHTML = "";
-      displayList(journalList);
-      removeJournalEventListeners();
-    },
-    { once: true },
-  );
+  };
 
   /**
    * Updates journal entry title with current contents in the title input bar.
@@ -409,6 +389,7 @@ function editJournal(id) {
 
   /* Adds or modifies tags */
   tagAdd.onclick = () => {
+    journalTags = getJournalTags();
     tagInput.style.display = "block";
     tagAdd.style.display = "none";
     journalTags.forEach(tag => {
@@ -436,6 +417,7 @@ function editJournal(id) {
 
   /* Saves tags to each entry and globally */
   tagSave.onclick = () => {
+    journalTags = getJournalTags();
     tagsList = parseTags(tagInputBar.value);  // parse input into array
     tagsList.forEach(tag => {
       journalTags.add(tag); // add tag to global set
