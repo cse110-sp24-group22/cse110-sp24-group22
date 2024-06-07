@@ -68,13 +68,13 @@ body {
 #search-bar {
   font-family: Single Day;
   width: 100%;
-  padding: 10px;
   border-width: 0px;
   background-color: rgb(71, 71, 71);
   color: white;
   opacity: 40%;
   border-radius: 12px;
   font-size: 16px;
+  padding: 10px 40px;
 }
 
 .logo {
