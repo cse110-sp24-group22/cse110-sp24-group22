@@ -6,6 +6,7 @@
 html,
 body {
   font-family: Single Day;
+  min-width: 900px;
   margin: 0;
   padding: 0;
   overscroll-behavior: none;
@@ -19,14 +20,14 @@ body {
 
 /*Header Styling */
 .top-section {
+  overflow:auto;
   width: 100%;
   height: 75px;
-  display: grid;
+  display:grid;
   grid-template-areas: "logo search list";
-  grid-template-columns: 75px auto 150px;
-  column-gap: 20px;
+  grid-template-columns: 100px minmax(1px,1fr) 300px;
   background-color: lightgrey;
-  position: fixed;
+  position:fixed;
   align-items: center;
   z-index: 2;
 }
@@ -38,6 +39,12 @@ body {
   justify-content: center;
 }
 
+.search-contain{
+  display: flex;
+  color: white;
+  justify-content: left;
+  max-width: 100%;
+}
 #search-bar {
   font-family: Single Day;
   width: 100%;
@@ -48,19 +55,19 @@ body {
   opacity: 40%;
   border-radius: 12px;
   font-size: 16px;
-  grid-area: search;
-  /*box-sizing: border-box;*/
-  margin-left: 25px;
-  display: grid;
-  
-  
 }
 
-#logo {
-  height: 60px;
-  width:60px;
-  padding-left: 35px;
-  grid-area: logo;
+.logo {
+  display: flex;
+  margin-left: 20%;
+  justify-content:center;
+
+
+}
+.button-contain{
+  display: flex;
+  color: white;
+  justify-content: center;
 }
 
 .top-section button {
@@ -72,9 +79,10 @@ body {
   border-radius: 10px;
   cursor: pointer;
   font-size: 14px;
-  width: 150px;
+  width: 50%;
   place-self: center;
   transition: background-color 0.3s ease;
+  float:left;
 }
 
 /*styling different sections of figma assets*/
