@@ -41,6 +41,8 @@ function newListOnCanClick() {
 // DROPDOWN FUNCTIONS
 /** @type {HTMLDivElement} */
 const entryDropdownList = document.getElementById("entry-dropdown");
+/** @type {HTMLInputElement} */
+const searchBar = document.getElementById("search-bar");
 
 /**
  * Displays a list of journal entries on the page.
@@ -69,57 +71,75 @@ function createEntryDropdownItem(item) {
   // Create title container
   const title = document.createElement("div");
   title.setAttribute("id", "entry-title");
-  title.textContent = item.title;
   title.className = "title";
-  
+  displayTitle();
+
   entryItem.appendChild(title);
 
   //Create timestamp container
   const timestampText = document.createElement("div");
-
   timestampText.setAttribute("id", "entry-timestamp");
-
-  let date = new Date(item.editTime);
-
-  let options = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false, // Use 24-hour time
-  };
-
-  // Display the formatted date
-  timestampText.textContent = date
-    .toLocaleString("en-GB", options)
-    .replace(",", "");
+  displayEntryDate();
 
   entryItem.appendChild(timestampText);
 
-  // Add entry to dropdown
+  let timestamp = item.timestamp;
+  entryItem.onclick = () => {
+    editJournal(timestamp);
+  }
+  
+  // Add entry to dropdown container
   entryDropdownList.appendChild(entryItem);
+
+  /**
+   * Displays the current entry's title.
+   */
+  function displayTitle() {
+    title.textContent = item.title;
+  }
+  
+  /**
+   * Displays the current entry's date.
+   */
+  function displayEntryDate() {
+    let date = new Date(item.editTime);
+    let options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // Use 24-hour time
+    };
+    // Display the formatted date
+    timestampText.textContent = date
+      .toLocaleString("en-GB", options)
+      .replace(",", "");
+  }
 }
 
 /**
  * Prepares search bar functionality for displaying dropdown with matching entries.
  */
 function setUpHomeSearch() {
-  const searchBar = document.getElementById("search-bar");
+  searchBar.oninput = updateDropdown;
+}
 
-  searchBar.oninput = () => {
-    let query = searchBar.value;
-    let matchingEntries = getMatchingEntries(journalList, query);
-    if (query.length > 0 && matchingEntries.length > 0) {
-      // Display dropdown with the search bar looking connected to the dropdown through shifting where the border roundness/radius is.
-      entryDropdownList.style.display = "inline";
-      searchBar.style.borderRadius = "12px 12px 0px 0px";
-      displayEntryDropdownList(matchingEntries);
-    } else {
-      // Hide dropdown and reset the border radius to normal.
-      entryDropdownList.style.display = "none";
-      searchBar.style.borderRadius = "12px";
-    }
+/**
+ * Updates the dropdown with currently matching entries.
+ */
+function updateDropdown() {
+  let query = searchBar.value;
+  let matchingEntries = getMatchingEntries(journalList, query);
+  if (query.length > 0 && matchingEntries.length > 0) {
+    // Display dropdown with the search bar looking connected to the dropdown through shifting where the border roundness/radius is.
+    entryDropdownList.style.display = "inline";
+    searchBar.style.borderRadius = "12px 12px 0px 0px";
+    displayEntryDropdownList(matchingEntries);
+  } else {
+    // Hide dropdown and reset the border radius to normal.
+    entryDropdownList.style.display = "none";
+    searchBar.style.borderRadius = "12px";
   }
 }
 
@@ -233,6 +253,7 @@ function editJournal(id) {
         deleteJournal(noteID);
         modal.style.display = "none";
         quill.off("text-change", quillUpdateTextHandler);
+        updateDropdown();
       }
       event.stopPropagation();
     };
@@ -269,6 +290,7 @@ function editJournal(id) {
         quillUpdateTextHandler();
         modal.style.display = "none";
         quill.off("text-change", quillUpdateTextHandler);
+        updateDropdown();
     };
   
     /**
@@ -280,6 +302,7 @@ function editJournal(id) {
   
       if (isTitleValid(title)) {
         // don't save if title is empty
+        noteObject.editTime = new Date().getTime();
         saveJournalList(journalList);
   
         saveJournal.disabled = false;
@@ -300,6 +323,7 @@ function editJournal(id) {
   
       if (isTitleValid(title)) {
         // don't save if title is empty
+        noteObject.editTime = new Date().getTime();
         saveJournalList(journalList);
   
         saveJournal.disabled = false;
@@ -307,7 +331,6 @@ function editJournal(id) {
         saveJournal.disabled = true;
         saveJournal.title = "Title cannot be empty";
       }
-      noteObject.editTime = new Date().getTime();
     }
   }
 
