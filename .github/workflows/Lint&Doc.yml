@@ -50,11 +50,9 @@ jobs:
           git config user.email "actions@github.com"
 
       - name: Commit and push changes
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: JSDoc updated by GitHub Action
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
-          push: origin HEAD:${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          git add .
+          git commit -m "JSDoc updated by GitHub Action [ci skip]" --author "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          git push origin HEAD:${{ github.ref_name }}
