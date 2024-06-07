@@ -25,6 +25,7 @@ body {
   position: fixed;
 }
 
+/*Styling Dates*/
 .date-section {
   width: 100%;
   padding: 10px;
@@ -38,7 +39,7 @@ body {
 #date {
   color: white;
 }
-
+/*Header components*/
 #search-bar {
   border-radius: 2rem;
   padding: 5px;
@@ -65,7 +66,7 @@ body {
   border: none;
 }
 
-/*styling different sections of figma assets*/
+/*Sky Asset Container*/
 .section1 {
   position: relative;
   z-index: -4;
@@ -73,12 +74,13 @@ body {
   pointer-events: none;
 }
 
-/*setting area of sky asset to take up entire div*/
+/*Setting up Sky Asset to take up Entire Width*/
 .section1 img {
   width: 100%;
   pointer-events: none;
 }
 
+/*Styling Sun Div Container and Image Element*/
 #sun {
   position: absolute;
   right: 15%;
@@ -92,11 +94,12 @@ body {
   height: auto;
 }
 
+/*Styling Can Div Container and Image Element*/
 #can:hover {
   cursor: pointer;
 }
 
-/*styling top soil*/
+/*Setting Top Soil Location*/
 .section3 {
   position: relative;
   margin-top: -65%;
@@ -107,6 +110,7 @@ body {
   pointer-events: none;
 }
 
+/*Set Up Pot position and image*/
 #pot {
   position: absolute;
   right: 46%;
@@ -120,6 +124,7 @@ body {
   height: auto;
 }
 
+/*Watering Can Styles*/
 #can-container {
   pointer-events: auto;
   width: 180%;
@@ -139,7 +144,7 @@ body {
   z-index: 2;
 }
 
-/*area of lower soil*/
+/*Area of Lower Soil*/
 .section2 img {
   width: 100%;
   margin-top: -1%;
