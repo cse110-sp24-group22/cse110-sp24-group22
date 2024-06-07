@@ -7,6 +7,7 @@
     <title>Root Page</title>
     <link rel="stylesheet" href="../css/home-page.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
     <!-- Quill injected CSS & JS -->
     <link
       href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
@@ -25,14 +26,19 @@
       width="55"
       ,
       alt="logo" />
-      <div class="search-contain">
-      <input type="text" placeholder="Search..." id="search-bar" />
+      <div class="search-container">
+        <div class="search-bar-container">
+          <input type="text" placeholder="Search..." id="search-bar" />
+        </div>
       </div>
       <div class ="button-contain">
         <button type="button" onclick="window.location.href ='./list.html'">
         List View
         </button>
       </div>
+      <ul class="entry-dropdown" id="entry-dropdown">
+        <!-- Items will be dynamically inserted here -->
+      </ul>
     </div>
     <div class="date-section">
       <div id="date"></div>

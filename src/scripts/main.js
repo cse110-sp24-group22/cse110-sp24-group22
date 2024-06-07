@@ -28,6 +28,7 @@ function init() {
     // Update the date every minute??
     setInterval(updateDate, 60000);
     newListOnCanClick();
+    setUpHomeSearch();
 }
 
 function newListOnCanClick() {
@@ -35,6 +36,122 @@ function newListOnCanClick() {
     can.addEventListener("click", () => {
         editJournal();
     })
+}
+
+// DROPDOWN FUNCTIONS
+const entryDropdownList = document.getElementById("entry-dropdown");
+
+/**
+ * Displays a list of journal entries on the page.
+ * @param list {JournalEntry[]} - list of journal entries
+ */
+function displayEntryDropdownList(list) {
+  //Iterate through list and append them to HTML
+  entryDropdownList.innerHTML = "";
+
+  list.forEach((item) => {
+    createEntryDropdownItem(item);
+  });
+}
+
+function createEntryDropdownItem(item) {
+  // Get the essential elements for the dropdown
+  const entryItem = document.createElement("li");
+  
+  // Make interactable entry keyboard-focusable for accessibility
+  entryItem.setAttribute("tabindex", "0");
+  
+  // Create title container
+  const title = document.createElement("div");
+  title.setAttribute("id", "entry-title");
+  title.textContent = item.title;
+  title.className = "title";
+  
+  entryItem.appendChild(title);
+
+  //Create timestamp container
+  const timestampText = document.createElement("div");
+
+  timestampText.setAttribute("id", "entry-timestamp");
+
+  let date = new Date(item.editTime);
+
+  let options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, // Use 24-hour time
+  };
+
+  // Display the formatted date
+  timestampText.textContent = date
+    .toLocaleString("en-GB", options)
+    .replace(",", "");
+
+  entryItem.appendChild(timestampText);
+
+  // Add entry to dropdown
+  entryDropdownList.appendChild(entryItem);
+}
+
+function setUpHomeSearch() {
+  const searchBar = document.getElementById("search-bar");
+  const entryDropdownList = document.getElementById("entry-dropdown");
+
+  searchBar.oninput = () => {
+    let query = searchBar.value;
+    let matchingEntries = getMatchingEntries(journalList, query);
+    if (query.length > 0 && matchingEntries.length > 0) {
+      entryDropdownList.style.display = "inline";
+      searchBar.style.borderRadius = "12px 12px 0px 0px";
+      displayEntryDropdownList(matchingEntries);
+    } else {
+      entryDropdownList.style.display = "none";
+      searchBar.style.borderRadius = "12px";
+    }
+  }
+}
+
+/**
+ * Searches a list of entries for a case-insensitive string.
+ * @param {Array.Object} list - list of entries
+ * @param {string} query - exact string to search for
+ * @returns matching entries
+ */
+function getMatchingEntries(list, query) {
+  query = query.toLowerCase();
+
+  let matchingEntriesByTitle = [];
+  let matchingEntriesByContent = [];
+
+  list.forEach((entry) => {
+    if (entry.title.toLowerCase().includes(query)) {
+      matchingEntriesByTitle.push(entry);
+    } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
+      matchingEntriesByContent.push(entry);
+    }
+  });
+
+  return matchingEntriesByTitle.concat(matchingEntriesByContent);
+}
+
+/**
+ * Extracts all the text in a Quill delta.
+ * @param {Object} delta - Quill delta containing text operations
+ * @returns all the text in a Quill delta
+ */
+function getTextFromDelta(delta) {
+  if (!delta || !delta.ops) {
+    return "";
+  }
+
+  let text = "";
+  delta.ops.forEach((op) => {
+    text += op.insert;
+  });
+  return text;
 }
 
 // MODAL FUNCTIONS
