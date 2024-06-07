@@ -127,6 +127,10 @@ body {
   z-index: 2;
 }
 
+#can-container:hover {
+  cursor: pointer;
+}
+
 #watering-can {
   position: absolute;
   right: 20%;
