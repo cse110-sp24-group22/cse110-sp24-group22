@@ -98,7 +98,6 @@ function createEntryDropdownItem(item) {
 
 function setUpHomeSearch() {
   const searchBar = document.getElementById("search-bar");
-  const entryDropdownList = document.getElementById("entry-dropdown");
 
   searchBar.oninput = () => {
     let query = searchBar.value;
