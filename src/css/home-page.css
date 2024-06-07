@@ -5,6 +5,7 @@ body {
   overscroll-behavior: none;
 }
 
+
 .background {
   height: 75vw;
   padding: 0;
@@ -53,35 +54,43 @@ body {
 /*styling different sections of figma assets*/
 .section1 {
   position: relative;
+  z-index: -4;
   width: 100%;
-  z-index: -2;
+  pointer-events: none;
 }
 
 /*setting area of sky asset to take up entire div*/
 .section1 img {
   width: 100%;
-  position: relative;
+  pointer-events: none;
 }
 
 #sun {
   position: absolute;
+  right: 15%;
+  top: -5%;
+  width: 10%;
   z-index: -1;
 }
 
 #sun-container {
-  width: 30%;
+  width: 140%;
   height: auto;
+}
+
+#can:hover {
+  cursor: pointer;
 }
 
 /*styling top soil*/
 .section3 {
-  /*margin-top: -65%;
-    background: url('/src/assets/background_top_soil.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;*/
   position: relative;
   margin-top: -65%;
+  pointer-events: none;
+}
+
+#top-soil {
+  pointer-events: none;
 }
 
 #pot {
@@ -98,6 +107,7 @@ body {
 }
 
 #can-container {
+  pointer-events: auto;
   width: 180%;
   height: auto;
 }
@@ -110,14 +120,10 @@ body {
   z-index: -1;
 }
 
-
-
 /*area of lower soil*/
-.section2 {
-  background: url("../assets/background_deep_ground.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center top;
+.section2 img {
+  width: 100%;
+  margin-top: -1%;
 }
 
 @media screen and (max-width: 560px) {

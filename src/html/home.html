@@ -15,10 +15,7 @@
       </button>
     </div>
     <div class="background section1">
-      <div id="sun">
-        <img id="sun-container" alt="sun" src="../assets/sun.svg">
-      </div>
-      <img alt="sky" src="../assets/background_sky.svg">
+      <img id="sky" alt="sky" src="../assets/background_sky.svg">
     </div>
     <div class="background section3">
       <div id="watering-can">
@@ -27,8 +24,22 @@
       <div id="pot">
         <img id="pot-container" alt="pot" src="../assets/pot.svg">
       </div>
-      <img alt="top-soil" src="../assets/background_top_soil.svg">
+      <div id="sun">
+        <img id="sun-container" alt="sun" src="../assets/sun.svg">
+      </div>
+      <img id="top-soil" alt="top-soil" src="../assets/background_top_soil.svg">
     </div>
-    <div class="background section2"></div>
+    <div class="background section2">
+      <img alt="lower soil" src="../assets/background_deep_ground.svg">
+    </div>
+    <script>
+      window.onload = function() {
+      let sun = document.getElementById("can-container");
+      console.log(sun);
+      sun.addEventListener("click", () => {
+        alert('sdfsa');
+      })
+    }
+    </script>
   </body>
 </html>
