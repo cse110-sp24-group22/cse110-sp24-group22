@@ -203,17 +203,11 @@ function editJournal(id) {
 
   /* Displays modal */
   modal.style.display = "block";
-  saveJournal.disabled = false;
 
   /* Opens Quill */
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
   }
-
-  /* Closes modal */
-  closeModal.addEventListener("click", function () {
-    modal.style.display = "none";
-  });
 
   window.addEventListener("click", function (event) {
     if (event.target == modal) {
@@ -234,9 +228,13 @@ function editJournal(id) {
   saveJournal.onclick = () => {
     updateTitleHandler();
     quillUpdateTextHandler();
-    modal.style.display = "none";
-    quill.off("text-change", quillUpdateTextHandler);
-    updateDropdown();
+    if(isTitleValid(titleBar.value)){
+      modal.style.display = "none";
+      quill.off("text-change", quillUpdateTextHandler);
+      updateDropdown();
+    } else {
+        alert('Cannot save journal without a title!');
+      }
   };
   
   let noteObject;
@@ -277,15 +275,18 @@ function editJournal(id) {
 
   /* Delete current journal */
   deleteButton.onclick = (event) => {
-    if (
-      window.confirm(
-        `Are you sure you would like to delete "${noteObject.title}"?`,
-      )
-    ) {
+    const executeDeletion = () => {
       deleteJournal(noteID);
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+    };
+    if(isNewJournal){
+      executeDeletion();
+    }else{
+      if (window.confirm(`Are you sure you would like to delete "${noteObject.title}"?`)) {
+        executeDeletion();
+      }
     }
     event.stopPropagation();
   };
@@ -299,16 +300,10 @@ function editJournal(id) {
 
     if (isNewJournal) {
       noteObject.title = tempTitle;
-
-      if (
-        window.confirm(
-          `Are you sure you would like to delete the "${noteObject.title}"?`,
-        )
-      ) {
-        deleteJournal(noteID);
-        modal.style.display = "none";
-        quill.off("text-change", quillUpdateTextHandler);
-      }
+      deleteJournal(noteID);
+      modal.style.display = "none";
+      quill.off("text-change", quillUpdateTextHandler);
+      
       event.stopPropagation();
     }
     else {
@@ -317,33 +312,16 @@ function editJournal(id) {
     }
   }
 
-
-
-  saveJournal.onclick = (event) => {
-    updateTitleHandler();
-    quillUpdateTextHandler();
-    modal.style.display = "none";
-    quill.off("text-change", quillUpdateTextHandler);
-    updateDropdown();
-    updatePlantImage();
-  };
-
   /**
    * Updates journal entry title with current contents in the title input bar.
    */
   function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
-
     if (isTitleValid(title)) {
       // don't save if title is empty
       noteObject.editTime = new Date().getTime();
       saveJournalList(journalList);
-
-      saveJournal.disabled = false;
-    } else {
-      saveJournal.disabled = true;
-      saveJournal.title = "Title cannot be empty";
     }
   }
 
@@ -360,12 +338,7 @@ function editJournal(id) {
       // don't save if title is empty
       noteObject.editTime = new Date().getTime();
       saveJournalList(journalList);
-
-      saveJournal.disabled = false;
-    } else {
-      saveJournal.disabled = true;
-      saveJournal.title = "Title cannot be empty";
-    }
+    } 
   }
 
   /* Adds or modifies tags */
