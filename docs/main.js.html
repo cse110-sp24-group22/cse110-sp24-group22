@@ -37,9 +37,11 @@ function dummy() {}
 // Globals
 let quill;
 let journalList;
+let currentPlantStage = localStorage.getItem('currentPlantStage') ? parseInt(localStorage.getItem('currentPlantStage')) : 0;
 
 document.addEventListener("DOMContentLoaded", function() {
-    init()
+    init();
+    displayPlantImage();
 });
 
 /**
@@ -63,6 +65,7 @@ function init() {
     setInterval(updateDate, 60000);
     newListOnCanClick();
     setUpHomeSearch();
+    updatePlantImage();
 }
 
 /**
@@ -101,7 +104,7 @@ function displayEntryDropdownList(list) {
 function createEntryDropdownItem(item) {
   // Get the essential elements for the dropdown
   const entryItem = document.createElement("li");
-  
+
   // Add accessibility through tabindex
   entryItem.setAttribute("tabindex", "0");
 
@@ -132,7 +135,7 @@ function createEntryDropdownItem(item) {
       editJournal(timestamp);
     }
   };
-  
+
   // Add entry to dropdown container
   entryDropdownList.appendChild(entryItem);
 
@@ -142,7 +145,7 @@ function createEntryDropdownItem(item) {
   function displayTitle() {
     title.textContent = item.title;
   }
-  
+
   /**
    * Displays the current entry's last modified date.
    */
@@ -207,7 +210,7 @@ function editJournal(id) {
   /** @type {HTMLDivElement} */
 
   modal.style.display = "block";
-  saveJournal.disabled = true;
+  saveJournal.disabled = false;
 
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
@@ -298,6 +301,7 @@ function editJournal(id) {
     modal.style.display = "none";
     quill.off("text-change", quillUpdateTextHandler);
     updateDropdown();
+    updatePlantImage();
   };
 
   /**
@@ -361,7 +365,236 @@ function getJournalByTimestamp(timestamp) {
 function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
-}</code></pre>
+  updatePlantImage()
+}
+
+
+/* PLANT FUNCTIONALITY*/
+/**
+ * Function to get the count of journal entries.
+ * @returns {number} - number of journal entries
+ */
+function getJournalEntryCount() {
+  return journalList.length;
+}
+
+/**
+ * Function to determine the plant image based on entry count.
+ * @param {number} entryCount - number of journal entries
+ * @returns {string} - path to the plant image
+ */
+function getPlantImage(entryCount) {
+  const plantStages = [
+    { src: '../assets/SVGPlantFiles/Plant/S0.svg', class: 'plant-stage-0' },
+    { src: '../assets/SVGPlantFiles/Plant/S1.svg', class: 'plant-stage-1' },
+    { src: '../assets/SVGPlantFiles/Plant/S2.svg', class: 'plant-stage-2' },
+    { src: '../assets/SVGPlantFiles/Plant/S3.svg', class: 'plant-stage-3' },
+    { src: '../assets/SVGPlantFiles/Plant/S4.svg', class: 'plant-stage-4' },
+    { src: '../assets/SVGPlantFiles/Plant/S5.svg', class: 'plant-stage-5' }
+  ];
+  //entryThreshold deciphers how many journal entries must be made to move onto the next stage.
+  const entryThreshold = 3
+  const stageIdx = Math.floor(entryCount / entryThreshold);
+  return {...plantStages[Math.min(stageIdx, plantStages.length - 1)], stageIdx};
+}
+
+/**
+ *This should be called whenever journal entries number is 
+ changed, including adding journal entries and removing them
+ */
+function updatePlantImage() {
+  const entryCount = getJournalEntryCount();
+  const { src, class: plantClass, stageIdx } = getPlantImage(entryCount);
+  const plantImageElement = document.getElementById('plant-container');
+
+  //disables transition for initial load to prevent unnecessary slide motion
+  plantImageElement.style.transition = 'none';
+
+  if (stageIdx &lt;= currentPlantStage) {
+    //no animation when stage did not increase
+    plantImageElement.src = src;
+    plantImageElement.className = plantClass;
+    currentPlantStage = stageIdx;
+    localStorage.setItem('currentPlantStage', currentPlantStage);
+  }    
+  else {
+    //plays little animation if stage increased
+    plantImageElement.classList.add('rumble');
+    setTimeout(() => {
+      // Remove the animation class after the animation completes
+      plantImageElement.src = src;
+      plantImageElement.className = plantClass;
+      
+      setTimeout(() => {
+        plantImageElement.classList.remove('rumble');
+      }, 2000); // duration of the animation
+      currentPlantStage = stageIdx;
+      localStorage.setItem('currentPlantStage', currentPlantStage);
+    }, 1000); 
+  }
+}
+
+/**
+ * Function to display the plant image immediately on page load
+ */
+function displayPlantImage() {
+  const entryCount = getJournalEntryCount();
+  const { src, class: plantClass } = getPlantImage(entryCount);
+  const plantImageElement = document.getElementById('plant-container');
+  plantImageElement.src = src;
+  plantImageElement.className = plantClass;
+}
+
+/**
+ * ROOT FUNCTIONALITY
+ */
+
+/** @type {Object.&lt;"January" | "February" | "March" | "April" | "May" | "June" | "July" | "August" | "September" |
+ * "October" | "November" | "December", number[]> | null} */
+let rootNodeData = null;
+
+/** @type {HTMLDivElement} */
+const rootNodeContainer = document.getElementById("root-nodes");
+
+const containerResizeObserver = new ResizeObserver(() => {
+    renderRoots();
+});
+containerResizeObserver.observe(rootNodeContainer);
+
+async function loadRoots() {
+  const text = await fetch("../assets/positions.json");
+  rootNodeData = await text.json();
+
+  renderRoots();
+}
+
+const COLORS = [];
+
+function getColor() {
+  let R = 0xdb / 255;
+  let G = 0x9e / 255;
+  let B = 0x3a / 255;
+
+  R += (Math.random() - 0.5) * 0.2;
+  G += (Math.random() - 0.5) * 0.2;
+  B += (Math.random() - 0.5) * 0.1;
+
+  return "#" + Math.floor(R * 255).toString(16) + Math.floor(G * 255).toString(16) + Math.floor(B * 255).toString(16);
+}
+
+for (let i = 0; i &lt; 400; ++i) {
+  COLORS.push(getColor());
+}
+
+async function loadExampleEntries() {
+  // Load from exampleEntries.json and save into GarlicNotes
+    const text = await fetch("../assets/exampleEntries.json");
+    const exampleEntries = await text.json();
+    journalList = exampleEntries;
+    saveJournalList(journalList);
+}
+
+// For debugging purposes
+globalThis.loadExampleEntries = loadExampleEntries;
+
+function filterJournalsByDate(date) {
+  return journalList.filter((journal) => {
+    const journalDate = new Date(journal.timestamp);
+    return journalDate.getDate() === date.getDate() &amp;&amp; journalDate.getMonth() === date.getMonth();
+  });
+}
+
+function renderRoots() {
+  if (!rootNodeData) {
+    return;
+  }
+  const rootRect = document.getElementById("root-container").getBoundingClientRect();
+
+  const width = rootRect.width;
+  const height = rootRect.height;
+
+  function createNodeAt(x, y) {
+    const node = document.createElement("div");
+    node.className = "root-node";
+    node.style.position = "absolute";
+
+    // Move things so that they align correcrtly
+    const SCALE_X = 0.00190;
+    const SCALE_Y = 0.00128;
+
+    node.style.left = `${x * SCALE_X * width}px`;
+    node.style.top = `${y * SCALE_Y * height}px`;
+
+    return node;
+  }
+
+  rootNodeContainer.innerHTML = "";
+
+  let nodeI = 0;
+  for (const [ month, positions ] of Object.entries(rootNodeData)) {
+    const nodes = [];
+
+    for (let i = 0; i &lt; positions.length; i += 2) {
+      if (month === "February" &amp;&amp; i === 28 * 2) {
+        break;
+      }
+
+      const MIDWAY = month === "February" ? 14 : 15;
+
+      const YEAR = 2023;
+      // construct from month, year and i
+      const date = new Date(YEAR,
+          ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+              .indexOf(month), (i / 2) + 1);
+
+      const entries = filterJournalsByDate(date);
+
+      if (entries.length === 0) continue;
+
+      const node = createNodeAt(positions[i], positions[i + 1]);
+      const labelText = document.createElement("div");
+
+      labelText.className = "root-node-label";
+      labelText.textContent = `${month} ${date.getDate()}`;
+      node.appendChild(labelText);
+
+      function hideLabel() {
+        labelText.style.display = "none";
+      }
+
+      hideLabel();
+
+      node.style.backgroundColor = COLORS[nodeI++];
+      node.onclick = () => {
+        editJournal(entries[0].timestamp);
+      };
+
+      node.onmouseenter = () => {
+        labelText.style.display = "block";
+      };
+
+      if (i / 2 &lt; MIDWAY) { // Put label text on the bottom left
+        labelText.style.left = "10px";
+        labelText.style.bottom = "20px";
+      } else {
+        labelText.style.right = "100%";
+        labelText.style.top = "0px";
+      }
+
+
+      node.onmouseleave = hideLabel;
+
+      nodes.push(node);
+    }
+
+    for (const node of nodes) {
+      rootNodeContainer.appendChild(node);
+    }
+  }
+}
+
+loadRoots();
+</code></pre>
         </article>
     </section>
 
@@ -371,13 +604,13 @@ function deleteJournal(timestamp) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createEntryDropdownItem">createEntryDropdownItem</a></li><li><a href="global.html#createListItem">createListItem</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayEntryDropdownList">displayEntryDropdownList</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#entryDropdownList">entryDropdownList</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getSearchField">getSearchField</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#newListOnCanClick">newListOnCanClick</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchBar">searchBar</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpHomeSearch">setUpHomeSearch</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortMode">sortMode</a></li><li><a href="global.html#updateDropdown">updateDropdown</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createEntryDropdownItem">createEntryDropdownItem</a></li><li><a href="global.html#createTag">createTag</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayEntryDropdownList">displayEntryDropdownList</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#displayPlantImage">displayPlantImage</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#entryDropdownList">entryDropdownList</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalEntryCount">getJournalEntryCount</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getPlantImage">getPlantImage</a></li><li><a href="global.html#getSearchField">getSearchField</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#newListOnCanClick">newListOnCanClick</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#rootNodeContainer">rootNodeContainer</a></li><li><a href="global.html#rootNodeData">rootNodeData</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchBar">searchBar</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpHomeSearch">setUpHomeSearch</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortMode">sortMode</a></li><li><a href="global.html#updateDropdown">updateDropdown</a></li><li><a href="global.html#updatePlantImage">updatePlantImage</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jun 08 2024 01:18:57 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jun 08 2024 19:32:03 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
