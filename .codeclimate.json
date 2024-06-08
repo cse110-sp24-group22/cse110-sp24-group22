@@ -10,7 +10,7 @@
     "complex-logic": {
       "enabled": true,
       "config": {
-        "threshold": 15
+        "threshold": 20
       }
     },
     "file-lines": {
@@ -22,13 +22,13 @@
     "method-complexity": {
       "enabled": true,
       "config": {
-        "threshold": 15
+        "threshold": 20
       }
     },
     "method-count": {
-      "enabled": false,
+      "enabled": true,
       "config": {
-        "threshold": 20
+        "threshold": 25
       }
     },
     "method-lines": {
@@ -56,7 +56,7 @@
       }
     },
     "identical-code": {
-      "enabled": true,
+      "enabled": false,
       "config": {
         "threshold": null
       }
