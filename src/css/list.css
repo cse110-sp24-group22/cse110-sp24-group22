@@ -65,7 +65,6 @@ button:hover {
   grid-template-areas: "name tags last delete";
   grid-template-columns: 1fr 0.75fr 0.75fr 0.5fr;
   transition: margin 0.5s ease;
-  padding: 10px;
 }
 
 /* styling for main header text */
@@ -231,6 +230,7 @@ header.entry-header {
 /* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
 .item-list li #entry-timestamp {
   place-self: right;
+  padding-left: 2%;
 }
 
 /* The item-list li .title rule sets the layout of the title within the list items. */
