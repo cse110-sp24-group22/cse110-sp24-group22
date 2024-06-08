@@ -226,24 +226,73 @@ describe('Basic user flow for Website', () => {
         expect(journalEntries.length).toBe(1);
     });
     
-
+/*
     // Testing 7: Filter the journal by date (to be implemented)
     it('Filter the journal by date', async () => {
         await page.reload();
 
         await page.click()
-    });
+    });*/
 
-    // Testing 8: Sort the journal by title alphabetically(to be implemented)
+    // Testing 8: Sort the journal by title alphabetically
     it('Sort the journal by title alphabetically', async () => {
-        await page.evaluate(() => localStorage.clear)
+        // delete existing entries
+        await page.evaluate(() => document.querySelector('ul').replaceChildren());
+        await page.evaluate(() => localStorage.clear());
+        let journalEntries = await page.$$('#item-list li');
+        expect(journalEntries.length).toBe(0);
+        
+        console.log(journalEntries);
+        // add entries in reverse alphabetical order
+        // Click the new journal button to open the editor
+        await page.click('.new-journal-button');
+        
+        // Enter the title
+        await page.type('#journalTitle', 'b');
+
+        // Enter the contents
+        await page.evaluate(() => {
+            const quill = new Quill('#editor', { theme: 'snow' });
+            quill.setText('a');
+        });
+
+        // Click the save journal button
+        await page.click('#closeModal');
+        console.log(await page.$$('#item-list li'));
+        await page.click('.new-journal-button');
+        
+        // Enter the title
+        await page.type('#journalTitle', 'a');
+
+        // Enter the contents
+        await page.evaluate(() => {
+            const quill = new Quill('#editor', { theme: 'snow' });
+            quill.setText('a');
+        });
+
+        // Click the save journal button
+        await page.click('#closeModal');
+        console.log(await page.$$('#item-list li'));
+        journalEntries = await page.$$('#item-list li');
+        expect(journalEntries.length).toBe(2);
+
+        // click sort twice to sort alphabetically
+        await page.click('#sort-name');
+        await page.click('#sort-name');
+
+
+        for (let i = 0; i<journalEntries.length; i++) {
+            let entry = journalEntries[i];
+            let title = await entry.children[0].textContent;
+            expect(title).toBe(String.fromCharCode(97 + i));
+        }
     });
-    for
-(let i = 0; i <= 3; i++)    // Testing 9: Sort the journal by date (to be implemented)
+/*
+    // Testing 9: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
 
     });
-    
+    /*
     // Tags
 
     // Testing 10: Add new tags to jounal inside modal 
@@ -302,15 +351,31 @@ describe('Basic user flow for Website', () => {
     // Testing 12: Adding duplicate tags
     it('Adding duplicate tags', async () => {
         await page.reload();
+
+        // add new journal
+        await page.click('.new-journal-button')
+        
+        // adding tag
+        await page.click('.tags-plus-button');
+
+        // adding duplicate tag
+        await page.type('#tags-input', 'tags1, tag2');
+
+        // save tag
+        await page.type('#save-tag');
         
         // duplicate tag modal
         page.on('dialog', async dialog => {
-            expect(dialog.message()).toContian
+            expect(dialog.message()).toContain('i fogor the message');
+            await dialog.accept();
         })
 
-        await page.click('')
+        await page.click('#closemodal');
+
+        // check that tags are unique
+        
     })
 
     // Testing 13: Check if tags are stored globally
-
+*/
 });
