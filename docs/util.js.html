@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: util.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: util.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Export utility functions
+export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, createTag, saveJournalTags, getJournalTags, parseTags };
+
+// Search-related utility functions
+
+/**
+ * Searches a list of entries for a case-insensitive string.
+ * @param {Array.Object} list - list of entries
+ * @param {string} query - exact string to search for
+ * @returns matching entries
+ */
+function getMatchingEntries(list, query) {
+  query = query.toLowerCase();
+
+  let matchingEntriesByTitle = [];
+  let matchingEntriesByContent = [];
+
+  list.forEach((entry) => {
+    if (entry.title.toLowerCase().includes(query)) {
+      matchingEntriesByTitle.push(entry);
+    } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
+      matchingEntriesByContent.push(entry);
+    }
+  });
+
+  return matchingEntriesByTitle.concat(matchingEntriesByContent);
+}
+
+/**
+ * Extracts all the text in a Quill delta.
+ * @param {Object} delta - Quill delta containing text operations
+ * @returns all the text in a Quill delta
+ */
+function getTextFromDelta(delta) {
+  if (!delta || !delta.ops) {
+    return "";
+  }
+
+  let text = "";
+  delta.ops.forEach((op) => {
+    text += op.insert;
+  });
+  return text;
+}
+
+// journalList/editing-related utility functions. These functions don't require looking into a global journalList object.
+
+/**
+* Checks if a title is valid.
+* @param title {string} - title of the journal entry
+* @returns {boolean} - true if title is valid, false otherwise
+*/
+function isTitleValid(title) {
+  return title.trim().length > 0;
+}
+
+/**
+ * Retrieves the list of journal entries from localStorage.
+ * @returns {JournalEntry[]} - list of journal entries
+ */
+function getJournalList() {
+  if (!localStorage.getItem("GarlicNotes")) {
+    return [];
+  } else {
+    return JSON.parse(localStorage.getItem("GarlicNotes"));
+  }
+}
+
+/**
+ * Saves the list of journal entries to localStorage.
+ * @param list {JournalEntry[]} - list of journal entries
+ */
+function saveJournalList(list) {
+  localStorage.setItem("GarlicNotes", JSON.stringify(list));
+}
+
+// Tags-related utility functions
+
+/**
+ * Creates tag buttons
+ * @param {string} tag - tag name
+ * @param {object} tagsWrapper - HTML element
+ * @param {object} noteObject - entry
+ * @param {object} tagAdd - tag plus button
+ */
+function createTag(tag, tagsWrapper, noteObject, tagAdd) {
+  const newTagElement = document.createElement("div");  // creates HTML element
+  newTagElement.className = "colored-tag";
+  newTagElement.textContent = tag;
+  tagsWrapper.insertBefore(newTagElement, tagAdd);
+
+  newTagElement.onclick = function() {  // remove tag buttons when clicked
+    if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+      noteObject.tags = noteObject.tags.filter(t => t != tag);
+      newTagElement.remove();
+    }
+  }
+}
+
+/**
+ * Parses a string of comma-separated tags into an array.
+ * @param {string} tagsString - string of comma-separated tags
+ * @returns array of tags
+ */
+function parseTags(tagsString) {
+  return tagsString.split(",").filter(tag => tag.length > 0);
+}
+
+/**
+ * Gets tags from localStorage
+ * @return new set or tags from localStorage parsed as set
+ */
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) {
+    return new Set();
+  }
+  return new Set(JSON.parse(localStorage.getItem("GarlicNotesTags")));
+}
+
+/**
+ * Saves tags into localStorage
+ * @param {Set} journalTags 
+ */
+function saveJournalTags(journalTags) {
+  localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createEntryDropdownItem">createEntryDropdownItem</a></li><li><a href="global.html#createTag">createTag</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayEntryDropdownList">displayEntryDropdownList</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#displayPlantImage">displayPlantImage</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#entryDropdownList">entryDropdownList</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalEntryCount">getJournalEntryCount</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getJournalTags">getJournalTags</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getPlantImage">getPlantImage</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#newListOnCanClick">newListOnCanClick</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#rootNodeContainer">rootNodeContainer</a></li><li><a href="global.html#rootNodeData">rootNodeData</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#saveJournalTags">saveJournalTags</a></li><li><a href="global.html#searchBar">searchBar</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpHomeSearch">setUpHomeSearch</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortMode">sortMode</a></li><li><a href="global.html#updateDropdown">updateDropdown</a></li><li><a href="global.html#updatePlantImage">updatePlantImage</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jun 08 2024 20:30:29 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 describe('Basic user flow for Website', () => {
     // First, visit the website before running any tests
     beforeAll(async () => {

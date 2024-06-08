@@ -1,10 +1,9 @@
 name: Prettier Linting & JS Doc Generation
 
 on:
-  pull_request:
+  push:
     branches:
-        - main
-    types: [opened, synchronize, reopened, review_requested]
+        - main-doc
 
 jobs:
   prettier-linting:
@@ -12,10 +11,6 @@ jobs:
     steps:
         - name: Checkout
           uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-            ref: ${{ github.event.pull_request.head.ref }}
-            persist-credentials: false
   
         - name: Prettify code
           uses: creyD/prettier_action@v4.3
@@ -31,8 +26,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Build
         uses: andstor/jsdoc-action@v1
@@ -46,4 +39,4 @@ jobs:
           message: JSDoc updated by GitHub Action
           committer_name: GitHub Actions
           committer_email: actions@github.com
-          push: origin HEAD:${{github.head_ref}}
+          push: origin HEAD:${{github.ref_name}}

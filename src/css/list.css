@@ -5,9 +5,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Single+Day&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Single+Day&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Gochi+Hand&family=Single+Day&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: Single Day;
   background-color: #ffe2b6;
   margin: 0;
   padding: 0;
@@ -21,20 +22,21 @@ main {
   display: inline;
 }
 
+/* place logo in the center of its grid cell */
 .logo {
   place-self: center;
 }
 
-/* general format for headers, placed above all content */
 header {
   display: grid;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  grid-template-columns: 0.5fr 2fr 0.5fr 0.5fr;
+  grid-template-columns: 100px minmax(1px,2fr) 150px 150px;
   column-gap: 10px;
   z-index: 2;
 }
+
 
 /* general transition for all buttons */
 button {
@@ -51,6 +53,7 @@ button:hover {
   grid-template-areas: "logo search root sort";
   height: 75px;
   background-color: lightgrey;
+  width: 100%;
 }
 
 /* margin to account for entry-header and transition for filter box */
@@ -61,18 +64,19 @@ button:hover {
   grid-template-areas: "name tags last delete";
   grid-template-columns: 1fr 0.75fr 0.75fr 0.5fr;
   transition: margin 0.5s ease;
-  padding: 10px;
 }
 
+/* styling for main header text */
 h1 {
   margin: 0;
   font-size: 24px;
   color: #333;
 }
 
+/* styling for subheading text */
 h2 {
   place-self: left;
-  margin: 0px;
+  margin: 10px;
 }
 
 header.entry-header {
@@ -86,6 +90,7 @@ header.entry-header {
 /* format Root View button and Filter button */
 .return-button,
 .filter-button {
+  font-family: Single Day;
   background-color: #4d4d4d;
   color: white;
   border: none;
@@ -98,50 +103,67 @@ header.entry-header {
   transition: background-color 0.3s ease;
 }
 
-.search-container {
-  margin: 20px 0;
-  display: flex;
-  color: white;
-  justify-content: center;
-}
 
+
+/* style filter container, includes animation mechanic */
 .filter-container {
   overflow: hidden;
   height: 0px;
   padding: 0px 0px 0px 0px;
-  grid-template-columns: 1fr 0.75fr 0.75fr 0.5fr;
   background-color: #947665;
   transition:
     height 0.5s ease,
     padding 0.5s ease;
 }
 
+/* style for when the filter container is showing */
 .filter-container.show {
-  height: 5em;
+  height: 3em;
   padding-bottom: 10px 0px 10px 0px;
 }
 
-#filter-inner {
+/* container layout within filter-container */
+#filter-outer {
   display: flex;
   flex-direction: row;
   justify-content: start;
-}
-
-#filter-outer {
   width: 100%;
   padding: 1em;
-  padding-bottom: 3em;
-}
-#tags-bar {
-  float: left;
-}
-#date-container {
-  margin-left: 40%;
+  padding-bottom: 1em;
 }
 
+/* Sets height and layout for tags text input */
+#tags-bar {
+  float: left;
+  height: 1em;
+}
+
+/* Sets formatting for filter sub-heading text */
+#filter-text {
+  margin: 0;
+  padding-right: 10px;
+}
+
+/* Sets position of the date filtering section */
+#date-container {
+  margin-left: 40%;
+  width: 20em;
+}
+
+/* layout for search bar container */
+.search-container {
+  display: flex;
+  color: white;
+  justify-content: center;
+  max-width: 1000px;
+
+}
+
+/* stylizes the search bar and its input */
 .search-bar {
+  font-family: Single Day;
   width: 100%;
-  padding: 10px;
+  padding: 10px 40px;
   border-width: 0px;
   background-color: rgb(71, 71, 71);
   color: white;
@@ -150,13 +172,16 @@ header.entry-header {
   font-size: 16px;
 }
 
+/* sets layout for the new journal button container */
 .add-button-container {
   display: flex;
   justify-content: flex-start;
   margin-bottom: 20px;
 }
 
+/* sets format for the new journal button */
 .new-journal-button {
+  font-family: Single Day;
   bottom: 5%;
   right: 5%;
   position: fixed;
@@ -166,18 +191,16 @@ header.entry-header {
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
   z-index: 2;
 }
 
-/* The item-list rule removes the default list style and padding. */
 .item-list {
   list-style-type: none;
   padding: 0;
   display: inline;
 }
 
-/* The item-list li rule sets the appearance and layout of the list items. */
 .item-list li {
   position: relative;
   display: grid;
@@ -204,13 +227,10 @@ header.entry-header {
 /* The item-list li .timestamp rule sets the appearance and layout of the timestamp within the list items. */
 .item-list li #entry-timestamp {
   place-self: right;
+  padding-left: 2%;
 }
 
 /* The item-list li .title rule sets the layout of the title within the list items. */
-.item-list li #entry-title {
-  margin-left: 75px;
-  margin-right: 30px;
-}
 
 /* The item-list li .tag rule centers the text of the tag within the list items. */
 .item-list li .tag {
@@ -222,25 +242,31 @@ header.entry-header {
   background: #c1b29b;
 }
 
+/* set button shape and location */
 .delete-button {
   display: none;
-  position: absolute;
-  transform: translateY(-50%);
-  background-color: #dc3545;
-  color: white;
+  background-image: url('../assets/trash_can.svg');
   border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
   cursor: pointer;
-  right: 85px;
+
+  background-color: transparent;
+  width: 35px;
+  height: 35px;
+  margin: 0;
+  padding: 0;
 }
 
+/* set delete button width and location on entry */
 #delete-container {
-  place-self: center;
+  place-self: left;
 }
 
 .item-list li:hover .delete-button {
-  display: inline;
+  display: block;
+}
+
+.item-list > li {
+  min-height: 40px;
 }
 
 .delete-icon {
@@ -254,7 +280,6 @@ header.entry-header {
   transform: translate;
 }
 
-/* The tag rule sets the appearance of the tag, but makes it change when it's hovered over. */
 .tag {
   display: inline-block;
   padding: 2px 5px;
@@ -266,7 +291,6 @@ header.entry-header {
   font-size: 12px;
 }
 
-/* The tag:hover rule changes the color and border color of the tag when it's hovered over. */
 .tag:hover {
   color: yellow;
   border-color: yellow;
@@ -276,7 +300,7 @@ header.entry-header {
 .modal {
   display: none;
   position: fixed;
-  z-index: 2 !important;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -286,8 +310,10 @@ header.entry-header {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+
 .modal-content {
-  z-index: 3 !important;
+  position: relative;
+  z-index: 3;
   display: block;
   background-color: #ffe2b6;
   margin: 15% auto;
@@ -299,6 +325,7 @@ header.entry-header {
 }
 
 .close-button {
+  font-family: Poppins;
   bottom: 5%;
   right: 5%;
   margin-top: 10px;
@@ -316,6 +343,7 @@ header.entry-header {
 }
 
 .Save-Close {
+  font-family: Poppins;
   bottom: 5%;
   margin-top: 10px;
   float: right;
@@ -325,6 +353,7 @@ header.entry-header {
   font-size: 14px;
 }
 .DeleteJournal {
+  font-family: Poppins;
   margin-left: 5%;
   margin-top: 10px;
   background-color: #ff7070;
@@ -349,12 +378,17 @@ header.entry-header {
 }
 
 .colored-tag {
-    background-color: #007bff;
-    border-radius: 4px;
+    background-color: #D6FBC0;
+    border-radius: 15%;
     padding: 5px 10px;
-    color: white;
+    color: black;
     text-align: center;
     height: 20px;
+    margin: 5px;
+}
+
+.colored-tag:hover {
+    background-color: #FF97B6;
 }
 
 .tags {
@@ -377,10 +411,21 @@ header.entry-header {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin: 5px;
 }
 
 #tag-plus > button:hover {
     background-color: #218838;
+}
+
+#tag-input {
+    margin: 5px;
+    display: none;
+}
+
+#tag-plus {
+    display: flex;
+    align-items: center;
 }
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
@@ -404,3 +449,4 @@ header.entry-header {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   padding: 8px;
 }
+
