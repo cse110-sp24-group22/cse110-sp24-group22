@@ -179,7 +179,7 @@ function editJournal(id) {
   /** @type {HTMLDivElement} */
 
   modal.style.display = "block";
-  saveJournal.disabled = true;
+  saveJournal.disabled = false;
 
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
@@ -390,7 +390,7 @@ globalThis.loadExampleEntries = loadExampleEntries;
 function filterJournalsByDate(date) {
   return journalList.filter((journal) => {
     const journalDate = new Date(journal.timestamp);
-    return journalDate.getDate() === date.getDate() && journalDate.getMonth() === date.getMonth() && journalDate.getFullYear() === date.getFullYear();
+    return journalDate.getDate() === date.getDate() && journalDate.getMonth() === date.getMonth();
   });
 }
 
