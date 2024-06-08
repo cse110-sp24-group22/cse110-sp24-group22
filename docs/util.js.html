@@ -27,7 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>// Export utility functions
-export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList };
+export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, createTag, saveJournalTags, getJournalTags, parseTags };
 
 // Search-related utility functions
 
@@ -100,6 +100,57 @@ function getJournalList() {
  */
 function saveJournalList(list) {
   localStorage.setItem("GarlicNotes", JSON.stringify(list));
+}
+
+// Tags-related utility functions
+
+/**
+ * Creates tag buttons
+ * @param {string} tag - tag name
+ * @param {object} tagsWrapper - HTML element
+ * @param {object} noteObject - entry
+ * @param {object} tagAdd - tag plus button
+ */
+function createTag(tag, tagsWrapper, noteObject, tagAdd) {
+  const newTagElement = document.createElement("div");  // creates HTML element
+  newTagElement.className = "colored-tag";
+  newTagElement.textContent = tag;
+  tagsWrapper.insertBefore(newTagElement, tagAdd);
+
+  newTagElement.onclick = function() {  // remove tag buttons when clicked
+    if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+      noteObject.tags = noteObject.tags.filter(t => t != tag);
+      newTagElement.remove();
+    }
+  }
+}
+
+/**
+ * Parses a string of comma-separated tags into an array.
+ * @param {string} tagsString - string of comma-separated tags
+ * @returns array of tags
+ */
+function parseTags(tagsString) {
+  return tagsString.split(",").filter(tag => tag.length > 0);
+}
+
+/**
+ * Gets tags from localStorage
+ * @return new set or tags from localStorage parsed as set
+ */
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) {
+    return new Set();
+  }
+  return new Set(JSON.parse(localStorage.getItem("GarlicNotesTags")));
+}
+
+/**
+ * Saves tags into localStorage
+ * @param {Set} journalTags 
+ */
+function saveJournalTags(journalTags) {
+  localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
 }</code></pre>
         </article>
     </section>
@@ -110,13 +161,13 @@ function saveJournalList(list) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createEntryDropdownItem">createEntryDropdownItem</a></li><li><a href="global.html#createTag">createTag</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayEntryDropdownList">displayEntryDropdownList</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#displayPlantImage">displayPlantImage</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#entryDropdownList">entryDropdownList</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalEntryCount">getJournalEntryCount</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getPlantImage">getPlantImage</a></li><li><a href="global.html#getSearchField">getSearchField</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#newListOnCanClick">newListOnCanClick</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#rootNodeContainer">rootNodeContainer</a></li><li><a href="global.html#rootNodeData">rootNodeData</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#searchBar">searchBar</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpHomeSearch">setUpHomeSearch</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortMode">sortMode</a></li><li><a href="global.html#updateDropdown">updateDropdown</a></li><li><a href="global.html#updatePlantImage">updatePlantImage</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createEntryDropdownItem">createEntryDropdownItem</a></li><li><a href="global.html#createTag">createTag</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayEntryDropdownList">displayEntryDropdownList</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#displayPlantImage">displayPlantImage</a></li><li><a href="global.html#dummy">dummy</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#entryDropdownList">entryDropdownList</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalEntryCount">getJournalEntryCount</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getJournalTags">getJournalTags</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getPlantImage">getPlantImage</a></li><li><a href="global.html#getSearchField">getSearchField</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#newListOnCanClick">newListOnCanClick</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#rootNodeContainer">rootNodeContainer</a></li><li><a href="global.html#rootNodeData">rootNodeData</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#saveJournalTags">saveJournalTags</a></li><li><a href="global.html#searchBar">searchBar</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpHomeSearch">setUpHomeSearch</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#sortMode">sortMode</a></li><li><a href="global.html#updateDropdown">updateDropdown</a></li><li><a href="global.html#updatePlantImage">updatePlantImage</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jun 08 2024 19:32:03 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jun 08 2024 19:57:30 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
