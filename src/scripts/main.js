@@ -213,6 +213,7 @@ function editJournal(id) {
   /* Closes modal */
   closeModal.addEventListener("click", function () {
     modal.style.display = "none";
+    renderRoots();
   });
 
   window.addEventListener("click", function (event) {
@@ -227,6 +228,7 @@ function editJournal(id) {
       modal.style.display = "none";
       deleteJournal(id);
       saveJournalList(journalList);
+      renderRoots();
     }
   }
 
@@ -315,6 +317,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
     }
+    renderRoots();
   }
 
 
