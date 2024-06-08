@@ -35,6 +35,7 @@ function init() {
     setInterval(updateDate, 60000);
     newListOnCanClick();
     setUpHomeSearch();
+    updatePlantImage();
 }
 
 /**
@@ -203,6 +204,7 @@ function editJournal(id) {
     quill.setText("\n");
     journalList.push(noteObject);
     saveJournalList(journalList);
+    updatePlantImage()
   }
 
   noteObject = getJournalByTimestamp(id);
@@ -333,4 +335,44 @@ function getJournalByTimestamp(timestamp) {
 function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
+  updatePlantImage()
+}
+
+/**
+ * Function to get the count of journal entries.
+ * @returns {number} - number of journal entries
+ */
+function getJournalEntryCount() {
+  return journalList.length;
+}
+
+/**
+ * Function to determine the plant image based on entry count.
+ * @param {number} entryCount - number of journal entries
+ * @returns {string} - path to the plant image
+ */
+function getPlantImage(entryCount) {
+  const plantStages = [
+    { src: '../assets/SVGPlantFiles/Plant/S0.svg', class: 'plant-stage-0' },
+    { src: '../assets/SVGPlantFiles/Plant/S1.svg', class: 'plant-stage-1' },
+    { src: '../assets/SVGPlantFiles/Plant/S2.svg', class: 'plant-stage-2' },
+    { src: '../assets/SVGPlantFiles/Plant/S3.svg', class: 'plant-stage-3' },
+    { src: '../assets/SVGPlantFiles/Plant/S4.svg', class: 'plant-stage-4' },
+    { src: '../assets/SVGPlantFiles/Plant/S5.svg', class: 'plant-stage-5' }
+  ];
+  //entryThreshold deciphers how many journal entries must be made to move onto the next stage.
+  const entryThreshold = 3
+  const stageIdx = Math.floor(entryCount / entryThreshold);
+  return plantStages[Math.min(stageIdx, plantStages.length - 1)];
+}
+
+/**
+ * Function to update the plant image.
+ */
+function updatePlantImage() {
+  const entryCount = getJournalEntryCount();
+  const { src, class: plantClass } = getPlantImage(entryCount);
+  const plantImageElement = document.getElementById('plant-container');
+  plantImageElement.src = src;
+  plantImageElement.className = plantClass;
 }
