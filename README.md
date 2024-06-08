@@ -1,6 +1,7 @@
 # Project **Garlic**
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/89c9e08de03e1c342c76/maintainability)](https://codeclimate.com/github/cse110-sp24-group22/cse110-sp24-group22/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/89c9e08de03e1c342c76/test_coverage)](https://codeclimate.com/github/cse110-sp24-group22/cse110-sp24-group22/test_coverage)\
 [![Jest Testing](https://github.com/cse110-sp24-group22/cse110-sp24-group22/actions/workflows/Jest.yml/badge.svg)](https://github.com/cse110-sp24-group22/cse110-sp24-group22/actions/workflows/Jest.yml)
 [![JSDoc](https://github.com/cse110-sp24-group22/cse110-sp24-group22/actions/workflows/Lint&Doc.yml/badge.svg)](https://github.com/cse110-sp24-group22/cse110-sp24-group22/actions/workflows/Lint&Doc.yml)
 [![LightHouse](https://github.com/cse110-sp24-group22/cse110-sp24-group22/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/cse110-sp24-group22/cse110-sp24-group22/actions/workflows/lighthouse.yml)

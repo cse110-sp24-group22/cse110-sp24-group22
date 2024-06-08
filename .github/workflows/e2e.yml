@@ -1,31 +1,38 @@
-name: Unit Tests
+name: E2E Tests
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
-
+      
 jobs:
-  Check_Jest:
+  e2e-test:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
       with:
-        fetch-depth: 0
-    
-    - name: Install Dependencies
+        node-version: '18'
+        
+    - name: Install dependencies
       run: npm install
+
+    - name: Install http-server
+      run: npm install -g http-server
+
+    - name: Start http-server
+      run: http-server -p 5501 &
+      # The ampersand (&) runs http-server in the background
 
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v6.0.0
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CC_ID}}
       with:
-        coverageCommand: npm run test:unit
+        coverageCommand: npm run test:e2e
         coverageLocations: ${{ github.workspace }}/coverage/lcov.info:lcov
         debug: true
