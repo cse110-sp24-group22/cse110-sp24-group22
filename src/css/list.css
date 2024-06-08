@@ -156,7 +156,7 @@ header.entry-header {
   color: white;
   justify-content: center;
   max-width: 1000px;
-  
+
 }
 
 /* stylizes the search bar and its input */
@@ -245,7 +245,6 @@ header.entry-header {
 /* set button shape and location */
 .delete-button {
   display: none;
-  position:absolute;
   background-image: url('../assets/trash_can.svg');
   border: none;
   cursor: pointer;
@@ -253,19 +252,21 @@ header.entry-header {
   background-color: transparent;
   width: 35px;
   height: 35px;
-  margin-left: 2%;
-  margin-top: -1.25%;
-
+  margin: 0;
+  padding: 0;
 }
 
 /* set delete button width and location on entry */
 #delete-container {
   place-self: left;
-
 }
 
 .item-list li:hover .delete-button {
   display: block;
+}
+
+.item-list > li {
+  min-height: 40px;
 }
 
 .delete-icon {

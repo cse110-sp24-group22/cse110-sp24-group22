@@ -73,6 +73,10 @@ function parseUrlAndSearch() {
 
 /** @type {"none"|"name"|"timestamp"} */
 let sortMode = "none";
+let sortDirection = {
+  name: true,
+  editTime: true,
+};
 
 function sortByCategory(category) {
   if (category === "name") {
