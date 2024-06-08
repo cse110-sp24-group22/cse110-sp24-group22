@@ -27,7 +27,6 @@ main {
   place-self: center;
 }
 
-/* general format for headers, placed above all content */
 header {
   display: grid;
   justify-content: space-between;
@@ -196,14 +195,12 @@ header.entry-header {
   z-index: 2;
 }
 
-/* The item-list rule removes the default list style and padding. */
 .item-list {
   list-style-type: none;
   padding: 0;
   display: inline;
 }
 
-/* The item-list li rule sets the appearance and layout of the list items. */
 .item-list li {
   position: relative;
   display: grid;
@@ -282,7 +279,6 @@ header.entry-header {
   transform: translate;
 }
 
-/* The tag rule sets the appearance of the tag, but makes it change when it's hovered over. */
 .tag {
   display: inline-block;
   padding: 2px 5px;
@@ -294,7 +290,6 @@ header.entry-header {
   font-size: 12px;
 }
 
-/* The tag:hover rule changes the color and border color of the tag when it's hovered over. */
 .tag:hover {
   color: yellow;
   border-color: yellow;
@@ -388,6 +383,11 @@ header.entry-header {
     color: white;
     text-align: center;
     height: 20px;
+    margin: 5px;
+}
+
+.colored-tag:hover {
+    background-color: rgb(157, 60, 60);
 }
 
 .tags {
@@ -410,10 +410,21 @@ header.entry-header {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin: 5px;
 }
 
 #tag-plus > button:hover {
     background-color: #218838;
+}
+
+#tag-input {
+    margin: 5px;
+    display: none;
+}
+
+#tag-plus {
+    display: flex;
+    align-items: center;
 }
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
@@ -437,3 +448,4 @@ header.entry-header {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   padding: 8px;
 }
+
