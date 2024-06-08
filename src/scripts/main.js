@@ -73,7 +73,7 @@ function displayEntryDropdownList(list) {
 function createEntryDropdownItem(item) {
   // Get the essential elements for the dropdown
   const entryItem = document.createElement("li");
-  
+
   // Add accessibility through tabindex
   entryItem.setAttribute("tabindex", "0");
 
@@ -104,7 +104,7 @@ function createEntryDropdownItem(item) {
       editJournal(timestamp);
     }
   };
-  
+
   // Add entry to dropdown container
   entryDropdownList.appendChild(entryItem);
 
@@ -114,7 +114,7 @@ function createEntryDropdownItem(item) {
   function displayTitle() {
     title.textContent = item.title;
   }
-  
+
   /**
    * Displays the current entry's last modified date.
    */
@@ -334,3 +334,46 @@ function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
 }
+
+/**
+ * ROOT FUNCTIONALITY
+ */
+
+/** @type {Object.<"January" | "February" | "March" | "April" | "May" | "June" | "July" | "August" | "September" |
+ * "October" | "November" | "December", number[]> | null} */
+let rootNodeData = null;
+
+/** @type {HTMLDivElement} */
+const rootNodeContainer = document.getElementById("root-nodes");
+
+async function loadRoots() {
+  const text = await fetch("../assets/positions.json");
+  rootNodeData = await text.json();
+
+  function createNodeAt(x, y) {
+    const node = document.createElement("div");
+    node.className = "root-node";
+    node.style.position = "absolute";
+
+    const X_SCALE = 0.34;
+    const Y_SCALE = 0.2;
+    node.style.left = `${x * X_SCALE}%`;
+    node.style.top = `${y * Y_SCALE}%`;
+
+    return node;
+  }
+
+  for (const [ month, positions ] of Object.entries(rootNodeData)) {
+    const nodes = [];
+
+    for (let i = 0; i < positions.length; i += 2) {
+      nodes.push(createNodeAt(positions[i], positions[i + 1]));
+    }
+
+    for (const node of nodes) {
+      rootNodeContainer.appendChild(node);
+    }
+  }
+}
+
+loadRoots();

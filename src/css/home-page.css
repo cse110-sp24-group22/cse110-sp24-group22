@@ -175,12 +175,35 @@ body {
 #root {
   position: absolute;
   right: 46%;
-  top: 30%;
+  top: 32%;
   width: 40%;
+  height: 100%;
   z-index: 2;
 }
 
+#root-nodes {
+  width: 100%;
+  height: 100%;
+}
+
+.root-node {
+  /*Circle of radius 5px*/
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: all;
+}
+
+.root-node:hover {
+  background-color: white;
+}
+
 #root-container {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 180%;
   height: auto;
 }
