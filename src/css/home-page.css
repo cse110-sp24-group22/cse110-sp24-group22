@@ -171,6 +171,20 @@ body {
   height: auto;
 }
 
+/*Set Up root position and image*/
+#root {
+  position: absolute;
+  right: 46%;
+  top: 30%;
+  width: 40%;
+  z-index: 2;
+}
+
+#root-container {
+  width: 180%;
+  height: auto;
+}
+
 /*Watering Can Styles*/
 #can-container {
   pointer-events: auto;
