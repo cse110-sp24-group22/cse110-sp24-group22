@@ -9,9 +9,11 @@ function dummy() {}
 // Globals
 let quill;
 let journalList;
+let currentPlantStage = localStorage.getItem('currentPlantStage') ? parseInt(localStorage.getItem('currentPlantStage')) : 0;
 
 document.addEventListener("DOMContentLoaded", function() {
-    init()
+    init();
+    displayPlantImage();
 });
 
 /**
@@ -35,6 +37,7 @@ function init() {
     setInterval(updateDate, 60000);
     newListOnCanClick();
     setUpHomeSearch();
+    updatePlantImage();
 }
 
 /**
@@ -270,6 +273,7 @@ function editJournal(id) {
     modal.style.display = "none";
     quill.off("text-change", quillUpdateTextHandler);
     updateDropdown();
+    updatePlantImage();
   };
 
   /**
@@ -333,6 +337,85 @@ function getJournalByTimestamp(timestamp) {
 function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
+  updatePlantImage()
+}
+
+
+/* PLANT FUNCTIONALITY*/
+/**
+ * Function to get the count of journal entries.
+ * @returns {number} - number of journal entries
+ */
+function getJournalEntryCount() {
+  return journalList.length;
+}
+
+/**
+ * Function to determine the plant image based on entry count.
+ * @param {number} entryCount - number of journal entries
+ * @returns {string} - path to the plant image
+ */
+function getPlantImage(entryCount) {
+  const plantStages = [
+    { src: '../assets/SVGPlantFiles/Plant/S0.svg', class: 'plant-stage-0' },
+    { src: '../assets/SVGPlantFiles/Plant/S1.svg', class: 'plant-stage-1' },
+    { src: '../assets/SVGPlantFiles/Plant/S2.svg', class: 'plant-stage-2' },
+    { src: '../assets/SVGPlantFiles/Plant/S3.svg', class: 'plant-stage-3' },
+    { src: '../assets/SVGPlantFiles/Plant/S4.svg', class: 'plant-stage-4' },
+    { src: '../assets/SVGPlantFiles/Plant/S5.svg', class: 'plant-stage-5' }
+  ];
+  //entryThreshold deciphers how many journal entries must be made to move onto the next stage.
+  const entryThreshold = 3
+  const stageIdx = Math.floor(entryCount / entryThreshold);
+  return {...plantStages[Math.min(stageIdx, plantStages.length - 1)], stageIdx};
+}
+
+/**
+ *This should be called whenever journal entries number is 
+ changed, including adding journal entries and removing them
+ */
+function updatePlantImage() {
+  const entryCount = getJournalEntryCount();
+  const { src, class: plantClass, stageIdx } = getPlantImage(entryCount);
+  const plantImageElement = document.getElementById('plant-container');
+
+  //disables transition for initial load to prevent unnecessary slide motion
+  plantImageElement.style.transition = 'none';
+
+  if (stageIdx <= currentPlantStage) {
+    //no animation when stage did not increase
+    plantImageElement.src = src;
+    plantImageElement.className = plantClass;
+    currentPlantStage = stageIdx;
+    localStorage.setItem('currentPlantStage', currentPlantStage);
+  }    
+  else {
+    //plays little animation if stage increased
+    plantImageElement.classList.add('rumble');
+    setTimeout(() => {
+      // Remove the animation class after the animation completes
+      plantImageElement.src = src;
+      plantImageElement.className = plantClass;
+      
+      setTimeout(() => {
+        plantImageElement.classList.remove('rumble');
+      }, 2000); // duration of the animation
+      currentPlantStage = stageIdx;
+      localStorage.setItem('currentPlantStage', currentPlantStage);
+    }, 1000); 
+  }
+}
+
+/**
+ * Function to display the plant image immediately on page load
+ */
+function displayPlantImage() {
+  const entryCount = getJournalEntryCount();
+  const { src, class: plantClass } = getPlantImage(entryCount);
+  const plantImageElement = document.getElementById('plant-container');
+  plantImageElement.src = src;
+  plantImageElement.className = plantClass;
+}
 }
 
 /**
