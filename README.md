@@ -38,10 +38,6 @@ Let's get your project growing! ([Click here]() for the journal) Link Needed
     **Example**
    - Description
 
-## Meet the Dev Team
-
-[Team Page](/admin/team.md)
-
 ## Repository Organization
 
 - `admin\`: Admin resources which incluse branding assets, information on our CI/CD pipeline, weekly meeting notes, our team page, and video links.
@@ -56,4 +52,5 @@ Let's get your project growing! ([Click here]() for the journal) Link Needed
 - [Miro](https://miro.com/app/board/uXjVKNpuLc0=/) (Overall brainstorming)
 
 ### Other
+- [Team Page](/admin/team.md)
 - [Group Intro](https://youtu.be/Pr2DBvsQnfE)
