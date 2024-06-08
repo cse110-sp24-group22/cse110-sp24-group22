@@ -209,6 +209,7 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
+
   window.addEventListener("click", function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
@@ -221,6 +222,7 @@ function editJournal(id) {
       modal.style.display = "none";
       deleteJournal(id);
       saveJournalList(journalList);
+      renderRoots();
     }
   }
 
@@ -310,6 +312,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
     }
+    renderRoots();
   }
 
   /**
@@ -611,9 +614,24 @@ function renderRoots() {
       hideLabel();
 
       node.style.backgroundColor = COLORS[nodeI++];
-      node.onclick = () => {
-        editJournal(entries[0].timestamp);
-      };
+      if(entries.length > 1){
+        let time = new Date(entries[0].timestamp);
+        let baseurl = window.location.origin;
+        let basemonth = ("0" + (time.getMonth() + 1)).slice(-2);
+        let basetime = time.getFullYear() + '-' + basemonth + '-' + ("0" + time.getDate()).slice(-2);
+        baseurl += '/src/html/list.html?query=&tags=&startDate='+ basetime + '&endDate='+ basetime;
+        console.log(basetime);
+        node.onclick = () => {
+          location.href = baseurl;
+        }
+          
+      }
+      else{
+        node.onclick = () => {
+          editJournal(entries[0].timestamp);
+        };
+      }
+      
 
       node.onmouseenter = () => {
         labelText.style.display = "block";
