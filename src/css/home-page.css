@@ -197,6 +197,10 @@ body {
   height: auto;
 }
 
+.plant-stage-2 {
+  margin-top: 8%;
+}
+
 /*Watering Can Styles*/
 #can-container {
   pointer-events: auto;

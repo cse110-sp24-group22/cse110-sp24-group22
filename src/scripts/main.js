@@ -367,7 +367,7 @@ function getPlantImage(entryCount) {
 }
 
 /**
- * Function to update the plant image.
+ *This should be called whenever journal entries number is changed, including adding journal entries and removing them
  */
 function updatePlantImage() {
   const entryCount = getJournalEntryCount();
