@@ -1,9 +1,10 @@
+import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
+
 // store the data into localStorage before starting
 let journalList = getJournalList();
 let journalTags = getJournalTags();
 var tagSet = new Set();
 let tagsList = [];
-let DEFAULT_TITLE = "Untitled";
 
 // TODO: check need for delete button container, line 200
 
@@ -151,7 +152,6 @@ function createListItem(item) {
   details.style.fontSize = "small";
   // Generate tags
   const tagsContainer = document.createElement("div");
-  tagsContainer.textContent = "Tags: ";
 
   item.tags.forEach((tag) => {
     const tagElement = document.createElement("span");
@@ -226,14 +226,6 @@ function createListItem(item) {
   itemList.appendChild(listItem);
 }
 
-function getJournalList() {
-  if (!localStorage.getItem("GarlicNotes")) {
-    return [];
-  } else {
-    return JSON.parse(localStorage.getItem("GarlicNotes"));
-  }
-}
-
 function getJournalByTimestamp(timestamp) {
   const journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
@@ -264,18 +256,6 @@ function saveJournalTags(journalTags) {
   localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
 }
 
-function saveJournalList(journalList) {
-  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
-}
-
-/**
- * Checks if a title is valid.
- * @param title {string} - title of the journal entry
- * @returns {boolean} - true if title is valid, false otherwise
- */
-function isTitleValid(title) {
-  return title.trim().length > 0;
-}
 /**
  * Opens a modal to edit a journal entry.
  * @param id {number} - unique identifier and time it was created
@@ -581,45 +561,7 @@ function searchJournal(query, tags, startDate, endDate) {
   return getMatchingEntries(filteredList, query);
 }
 
-/**
- * Searches a list of entries for a case-insensitive string.
- * @param {Array.Object} list - list of entries
- * @param {string} query - exact string to search for
- * @returns matching entries
- */
-function getMatchingEntries(list, query) {
-  query = query.toLowerCase();
 
-  let matchingEntriesByTitle = [];
-  let matchingEntriesByContent = [];
-
-  list.forEach((entry) => {
-    if (entry.title.toLowerCase().includes(query)) {
-      matchingEntriesByTitle.push(entry);
-    } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
-      matchingEntriesByContent.push(entry);
-    }
-  });
-
-  return matchingEntriesByTitle.concat(matchingEntriesByContent);
-}
-
-/**
- * Extracts all the text in a Quill delta.
- * @param {Object} delta - Quill delta containing text operations
- * @returns all the text in a Quill delta
- */
-function getTextFromDelta(delta) {
-  if (!delta || !delta.ops) {
-    return "";
-  }
-
-  let text = "";
-  delta.ops.forEach((op) => {
-    text += op.insert;
-  });
-  return text;
-}
 
 /**
  * Parses a string of comma-separated tags into an array.
@@ -630,13 +572,6 @@ function parseTags(tagsString) {
   return tagsString.split(",").filter(tag => tag.length > 0);
 }
 
-/**
- * Gets the search field value.
- * @returns {string} - search field value
- */
-function getSearchField() {
-  return searchBar.value.trim();
-}
 
 /** @type {HTMLInputElement} */
 const searchBar = document.getElementById("search-bar");
@@ -673,10 +608,9 @@ function updateDisplay() {
 }
 
 /**
- * Prepares search functionality on the page.
+ * Sets up search function by adding eventListener.
  */
 function setUpSearch() {
-
   const searchElements = [searchBar, tagsBar, startDate, endDate];
   const itemList = document.getElementById("item-list");
 
