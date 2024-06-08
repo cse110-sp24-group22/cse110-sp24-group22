@@ -181,6 +181,47 @@ body {
   width: 180%;
   height: auto;
 }
+
+/* Set up year navigator to be on top of pot */
+#year-nav {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  right: 37%;
+  top: 27%;
+  width: 10%;
+  height: 30px;
+  z-index: 1;
+  transform: translateX(-50%);
+}
+
+#year-decrement, #year-increment {
+  flex-grow: 1;
+  font-size: 20px;
+  background-color: rgba(255, 212, 171, 0.6);
+  border: 0;
+  padding: 2px;
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 5;
+}
+
+/* on hover */
+#year-decrement:hover, #year-increment:hover {
+  background-color: rgba(255, 212, 171, 1.0);
+}
+
+#year-display {
+  font-size: 20px;
+  background-color: rgba(255, 212, 171, 0.6);
+  padding: 10px;
+  flex: 0 0 40px;
+  /* center text immediately */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /*Set Up Plant position and image*/
 #plant {
   position: absolute;

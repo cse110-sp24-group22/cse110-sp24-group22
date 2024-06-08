@@ -63,7 +63,13 @@
         <div id="plant">
           <img id="plant-container" alt="plant" src="">
         </div>
-      </div>  
+      </div>
+      <!-- Switch between years -->
+      <div id="year-nav">
+        <button id="year-decrement">《</button>
+        <div id="year-display"><p id="year-display-inner">2021</p></div>
+        <button id="year-increment">》</button>
+      </div>
       <div id="sun">
         <img id="sun-container" alt="sun" src="../assets/sun.svg">
       </div>
@@ -87,9 +93,9 @@
           id="journalTitle"
           placeholder="Enter title here..."
         />
-        <div class="tags" id="tags"> 
+        <div class="tags" id="tags">
           <div class="tag-interface">
-            <div id="tag-plus"> Tags: 
+            <div id="tag-plus"> Tags:
               <!-- Tags will be dynamically inserted here -->
               <button id="tag-plus-button">+</button>
             </div>

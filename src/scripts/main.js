@@ -221,7 +221,6 @@ function editJournal(id) {
     if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
       deleteJournal(id);
-      saveJournalList(journalList);
       renderRoots();
     }
   }
@@ -238,7 +237,7 @@ function editJournal(id) {
         alert('Cannot save journal without a title!');
       }
   };
-  
+
   let noteObject;
   let isNewJournal = false;
 
@@ -421,10 +420,11 @@ function deleteJournal(timestamp) {
 /* PLANT FUNCTIONALITY*/
 /**
  * Function to get the count of journal entries.
+ * @param {number} year - year to filter journal entries
  * @returns {number} - number of journal entries
  */
-function getJournalEntryCount() {
-  return journalList.length;
+function getJournalEntryCount(year) {
+  return journalList?.filter(entry => new Date(entry.timestamp).getFullYear() === year)?.length || 0;
 }
 
 /**
@@ -448,11 +448,11 @@ function getPlantImage(entryCount) {
 }
 
 /**
- *This should be called whenever journal entries number is 
+ *This should be called whenever journal entries number is
  changed, including adding journal entries and removing them
  */
 function updatePlantImage() {
-  const entryCount = getJournalEntryCount();
+  const entryCount = getJournalEntryCount(currentYear);
   const { src, class: plantClass, stageIdx } = getPlantImage(entryCount);
   const plantImageElement = document.getElementById('plant-container');
 
@@ -465,7 +465,7 @@ function updatePlantImage() {
     plantImageElement.className = plantClass;
     currentPlantStage = stageIdx;
     localStorage.setItem('currentPlantStage', currentPlantStage);
-  }    
+  }
   else {
     //plays little animation if stage increased
     plantImageElement.classList.add('rumble');
@@ -473,13 +473,13 @@ function updatePlantImage() {
       // Remove the animation class after the animation completes
       plantImageElement.src = src;
       plantImageElement.className = plantClass;
-      
+
       setTimeout(() => {
         plantImageElement.classList.remove('rumble');
       }, 2000); // duration of the animation
       currentPlantStage = stageIdx;
       localStorage.setItem('currentPlantStage', currentPlantStage);
-    }, 1000); 
+    }, 1000);
   }
 }
 
@@ -487,7 +487,7 @@ function updatePlantImage() {
  * Function to display the plant image immediately on page load
  */
 function displayPlantImage() {
-  const entryCount = getJournalEntryCount();
+  const entryCount = getJournalEntryCount(currentYear);
   const { src, class: plantClass } = getPlantImage(entryCount);
   const plantImageElement = document.getElementById('plant-container');
   plantImageElement.src = src;
@@ -514,7 +514,7 @@ async function loadRoots() {
   const text = await fetch("../assets/positions.json");
   rootNodeData = await text.json();
 
-  renderRoots();
+  renderRoots(true /* do animation on page load */);
 }
 
 const COLORS = [];
@@ -546,17 +546,68 @@ async function loadExampleEntries() {
 // For debugging purposes
 globalThis.loadExampleEntries = loadExampleEntries;
 
-function filterJournalsByDate(date) {
-  return journalList.filter((journal) => {
-    const journalDate = new Date(journal.timestamp);
-    return journalDate.getDate() === date.getDate() && journalDate.getMonth() === date.getMonth();
-  });
+class JournalFilterer {
+  constructor(journalList) {
+      this.journalList = journalList;
+      /** @type {Map<number, JournalEntry[]>} */
+      this.dateToEntries = new Map();
+
+      for (const journal of journalList) {
+          const journalDate = new Date(journal.timestamp);
+          const date = new Date(journalDate.getFullYear(), journalDate.getMonth(), journalDate.getDate()).getTime();
+          if (!this.dateToEntries.has(date)) {
+              this.dateToEntries.set(date, []);
+          }
+          this.dateToEntries.get(date).push(journal);
+      }
+  }
+
+  filterByDate(date) {
+    // get time at start of day
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    return this.dateToEntries.get(date) || [];
+  }
 }
 
-function renderRoots() {
+/**
+ * Animate a node to a certain size over a certain duration.
+ * @param node - the node to animate
+ * @param sizeAtTime - a function that takes a time and returns the size of the node at that time, parameterized 0 to 1
+ * @param duration - the duration of the animation
+ */
+function animateNode(node, sizeAtTime, duration) {
+  let nodeRemovedFromDOM = false;
+
+  function doTick(startTime) {
+    if (nodeRemovedFromDOM) {
+      return;
+    }
+
+    const time = (Date.now() - startTime) / duration;
+    const size = sizeAtTime(time);
+
+    node.style.width = `${size}px`;
+    node.style.height = `${size}px`;
+
+    if (time < 1) {
+      requestAnimationFrame(() => doTick(startTime));
+    }
+  }
+
+  requestAnimationFrame(() => doTick(Date.now()));
+
+  new MutationObserver(() => {
+    if (!node.isConnected) {
+      nodeRemovedFromDOM = true;
+    }
+  }).observe(node, { childList: true, subtree: true });
+}
+
+function renderRoots(doAnimation = false) {
   if (!rootNodeData) {
     return;
   }
+
   const rootRect = document.getElementById("root-container").getBoundingClientRect();
 
   const width = rootRect.width;
@@ -579,6 +630,8 @@ function renderRoots() {
 
   rootNodeContainer.innerHTML = "";
 
+  const filterer = new JournalFilterer(journalList);
+
   let nodeI = 0;
   for (const [ month, positions ] of Object.entries(rootNodeData)) {
     const nodes = [];
@@ -590,13 +643,13 @@ function renderRoots() {
 
       const MIDWAY = month === "February" ? 14 : 15;
 
-      const YEAR = 2023;
+      const YEAR = currentYear;
       // construct from month, year and i
       const date = new Date(YEAR,
           ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
               .indexOf(month), (i / 2) + 1);
 
-      const entries = filterJournalsByDate(date);
+      const entries = filterer.filterByDate(date);
 
       if (entries.length === 0) continue;
 
@@ -614,6 +667,7 @@ function renderRoots() {
       hideLabel();
 
       node.style.backgroundColor = COLORS[nodeI++];
+
       if(entries.length > 1){
         let time = new Date(entries[0].timestamp);
         let baseurl = window.location.origin;
@@ -624,14 +678,12 @@ function renderRoots() {
         node.onclick = () => {
           location.href = baseurl;
         }
-          
       }
       else{
         node.onclick = () => {
           editJournal(entries[0].timestamp);
         };
       }
-      
 
       node.onmouseenter = () => {
         labelText.style.display = "block";
@@ -653,8 +705,46 @@ function renderRoots() {
 
     for (const node of nodes) {
       rootNodeContainer.appendChild(node);
+
+      if (doAnimation) {
+        animateNode(node, (time) => {
+          // Up until midway through the downstroke of sine PLEASE
+          return 20 * Math.sin(time * (3 * Math.PI / 4));
+        }, 250);
+      }
     }
   }
 }
 
 loadRoots();
+
+
+/**
+ * Set up year navigation
+ */
+
+const yearDisplay = document.getElementById("year-display-inner");
+const yearDecrement = document.getElementById("year-decrement");
+const yearIncrement = document.getElementById("year-increment");
+
+let currentYear = new Date().getFullYear();
+const maxYear = currentYear;
+
+function setYearDisplay(year) {
+  yearDisplay.textContent = year;
+  renderRoots(true /* do animation when changing years */);
+  updatePlantImage();
+}
+
+yearIncrement.onclick = () => {
+  if (currentYear >= maxYear) return;
+  currentYear++;
+  setYearDisplay(currentYear);
+};
+
+yearDecrement.onclick = () => {
+  currentYear--;
+  setYearDisplay(currentYear);
+};
+
+setYearDisplay(currentYear);
