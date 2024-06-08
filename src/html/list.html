@@ -1,32 +1,33 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer type="module" src="../scripts/list.js"></script>
-    <title>List Page</title>
-    <link rel="stylesheet" href="../css/list.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script defer type="module" src="../scripts/list.js"></script>
+  <title>List Page</title>
+  <link rel="stylesheet" href="../css/list.css" />
 
-    <!-- Quill injected CSS & JS -->
-    <link
-      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
-      rel="stylesheet"
+  <!-- Quill injected CSS & JS -->
+  <link
+    href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+    rel="stylesheet"
+  />
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+</head>
+  
+<body>
+  <header class="main-header">
+    <img
+      src="..\assets\TeamIcon_3Diagonal.png"
+      ,
+      class="logo"
+      ,
+      height="55"
+      ,
+      width="55"
+      ,
+      alt="logo"
     />
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-  </head>
-  <body>
-    <header class="main-header">
-      <img
-        src="..\assets\TeamIcon_3Diagonal.png"
-        ,
-        class="logo"
-        ,
-        height="55"
-        ,
-        width="55"
-        ,
-        alt="logo"
-      />
       <div class="search-container">
         <input
           type="text"
@@ -41,7 +42,7 @@
       >
         Root View
       </button>
-      <button class="filter-button">Filter</button>
+      <button class="filter-button" id="filter-button">Filter</button>
     </header>
     <header class="filter-container">
       <div id="filter-outer">
@@ -59,37 +60,51 @@
         </div>
       </div>
     </header>
-    <div class="entry-header">
-      <h2>Name <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
-      <h2>Tags</h2>
-      <h2>
-        Last Modified<span class="sort-arrow" id="sort-timestamp">&#9650;</span>
-      </h2>
-      <h2>Delete</h2>
-    </div>
+  
+  <div class="entry-header">
+    <h2>Name <span class="sort-arrow" id="sort-name">&#9650;</span></h2>
+    <h2>Tags</h2>
+    <h2>
+      Last Modified<span class="sort-arrow" id="sort-timestamp">&#9650;</span>
+    </h2>
+    <h2>Delete</h2>
+  </div>
     <main>
       <button class="new-journal-button">+ New Journal</button>
       <ul class="item-list" id="item-list">
         <!-- Items will be dynamically inserted here -->
-        <img src="../assets/trashcan.png" alt="Delete" class="delete-icon" />
+        <img src="../assets/trashcan.svg" alt="Delete" class="delete-icon" />
       </ul>
+
       <div class="modal" id="journalModal">
         <div class="modal-content">
-          <input
-            type="text"
-            id="journalTitle"
-            placeholder="Enter title here..."
-          />
+          <!-- <span class="close-button" id="closeModal">&times;</span> -->
+          <input type="text" id="journalTitle" placeholder="Enter title here..." />
+          <div class="tags" id="tags"> 
+            <div class="tag-interface">
+              <div id="tag-plus"> Tags: 
+                <!-- Tags will be dynamically inserted here -->
+                <button id="tag-plus-button">+</button>
+              </div>
+              <!-- Should remain hidden until add button is clicked-->
+              <div id="tag-input">
+                <input list="tag-list" type="text" id="tag-input-bar" placeholder="New tag" />
+                <button id="save-tag">Add</button>
+                <!-- Dropdown menu for available tags-->
+                <datalist id="tag-list">
+                </datalist>
+              </div>
+            </div>
+          </div>
           <div id="editor"></div>
           <div id="butforlist">
+            <!-- Need js for this button -->
             <button class="close-button" id="cancelModal">Cancel</button>
-            <button class="DeleteJournal" id="deleteModal">
-              Delete Journal
-            </button>
+            <button class="DeleteJournal" id="deleteModal">Delete Journal</button>
             <button class="Save-Close" id="closeModal">Save Changes</button>
           </div>
         </div>
       </div>
     </main>
-  </body>
+</body>
 </html>

@@ -3,101 +3,170 @@
 
 /* Modal background */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 4 !important; /* Overlay background over all content */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
-  }
+  display: none;
+  position: fixed;
+  z-index: 4 !important; /* Overlay background over all content */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal pop-up */
+.modal-content {
+  z-index: 5 !important; /* Overlay modal over background */
+  position: relative;
+  display: block;
+  background-color: #ffe2b6;
+  margin: 10% auto;
+  padding: 20px;
+  padding-bottom: 45px;
+  border: 1px solid #888;
+  width: 80%;
+  height: fit-content;
+}
+
+/* Cancel button */
+.close-button {
+  bottom: 5%;
+  right: 5%;
+  margin-top: 10px;
+  background-color: #d9d9d9a4;
+  border-radius: 6px;
+  color: #000000;
+  float: left;
+  font-size: 14px;
+}
+
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
   
-  /* Modal pop-up */
-  .modal-content {
-    z-index: 5 !important; /* Overlay modal over background */
-    position: relative;
-    display: block;
-    background-color: #ffe2b6;
-    margin: 10% auto;
-    padding: 20px;
-    padding-bottom: 45px;
-    border: 1px solid #888;
-    width: 80%;
-    height: fit-content;
-  }
-  
-  /* Cancel button */
-  .close-button {
-    bottom: 5%;
-    right: 5%;
-    margin-top: 10px;
-    background-color: #d9d9d9a4;
-    border-radius: 6px;
-    color: #000000;
-    float: left;
-    font-size: 14px;
-  }
-  
-  .close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  /* Save button */
-  .Save-Close {
-    bottom: 5%;
-    margin-top: 10px;
-    float: right;
-    background-color: #d0fbbc;
-    border-radius: 6px;
-    color: #000000;
-    font-size: 14px;
-  }
+/* Save button */
+.Save-Close {
+  bottom: 5%;
+  margin-top: 10px;
+  float: right;
+  background-color: #d0fbbc;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 14px;
+}
 
-  /* Delete button */
-  .DeleteJournal {
-    margin-left: 5%;
-    margin-top: 10px;
-    background-color: #ff7070;
-    border-radius: 6px;
-    color: #000000;
-    font-size: 14px;
-    float: left;
-  }
+/* Delete button */
+.DeleteJournal {
+  margin-left: 5%;
+  margin-top: 10px;
+  background-color: #ff7070;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 14px;
+  float: left;
+}
 
-  /* Editor */
-  #journalTitle {
-    width: 100%; /* Adjust width to fit within padding */
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 18px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Ensure padding is included in width */
-  }
+/* Editor */
+#journalTitle {
+  width: 100%; /* Adjust width to fit within padding */
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
 
-  /* Quill-specific Styles */
+/* Quill-specific Styles */
 
-  /* Quill editor */
-  #editor {
-    height: 300px;
-  }
+/* Quill editor */
+#editor {
+  height: 300px;
+}
 
-  /* Editor background */
-  .ql-snow * {
-    box-sizing: border-box;
-    background: white;
-  }
+/* Editor background */
+.ql-snow * {
+  box-sizing: border-box;
+  background: white;
+}
 
-  /* Editor toolbar */
-  .ql-toolbar.ql-snow {
-    border: 1px solid #ccc;
-    background: white;
-    box-sizing: border-box;
-    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    padding: 8px;
-  }
+/* Editor toolbar */
+.ql-toolbar.ql-snow {
+  border: 1px solid #ccc;
+  background: white;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  padding: 8px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 5px;
+  border: 1px solid black;
+  border-radius: 3px;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 12px;
+}
+
+.tag:hover {
+  color: yellow;
+  border-color: yellow;
+}
+
+/* Tag buttons */
+.colored-tag {
+  background-color: #D6FBC0;
+  border-radius: 15%;
+  padding: 5px 10px;
+  color: black;
+  text-align: center;
+  height: 20px;
+  margin: 5px;
+}
+
+.colored-tag:hover {
+  background-color: #FF97B6;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.tag-interface {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Add-tag button */
+#tag-plus > button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 5px;
+}
+
+#tag-plus > button:hover {
+  background-color: #218838;
+}
+
+#tag-input {
+  margin: 5px;
+  display: none;
+}
+
+#tag-plus {
+  display: flex;
+  align-items: center;
+}

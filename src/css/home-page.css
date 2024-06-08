@@ -47,18 +47,27 @@ body {
 
 /*Styling Dates*/
 .date-section {
+  height:auto;
   width: 100%;
   padding: 10px;
-  display: flex;
+  display: flow-root;
   justify-content: flex-start;
   position: fixed;
   margin-top: 5%;
   z-index: 1;
 }
 
-#date {
+#weekday {
+  font-family: Gloria Hallelujah;
   color: white;
   font-size: 20px;
+}
+
+#date {
+  font-family: Gloria Hallelujah;
+  color: white;
+  font-size: 25px;
+  margin-top: -1%;
 }
 
 /*Header components*/
@@ -148,6 +157,17 @@ body {
   pointer-events: none;
 }
 
+/*Pot and Plant Container */
+#pot-plant-container {
+  position: absolute;
+  right: 46%;
+  top: -2%;
+  width: 12%;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 /*Set Up Pot position and image*/
 #pot {
   position: absolute;
@@ -158,6 +178,108 @@ body {
 }
 
 #pot-container {
+  width: 180%;
+  height: auto;
+}
+/*Set Up Plant position and image*/
+#plant {
+  position: absolute;
+  right: 46%;
+  top: -5%;
+  width: 14%;
+  height: auto;
+  z-index: -1;
+}
+
+#plant-container {
+  transition: none;
+  width: 180%;
+  height: auto;
+  position: absolute;
+}
+
+.plant-stage-0 {
+  margin-top: 13%;
+  margin-left: 3%;
+}
+
+.plant-stage-1 {
+  margin-left: 3%;
+}
+
+.plant-stage-2 {
+  margin-top: 8%;
+  margin-left: 4%;
+}
+
+.plant-stage-3 {
+  margin-top: 8%;
+  margin-left: 4%;
+}
+#plant-container.plant-stage-4 {
+  margin-left: 9%;
+  margin-top: 6.5%;
+  width: 170%;
+}
+.plant-stage-5 {
+  margin-left: 4%;
+  size: 1%;
+}
+
+/*Set Up root position and image*/
+#root {
+  position: absolute;
+  right: 46%;
+  top: 32%;
+  width: 40%;
+  height: 100%;
+  z-index: 2;
+}
+
+#root-nodes {
+  width: 100%;
+  height: 100%;
+}
+
+.root-node {
+  /*Circle of radius 5px*/
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: all;
+}
+
+.root-node-label {
+  /* position it up and to the right*/
+  position: absolute;
+  font-size: 20px;
+  mix-blend-mode: difference;
+  width: fit-content;
+  pointer-events: none;
+  text-wrap: nowrap;
+  color: black !important;
+
+  background-color: rgba(255, 212, 171, 0.6);
+  border-radius: 10%;
+  padding: 2px;
+}
+
+.root-node:hover {
+  filter: brightness(70%);
+  width: 20px;
+  height: 20px;
+
+  /* animate the dimensions for me please */
+  transition: width 0.3s, height 0.3s;
+  z-index: 4;
+}
+
+#root-container {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 180%;
   height: auto;
 }
@@ -192,4 +314,16 @@ body {
   .background {
     height: 420px;
   }
+}
+
+
+/* animation for growing plant! */
+@keyframes rumble {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.rumble {
+  animation: rumble 1s linear; /* Longer duration with faster speed */
 }

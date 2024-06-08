@@ -1,5 +1,5 @@
 // Export utility functions
-export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList };
+export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, createTag, saveJournalTags, getJournalTags, parseTags };
 
 // Search-related utility functions
 
@@ -72,4 +72,55 @@ function getJournalList() {
  */
 function saveJournalList(list) {
   localStorage.setItem("GarlicNotes", JSON.stringify(list));
+}
+
+// Tags-related utility functions
+
+/**
+ * Creates tag buttons
+ * @param {string} tag - tag name
+ * @param {object} tagsWrapper - HTML element
+ * @param {object} noteObject - entry
+ * @param {object} tagAdd - tag plus button
+ */
+function createTag(tag, tagsWrapper, noteObject, tagAdd) {
+  const newTagElement = document.createElement("div");  // creates HTML element
+  newTagElement.className = "colored-tag";
+  newTagElement.textContent = tag;
+  tagsWrapper.insertBefore(newTagElement, tagAdd);
+
+  newTagElement.onclick = function() {  // remove tag buttons when clicked
+    if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+      noteObject.tags = noteObject.tags.filter(t => t != tag);
+      newTagElement.remove();
+    }
+  }
+}
+
+/**
+ * Parses a string of comma-separated tags into an array.
+ * @param {string} tagsString - string of comma-separated tags
+ * @returns array of tags
+ */
+function parseTags(tagsString) {
+  return tagsString.split(",").filter(tag => tag.length > 0);
+}
+
+/**
+ * Gets tags from localStorage
+ * @return new set or tags from localStorage parsed as set
+ */
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) {
+    return new Set();
+  }
+  return new Set(JSON.parse(localStorage.getItem("GarlicNotesTags")));
+}
+
+/**
+ * Saves tags into localStorage
+ * @param {Set} journalTags 
+ */
+function saveJournalTags(journalTags) {
+  localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
 }

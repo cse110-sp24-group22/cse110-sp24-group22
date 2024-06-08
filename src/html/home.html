@@ -43,6 +43,7 @@
     </div>
     <!-- Today's date -->
     <div class="date-section">
+      <div id ="weekday"></div>
       <div id="date"></div>
     </div>
     <!-- Sky Asset Location -->
@@ -54,13 +55,24 @@
       <div id="watering-can">
         <input type="image" id="can-container" alt="watering-can" src="../assets/watering-can.svg">
       </div>
-      <div id="pot">
-        <img id="pot-container" alt="pot" src="../assets/pot.svg">
-      </div>
+          <!-- Wrapping Pot and Plant assets -->
+      <div id="pot=plant-container">
+        <div id="pot">
+          <img id="pot-container" alt="pot" src="../assets/pot.svg">
+        </div>
+        <div id="plant">
+          <img id="plant-container" alt="plant" src="">
+        </div>
+      </div>  
       <div id="sun">
         <img id="sun-container" alt="sun" src="../assets/sun.svg">
       </div>
+      <div id="root">
+        <img id="root-container" alt="root" src="../assets/root.svg">
+        <div id="root-nodes"> <!-- generated in the JS --> </div>
+      </div>
       <img id="top-soil" alt="top-soil" src="../assets/background_top_soil.svg">
+
     </div>
     <!-- Lower Soil Section -->
     <div class="background section2">
@@ -75,6 +87,22 @@
           id="journalTitle"
           placeholder="Enter title here..."
         />
+        <div class="tags" id="tags"> 
+          <div class="tag-interface">
+            <div id="tag-plus"> Tags: 
+              <!-- Tags will be dynamically inserted here -->
+              <button id="tag-plus-button">+</button>
+            </div>
+            <!-- Should remain hidden until add button is clicked-->
+            <div id="tag-input">
+              <input list="tag-list" type="text" id="tag-input-bar" placeholder="New tag" />
+              <button id="save-tag">Add</button>
+              <!-- Dropdown menu for available tags-->
+              <datalist id="tag-list">
+              </datalist>
+            </div>
+          </div>
+        </div>
         <div id="editor"></div>
         <div id="butforlist">
           <button class="close-button" id="cancelModal">Cancel</button>
@@ -84,8 +112,6 @@
           <button class="Save-Close" id="closeModal">Save Changes</button>
         </div>
       </div>
-    </div>
-    <div id="plant" class="plant" src="" alt="Plant"> 
     </div>
   </body>
 </html>
