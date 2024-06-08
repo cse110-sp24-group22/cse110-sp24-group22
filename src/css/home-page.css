@@ -188,16 +188,37 @@ body {
 
 .root-node {
   /*Circle of radius 5px*/
+  transform: translate(-50%, -50%);
   width: 10px;
   height: 10px;
-  background-color: black;
   border-radius: 50%;
   z-index: 3;
   pointer-events: all;
 }
 
+.root-node-label {
+  /* position it up and to the right*/
+  position: absolute;
+  font-size: 20px;
+  mix-blend-mode: difference;
+  width: fit-content;
+  pointer-events: none;
+  text-wrap: nowrap;
+  color: black !important;
+
+  background-color: rgba(255, 212, 171, 0.6);
+  border-radius: 10%;
+  padding: 2px;
+}
+
 .root-node:hover {
-  background-color: white;
+  filter: brightness(70%);
+  width: 20px;
+  height: 20px;
+
+  /* animate the dimensions for me please */
+  transition: width 0.3s, height 0.3s;
+  z-index: 4;
 }
 
 #root-container {
