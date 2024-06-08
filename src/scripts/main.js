@@ -1,5 +1,5 @@
 // Import utility functions
-import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList } from "./util.js";
+import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, createTag, saveJournalTags, getJournalTags, parseTags } from "./util.js";
 
 /**
  * Dummy function for JSDoc
@@ -9,6 +9,9 @@ function dummy() {}
 // Globals
 let quill;
 let journalList;
+let journalTags = getJournalTags();
+let tagsList = [];
+let DEFAULT_TITLE = "Untitled";
 let currentPlantStage = localStorage.getItem('currentPlantStage') ? parseInt(localStorage.getItem('currentPlantStage')) : 0;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -181,13 +184,61 @@ function editJournal(id) {
   const cancelButton = document.getElementById("cancelModal");
   /** @type {HTMLDivElement} */
 
+  /* Tags */
+  /** @type {HTMLButtonElement} */
+  const tagAdd = document.getElementById("tag-plus-button");    // button for adding tags
+  /** @type {HTMLDivElement} */
+  const tagInput = document.getElementById("tag-input");        // tags input segment
+  /** @type {HTMLInputElement} */
+  const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags
+  /** @type {HTMLDataListElement} */
+  const tagList = document.getElementById("tag-list");          // dropdown list for global tags
+  /** @type {HTMLButtonElement} */
+  const tagSave = document.getElementById("save-tag");          // button for saving tags
+  /** @type {HTMLDivElement} */
+  const tagsWrapper = document.getElementById("tag-plus");      // tag buttons segment
+
+  tagInput.style.display = "none";
+  tagAdd.style.display = "block";
+
+  /* Displays modal */
   modal.style.display = "block";
   saveJournal.disabled = false;
 
+  /* Opens Quill */
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
+  /* Closes modal */
+  closeModal.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  /* Deletes journal inside modal */
+  deleteModal.onclick = () => {
+    if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
+      modal.style.display = "none";
+      deleteJournal(id);
+      saveJournalList(journalList);
+    }
+  }
+
+  /* Saves journal */
+  saveJournal.onclick = () => {
+    updateTitleHandler();
+    quillUpdateTextHandler();
+    modal.style.display = "none";
+    quill.off("text-change", quillUpdateTextHandler);
+    updateDropdown();
+  };
+  
   let noteObject;
   let isNewJournal = false;
 
@@ -221,14 +272,14 @@ function editJournal(id) {
 
   quill.on("text-change", quillUpdateTextHandler);
 
+  /* Adds or modifies title */
   titleBar.oninput = updateTitleHandler;
 
-
-  // Delete current journal
+  /* Delete current journal */
   deleteButton.onclick = (event) => {
     if (
       window.confirm(
-        `Are you sure you would like to delete the "${noteObject.title}"?`,
+        `Are you sure you would like to delete "${noteObject.title}"?`,
       )
     ) {
       deleteJournal(noteID);
@@ -239,7 +290,7 @@ function editJournal(id) {
     event.stopPropagation();
   };
 
-  // Cancel changes and revert notebook
+  /* Cancel changes and revert notebook */
   cancelButton.onclick = (event) => {
     let tempTitle = noteObject.title;
     noteObject.delta = contentScreenShot;
@@ -265,6 +316,7 @@ function editJournal(id) {
       quill.off("text-change", quillUpdateTextHandler);
     }
   }
+
 
 
   saveJournal.onclick = (event) => {
@@ -315,6 +367,55 @@ function editJournal(id) {
       saveJournal.title = "Title cannot be empty";
     }
   }
+
+  /* Adds or modifies tags */
+  tagAdd.onclick = () => {
+    journalTags = getJournalTags();
+    tagInput.style.display = "block";
+    tagAdd.style.display = "none";
+    journalTags.forEach(tag => {
+      const tagItem = document.createElement("option"); // display tag as part of the dropdown list
+      // populate tag with info
+      tagItem.value = tag;
+      tagItem.className = "tag-item";
+      tagList.appendChild(tagItem);
+    })
+  };
+
+  /* Displays tag buttons */
+  const tagsTextNode = tagsWrapper.childNodes[0]; // Get the "Tags: " text node
+
+  let currentNode = tagsTextNode.nextSibling; // Iterate over child nodes and remove dynamically added tags
+  while (currentNode && currentNode !== tagAdd) {
+      const nextNode = currentNode.nextSibling;
+      tagsWrapper.removeChild(currentNode);
+      currentNode = nextNode;
+  }
+
+  noteObject.tags.forEach(tag => {
+    createTag(tag, tagsWrapper, noteObject, tagAdd);
+  });
+
+
+  /* Saves tags to each entry and globally */
+  tagSave.onclick = () => {
+    journalTags = getJournalTags();
+    tagsList = parseTags(tagInputBar.value);  // parse input into array
+    tagsList.forEach(tag => {
+      journalTags.add(tag); // add tag to global set
+      if(noteObject.tags.includes(tag)) { // check if tags already added to the entry
+        alert(`${tag} already added!`);
+        return;
+      }
+      createTag(tag, tagsWrapper, noteObject, tagAdd);  // create new tag buttons and populate with info
+    });
+    noteObject.tags = [...new Set([...noteObject.tags, ...tagsList])]; // save as note's tags
+    saveJournalTags([...journalTags]);
+    saveJournalList(journalList);
+    tagInputBar.value = ""; // clear input bar
+    tagInput.style.display = "none";
+    tagAdd.style.display = "block";
+  };
 }
 
 /**
