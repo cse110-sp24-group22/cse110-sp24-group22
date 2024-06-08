@@ -1,4 +1,5 @@
 module.exports = {
     testEnvironment: 'node',
-    testMatch: ['**/__tests__/unitTests.test.js'],
+    testMatch: ["**/tests/unitTests.test.js"],
+    rootDir: "../../"
   };
