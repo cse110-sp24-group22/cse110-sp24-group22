@@ -157,6 +157,17 @@ body {
   pointer-events: none;
 }
 
+/*Pot and Plant Container */
+#pot-plant-container {
+  position: absolute;
+  right: 46%;
+  top: -2%;
+  width: 12%;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 /*Set Up Pot position and image*/
 #pot {
   position: absolute;
@@ -169,6 +180,50 @@ body {
 #pot-container {
   width: 180%;
   height: auto;
+}
+/*Set Up Plant position and image*/
+#plant {
+  position: absolute;
+  right: 46%;
+  top: -5%;
+  width: 14%;
+  height: auto;
+  z-index: -1;
+}
+
+#plant-container {
+  transition: none;
+  width: 180%;
+  height: auto;
+  position: absolute;
+}
+
+.plant-stage-0 {
+  margin-top: 13%;
+  margin-left: 3%;
+}
+
+.plant-stage-1 {
+  margin-left: 3%;
+}
+
+.plant-stage-2 {
+  margin-top: 8%;
+  margin-left: 4%;
+}
+
+.plant-stage-3 {
+  margin-top: 8%;
+  margin-left: 4%;
+}
+#plant-container.plant-stage-4 {
+  margin-left: 9%;
+  margin-top: 6.5%;
+  width: 170%;
+}
+.plant-stage-5 {
+  margin-left: 4%;
+  size: 1%;
 }
 
 /*Set Up root position and image*/
@@ -259,4 +314,16 @@ body {
   .background {
     height: 420px;
   }
+}
+
+
+/* animation for growing plant! */
+@keyframes rumble {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.rumble {
+  animation: rumble 1s linear; /* Longer duration with faster speed */
 }
