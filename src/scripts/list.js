@@ -48,7 +48,7 @@ function init() {
   });
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
-  });  
+  });
 }
 
 function parseUrlAndSearch() {
@@ -262,7 +262,7 @@ function saveJournalList(journalList) {
 function isTitleValid(title) {
   return title.trim().length > 0;
 }
-/** 
+/**
  * Opens a modal to edit a journal entry.
  * @param id {number} - unique identifier and time it was created
  */
@@ -287,11 +287,11 @@ function editJournal(id) {
   /** @type {HTMLDivElement} */
   const tagInput = document.getElementById("tag-input");        // tags input segment
   /** @type {HTMLInputElement} */
-  const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags 
+  const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags
   /** @type {HTMLDataListElement} */
   const tagList = document.getElementById("tag-list");          // dropdown list for global tags
   /** @type {HTMLButtonElement} */
-  const tagSave = document.getElementById("save-tag");          // button for saving tags 
+  const tagSave = document.getElementById("save-tag");          // button for saving tags
   /** @type {HTMLDivElement} */
   const tagsWrapper = document.getElementById("tag-plus");      // tag buttons segment
 
@@ -300,7 +300,7 @@ function editJournal(id) {
 
   /* Displays modal */
   modal.style.display = "block";
-  saveJournal.disabled = true;
+  saveJournal.disabled = false;
 
   /* Opens Quill */
   if (!quill) {
@@ -323,7 +323,7 @@ function editJournal(id) {
   deleteModal.onclick = () => {
     if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
-      deleteJournal(id);  
+      deleteJournal(id);
       saveJournalList(journalList);
       displayList(journalList);
     }
@@ -443,7 +443,7 @@ function editJournal(id) {
       saveJournal.disabled = true;
       saveJournal.title = "Title cannot be empty";
     }
-  }; 
+  };
 
   /**
    * Updates journal entry with current contents of the Quill editor.
@@ -451,7 +451,7 @@ function editJournal(id) {
   function quillUpdateTextHandler() {
     const newDelta = quill.getContents();
     let title = titleBar.value;
-    
+
     noteObject.delta = newDelta;
 
     if (isTitleValid(title)) {
@@ -472,9 +472,9 @@ function editJournal(id) {
     tagInput.style.display = "block";
     tagAdd.style.display = "none";
     journalTags.forEach(tag => {
-      const tagItem = document.createElement("option"); // display tag as part of the dropdown list 
-      // populate tag with info 
-      tagItem.value = tag;  
+      const tagItem = document.createElement("option"); // display tag as part of the dropdown list
+      // populate tag with info
+      tagItem.value = tag;
       tagItem.className = "tag-item";
       tagList.appendChild(tagItem);
     })
@@ -489,7 +489,7 @@ function editJournal(id) {
       tagsWrapper.removeChild(currentNode);
       currentNode = nextNode;
   }
-  
+
   noteObject.tags.forEach(tag => {
     createTag(tag, tagsWrapper, noteObject, tagAdd);
   });
@@ -517,7 +517,7 @@ function editJournal(id) {
 }
 
 /**
- * Creates tag buttons 
+ * Creates tag buttons
  * @param {string} tag - tag name
  * @param {object} tagsWrapper - HTML element
  * @param {object} noteObject - entry
@@ -528,7 +528,7 @@ function createTag(tag, tagsWrapper, noteObject, tagAdd) {
   newTagElement.className = "colored-tag";
   newTagElement.textContent = tag;
   tagsWrapper.insertBefore(newTagElement, tagAdd);
-  
+
   newTagElement.onclick = function() {  // remove tag buttons when clicked
     if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
       noteObject.tags = noteObject.tags.filter(t => t != tag);
