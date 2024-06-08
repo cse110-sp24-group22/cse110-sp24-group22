@@ -19,13 +19,13 @@ document.addEventListener("DOMContentLoaded", function() {
  */
 function init() {
     const dateElement = document.getElementById('date');
+    const weekDayElement = document.getElementById('weekday');
     journalList = getJournalList();
     // Function to update the date continuously
     function updateDate() {
         const currentDate = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const formattedDate = currentDate.toLocaleDateString('en-US', options);
-        dateElement.textContent = formattedDate;
+        weekDayElement.textContent = currentDate.toLocaleString('en-us', {weekday: 'long'});
+        dateElement.textContent = currentDate.toLocaleDateString('en-US');
     }
 
     // Update the date immediately when the script is run
