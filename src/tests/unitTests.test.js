@@ -132,11 +132,11 @@ describe("getMatchingEntries correctly retrieves searched entries", () => {
   test("getMatchingEntries to not grab anything with search term 'nothing'", () => {
     let matches = getMatchingEntries(journalList, "nothing");
     expect(matches).toStrictEqual([]);
-  })
+  });
 });
 
 describe("getJournalByTimestamp correctly uses date creation as id", () => {
-  test("get entry with id  1717082302909 (Goodbye)", () => {
+  test("get entry with id 1717082302909 (Goodbye)", () => {
     let match = getJournalByTimestamp(1717082302909);
     expect(match).toStrictEqual([
       {
@@ -151,6 +151,29 @@ describe("getJournalByTimestamp correctly uses date creation as id", () => {
           ],
         },
       }
-    ])
-  })
+    ]);
+  });
+
+  test("get entry with id 1717082192860 (One Off) that is one off another entry", () => {
+    let match = getJournalByTimestamp(1717082192860);
+    expect(match).toStrictEqual([
+      {
+        timestamp: 1717082192860,
+        title: "One Off",
+        tags: [],
+        delta: {
+          ops: [
+            {
+              insert: "temp\n",
+            }
+          ]
+        }
+      }
+    ]);
+  });
+
+  test("get no with id 1715082192860", () => {
+    let match = getJournalByTimestamp(1715082192860);
+    expect(match).toStrictEqual([]);
+  });
 })
