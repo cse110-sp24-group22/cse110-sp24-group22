@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form root</title>
+</head>
+<body>
+<div style="position: relative;">
+<img id="root-container" style="position: absolute; top: 0; left: 0;" alt="root" src="../assets/root.svg">
+    <canvas id="canvas" style="position: absolute; top: 0; left: 0;" width="1000" height="1000"></canvas>
+</div>
+
+<script>
+    // Upon clicking the root, get the (x,y) and add a new circle on the canvas
+
+    const circleList = [];
+
+    document.getElementById("canvas").onclick = (evt) => {
+        const { offsetX: x, offsetY: y } = evt;
+
+        circleList.push(x, y);
+
+        console.log(circleList.length / 2);
+        console.log(circleList);
+    };
+
+    window.addEventListener("keydown", (evt) => {
+        console.log(evt);
+        if ((evt.metaKey || evt.shiftKey) && evt.key === 'z') {
+            circleList.pop();
+            circleList.pop();
+        }
+    })
+
+    const canvas = document.getElementById("canvas");
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = canvas.getContext("2d");
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < circleList.length; i += 2) {
+            let x = circleList[i], y = circleList[i + 1];
+
+            ctx.fillStyle = "green";
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, 2 * Math.PI, false);
+            ctx.fill();
+
+            ctx.fillStyle = "white";
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText((i / 2) + 1 + "", x, y);
+        }
+
+        requestAnimationFrame(render);
+    }
+
+    render();
+</script>
+
+</body>
+</html>

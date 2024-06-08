@@ -9,6 +9,17 @@ let DEFAULT_TITLE = "Untitled";
 
 document.addEventListener("DOMContentLoaded", init);
 
+
+/**
+ * Journal entry object.
+ * @typedef {Object} JournalEntry
+ * @property {number} timestamp - unique identifier and time it was created
+ * @property {number} editTime - time it was last edited
+ * @property {string} title - title of the journal entry
+ * @property {string[]} tags - list of tags
+ * @property {Object} delta - Quill delta containing text operations
+ */
+
 let quill;
 
 function init() {
