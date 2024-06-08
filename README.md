@@ -43,12 +43,20 @@ Let's get your project growing!
 
 ### **How to Use:**
 
-- **Home/ Root Page:**
+**Home/ Root Page**
+
+![Home Page](admin/branding/home-page.png)
+
    - Opening up the homepage brings you to your ungrown tree.
    - Simply press the watering can to add a daily journal and begin growing your tree.
    - Scroll down to the roots of your tree to access your journals by month and day.
-- **List Page:**
+  
+**List Page**
+
+![Home Page](admin/branding/list-page-text.png)
+
    - If you don't want to access your journals by the root function, look at them through our list page.
+   - You can create new journals through this page as well
    - How to look up your journals?
      - Search by name or contents
      - Filter by tags
