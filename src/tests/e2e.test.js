@@ -142,7 +142,7 @@ describe('Basic user flow for Website', () => {
         expect(journalEntries.length).toBe(0);
     });
 
-    //Testing 6: adding multiple journals
+    //Testing 6: Adding multiple journals
     it('Add multiple journals to list', async () => {
         // Click the new journal button to open the editor
         await page.click('.new-journal-button');
@@ -236,10 +236,10 @@ describe('Basic user flow for Website', () => {
 
     // Testing 8: Sort the journal by title alphabetically(to be implemented)
     it('Sort the journal by title alphabetically', async () => {
-
+        await page.evaluate(() => localStorage.clear)
     });
-
-    // Testing 9: Sort the journal by date (to be implemented)
+    for
+(let i = 0; i <= 3; i++)    // Testing 9: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
 
     });
@@ -250,30 +250,63 @@ describe('Basic user flow for Website', () => {
     it('Add new tags to journal', async() => {
         await page.reload();
         
+        // Add new journal
         await page.click('.new-journal-button');
 
+        // Add tag
         await page.click('#tag-plus-button');
-
         const testTag = "Test";
-
         await page.type('#tag-input-bar', testTag);
 
+        // Save tag
         await page.click('#save-tag');
 
+        // Add title
+        const testTitle = "Dummy"
+        await page.type('#journalTitle', testTitle);
+
+        // Find the noteObject
         const noteObjectTags = await page.evaluate(() => {
-            window.noteObject;
-            return noteObject.tags; // Replace 'yourKey' with the actual key you want to retrieve
+            const journalEntries = JSON.parse(localStorage.getItem('GarlicNotes'));
+            return journalEntries.find(note => note.title === testTitle).tags;
         });
 
+        // Check that the tags in the noteObject contains testTag
         expect(noteObjectTags.includes(testTag)).toBe(true);
-
     });
 
     // Testing 11: Add tags when there are tags inside modal
+    it('Add tags when there are tags inside modal', async() => {
+        await page.reload();
+
+        // Wait for the search bar to be available
+        await page.waitForSelector('#search-bar');
+
+        // Enter the search term
+        await page.type('#search-bar', "Dummy");
+
+        const journalEntries = await page.$$('#item-list li');
+
+        // FIX 
+        let targetEntry = null;
+        for (const entry of journalEntries) {
+            const title = await entry.$eval('.title-class', el => el.innerText); // Adjust the selector to match your title element
+            if (title.includes("Dummy")) {
+                targetEntry = entry;
+                break;
+            }
+        }
+        
+    });
 
     // Testing 12: Adding duplicate tags
     it('Adding duplicate tags', async () => {
-        await page.click('.tag');
+        await page.reload();
+        
+        // duplicate tag modal
+        page.on('dialog', async dialog => {
+            expect(dialog.message()).toContian
+        })
 
         await page.click('')
     })
