@@ -197,7 +197,6 @@ function createListItem(item) {
   //Create delete button
   const deleteButtonContainer = document.createElement("div");
   const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
   deleteButton.className = "delete-button";
   deleteButtonContainer.id = "delete-container";
   deleteButtonContainer.appendChild(deleteButton);

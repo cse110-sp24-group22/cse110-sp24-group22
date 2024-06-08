@@ -38,6 +38,7 @@ header {
   z-index: 2;
 }
 
+
 /* general transition for all buttons */
 button {
   transition: background-color 0.3s ease;
@@ -77,7 +78,7 @@ h1 {
 /* styling for subheading text */
 h2 {
   place-self: left;
-  margin: 0px;
+  margin: 10px;
 }
 
 header.entry-header {
@@ -247,23 +248,23 @@ header.entry-header {
 /* set button shape and location */
 .delete-button {
   display: none;
-  position: absolute;
-  transform: translateY(-50%);
-  background-color: #dc3545;
-  color: white;
+  position:absolute;
+  background-image: url('../assets/trash_can.svg');
   border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
   cursor: pointer;
-  right: 85px;
-  margin-right:5%;
+
+  background-color: transparent;
+  width: 35px;
+  height: 35px;
+  margin-left: 2%;
+  margin-top: -1.25%;
+
 }
 
 /* set delete button width and location on entry */
 #delete-container {
-  place-self: center;
-  width: 100%;
-  overflow:auto;
+  place-self: left;
+
 }
 
 .item-list li:hover .delete-button {
