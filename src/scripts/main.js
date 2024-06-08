@@ -384,7 +384,8 @@ async function loadExampleEntries() {
     saveJournalList(journalList);
 }
 
-loadExampleEntries();
+// For debugging purposes
+globalThis.loadExampleEntries = loadExampleEntries;
 
 function filterJournalsByDate(date) {
   return journalList.filter((journal) => {
