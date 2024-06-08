@@ -641,9 +641,24 @@ function renderRoots() {
       hideLabel();
 
       node.style.backgroundColor = COLORS[nodeI++];
-      node.onclick = () => {
-        editJournal(entries[0].timestamp);
-      };
+      if(entries.length > 1){
+        let time = new Date(entries[0].timestamp);
+        let baseurl = window.location.origin;
+        let basemonth = ("0" + (time.getMonth() + 1)).slice(-2);
+        let basetime = time.getFullYear() + '-' + basemonth + '-' + ("0" + time.getDate()).slice(-2);
+        baseurl += '/src/html/list.html?query=&tags=&startDate='+ basetime + '&endDate='+ basetime;
+        console.log(basetime);
+        node.onclick = () => {
+          location.href = baseurl;
+        }
+          
+      }
+      else{
+        node.onclick = () => {
+          editJournal(entries[0].timestamp);
+        };
+      }
+      
 
       node.onmouseenter = () => {
         labelText.style.display = "block";
