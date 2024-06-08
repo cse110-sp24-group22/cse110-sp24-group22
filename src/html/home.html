@@ -80,6 +80,22 @@
           id="journalTitle"
           placeholder="Enter title here..."
         />
+        <div class="tags" id="tags"> 
+          <div class="tag-interface">
+            <div id="tag-plus"> Tags: 
+              <!-- Tags will be dynamically inserted here -->
+              <button id="tag-plus-button">+</button>
+            </div>
+            <!-- Should remain hidden until add button is clicked-->
+            <div id="tag-input">
+              <input list="tag-list" type="text" id="tag-input-bar" placeholder="New tag" />
+              <button id="save-tag">Add</button>
+              <!-- Dropdown menu for available tags-->
+              <datalist id="tag-list">
+              </datalist>
+            </div>
+          </div>
+        </div>
         <div id="editor"></div>
         <div id="butforlist">
           <button class="close-button" id="cancelModal">Cancel</button>
