@@ -164,7 +164,7 @@ header.entry-header {
 .search-bar {
   font-family: Single Day;
   width: 100%;
-  padding: 10px;
+  padding: 10px 40px;
   border-width: 0px;
   background-color: rgb(71, 71, 71);
   color: white;
