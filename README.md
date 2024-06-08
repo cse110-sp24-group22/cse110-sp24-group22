@@ -12,7 +12,7 @@ This is a project developed by team 22 of SP24 CSE 110.
 
 ## Project Description
 
-Our garlic/ tree inspired developer journal is sure to keep your thumb green and your project well documented and thriving! In our journal, each entry symbolizes the growth and deepening of your knowledge and experience. This unique journal system stores entries in the "roots" of your tree, representing the foundational knowledge that supports your ongoing software development. With each journal entry, the tree grows, signifying your expanding skills and understanding.
+Our garlic/ tree inspired developer journal is sure to keep your thumb green and your project well documented! In our journal, each entry symbolizes the growth and deepening of your knowledge. This unique journal system stores entries in the "roots" of your tree, representing the foundational knowledge that supports your ongoing software development. With each journal entry, the tree grows, signifying your expanding skills and understanding.
 
 As developers, we want to document daily progress and reflections in a journal that visually represents growth. By storing entries this way, we are seeing growth with each new entry, and can better appreciate the accumulation of knowledge and experience over time. This visualization is a motivation to continue learning and developing skills, while also providing an organized and accessible record of the overall journey.
 
@@ -63,8 +63,8 @@ Let's get your project growing!
 - `src\`: Our source code.
 
 ## Design Process
-- [Figma](https://www.figma.com/design/jI9imcuPdGE3AL2bU9qolt/Project-Workfllow?node-id=0-1&t=UjUWEJOyvV7pFALc-0): We utilized this for all asset designing (ie. our background, tree, roots, etc.)
-- [Miro](https://miro.com/app/board/uXjVKNpuLc0=/): For general brainstorming and diagram creation we used a Miro board to better visualize what we wanted to do and how we were going to do it
+- [Link to our Figma](https://www.figma.com/design/jI9imcuPdGE3AL2bU9qolt/Project-Workfllow?node-id=0-1&t=UjUWEJOyvV7pFALc-0): We used this for all asset designing (ie. our background, tree, roots, etc.)
+- [Link to our Miro Board](https://miro.com/app/board/uXjVKNpuLc0=/): For general brainstorming and diagram creation we used a Miro board to better visualize what we wanted to do and how we were going to do it
 - We also used [Retrium](https://www.retrium.com/) for our retrospective meetings to determine what exactly was working for our team, and what we needed to improve on 
 
 ## Testing
