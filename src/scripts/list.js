@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", init);
  * Journal entry object.
  * @typedef {Object} JournalEntry
  * @property {number} timestamp - unique identifier and time it was created
+ * @property {number} editTime - time it was last edited
  * @property {string} title - title of the journal entry
  * @property {string[]} tags - list of tags
  * @property {Object} delta - Quill delta containing text operations
@@ -61,7 +62,7 @@ function init() {
   });
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
-  });  
+  });
 }
 
 function parseUrlAndSearch() {
@@ -420,7 +421,7 @@ function editJournal(id) {
   function quillUpdateTextHandler() {
     const newDelta = quill.getContents();
     let title = titleBar.value;
-    
+
     noteObject.delta = newDelta;
 
     if (isTitleValid(title)) {
