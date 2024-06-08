@@ -230,17 +230,55 @@ describe('Basic user flow for Website', () => {
 
     // Testing 7: Filter the journal by date (to be implemented)
     it('Filter the journal by date', async () => {
+        await page.reload();
 
+        await page.click()
     });
 
-    //Testing 8: Sort the journal by title alphabetically(to be implemented)
+    // Testing 8: Sort the journal by title alphabetically(to be implemented)
     it('Sort the journal by title alphabetically', async () => {
 
     });
 
-    //Testing 9: Sort the journal by date (to be implemented)
+    // Testing 9: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
 
     });
     
+    // Tags
+
+    // Testing 10: Add new tags to jounal inside modal 
+    it('Add new tags to journal', async() => {
+        await page.reload();
+        
+        await page.click('.new-journal-button');
+
+        await page.click('#tag-plus-button');
+
+        const testTag = "Test";
+
+        await page.type('#tag-input-bar', testTag);
+
+        await page.click('#save-tag');
+
+        const noteObjectTags = await page.evaluate(() => {
+            window.noteObject;
+            return noteObject.tags; // Replace 'yourKey' with the actual key you want to retrieve
+        });
+
+        expect(noteObjectTags.includes(testTag)).toBe(true);
+
+    });
+
+    // Testing 11: Add tags when there are tags inside modal
+
+    // Testing 12: Adding duplicate tags
+    it('Adding duplicate tags', async () => {
+        await page.click('.tag');
+
+        await page.click('')
+    })
+
+    // Testing 13: Check if tags are stored globally
+
 });
