@@ -416,7 +416,6 @@ function displayPlantImage() {
   plantImageElement.src = src;
   plantImageElement.className = plantClass;
 }
-}
 
 /**
  * ROOT FUNCTIONALITY
