@@ -224,7 +224,8 @@ body {
 .plant-stage-5 {
   margin-left: 4%;
   size: 1%;
-  
+}
+
 /*Set Up root position and image*/
 #root {
   position: absolute;
