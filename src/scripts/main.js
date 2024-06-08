@@ -9,9 +9,11 @@ function dummy() {}
 // Globals
 let quill;
 let journalList;
+let currentPlantStage = localStorage.getItem('currentPlantStage') ? parseInt(localStorage.getItem('currentPlantStage')) : 0;
 
 document.addEventListener("DOMContentLoaded", function() {
-    init()
+    init();
+    displayPlantImage();
 });
 
 /**
@@ -204,7 +206,6 @@ function editJournal(id) {
     quill.setText("\n");
     journalList.push(noteObject);
     saveJournalList(journalList);
-    updatePlantImage()
   }
 
   noteObject = getJournalByTimestamp(id);
@@ -272,6 +273,7 @@ function editJournal(id) {
     modal.style.display = "none";
     quill.off("text-change", quillUpdateTextHandler);
     updateDropdown();
+    updatePlantImage();
   };
 
   /**
@@ -363,13 +365,52 @@ function getPlantImage(entryCount) {
   //entryThreshold deciphers how many journal entries must be made to move onto the next stage.
   const entryThreshold = 3
   const stageIdx = Math.floor(entryCount / entryThreshold);
-  return plantStages[Math.min(stageIdx, plantStages.length - 1)];
+  return {...plantStages[Math.min(stageIdx, plantStages.length - 1)], stageIdx};
 }
 
 /**
- *This should be called whenever journal entries number is changed, including adding journal entries and removing them
+ *This should be called whenever journal entries number is 
+ changed, including adding journal entries and removing them
  */
 function updatePlantImage() {
+  const entryCount = getJournalEntryCount();
+  const { src, class: plantClass, stageIdx } = getPlantImage(entryCount);
+  const plantImageElement = document.getElementById('plant-container');
+
+  //disables transition for initial load to prevent unnecessary slide motion
+  plantImageElement.style.transition = 'none';
+
+  if (stageIdx <= currentPlantStage) {
+    //no animation when stage did not increase
+    plantImageElement.src = src;
+    plantImageElement.className = plantClass;
+    currentPlantStage = stageIdx;
+    localStorage.setItem('currentPlantStage', currentPlantStage);
+  }    
+  else {
+    //transitions for animations
+   // plantImageElement.offsetHeight; // Trigger a reflow to ensure the transition property is reset
+   // plantImageElement.style.transition = 'all 1s linear';
+    //plays little animation if stage increased
+    plantImageElement.classList.add('rumble');
+    setTimeout(() => {
+      // Remove the animation class after the animation completes
+      plantImageElement.src = src;
+      plantImageElement.className = plantClass;
+      
+      setTimeout(() => {
+        plantImageElement.classList.remove('rumble');
+      }, 2000); // Match the duration of the animation
+      currentPlantStage = stageIdx;
+      localStorage.setItem('currentPlantStage', currentPlantStage);
+    }, 1000);// Half of the duration to allow flashing
+  }
+}
+
+/**
+ * Function to display the plant image immediately on page load
+ */
+function displayPlantImage() {
   const entryCount = getJournalEntryCount();
   const { src, class: plantClass } = getPlantImage(entryCount);
   const plantImageElement = document.getElementById('plant-container');
