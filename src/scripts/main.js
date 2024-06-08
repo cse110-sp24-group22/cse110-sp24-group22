@@ -76,7 +76,7 @@ function displayEntryDropdownList(list) {
 function createEntryDropdownItem(item) {
   // Get the essential elements for the dropdown
   const entryItem = document.createElement("li");
-  
+
   // Add accessibility through tabindex
   entryItem.setAttribute("tabindex", "0");
 
@@ -107,7 +107,7 @@ function createEntryDropdownItem(item) {
       editJournal(timestamp);
     }
   };
-  
+
   // Add entry to dropdown container
   entryDropdownList.appendChild(entryItem);
 
@@ -117,7 +117,7 @@ function createEntryDropdownItem(item) {
   function displayTitle() {
     title.textContent = item.title;
   }
-  
+
   /**
    * Displays the current entry's last modified date.
    */
@@ -182,7 +182,7 @@ function editJournal(id) {
   /** @type {HTMLDivElement} */
 
   modal.style.display = "block";
-  saveJournal.disabled = true;
+  saveJournal.disabled = false;
 
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
@@ -340,6 +340,8 @@ function deleteJournal(timestamp) {
   updatePlantImage()
 }
 
+
+/* PLANT FUNCTIONALITY*/
 /**
  * Function to get the count of journal entries.
  * @returns {number} - number of journal entries
@@ -388,9 +390,6 @@ function updatePlantImage() {
     localStorage.setItem('currentPlantStage', currentPlantStage);
   }    
   else {
-    //transitions for animations
-   // plantImageElement.offsetHeight; // Trigger a reflow to ensure the transition property is reset
-   // plantImageElement.style.transition = 'all 1s linear';
     //plays little animation if stage increased
     plantImageElement.classList.add('rumble');
     setTimeout(() => {
@@ -400,10 +399,10 @@ function updatePlantImage() {
       
       setTimeout(() => {
         plantImageElement.classList.remove('rumble');
-      }, 2000); // Match the duration of the animation
+      }, 2000); // duration of the animation
       currentPlantStage = stageIdx;
       localStorage.setItem('currentPlantStage', currentPlantStage);
-    }, 1000);// Half of the duration to allow flashing
+    }, 1000); 
   }
 }
 
@@ -417,3 +416,154 @@ function displayPlantImage() {
   plantImageElement.src = src;
   plantImageElement.className = plantClass;
 }
+}
+
+/**
+ * ROOT FUNCTIONALITY
+ */
+
+/** @type {Object.<"January" | "February" | "March" | "April" | "May" | "June" | "July" | "August" | "September" |
+ * "October" | "November" | "December", number[]> | null} */
+let rootNodeData = null;
+
+/** @type {HTMLDivElement} */
+const rootNodeContainer = document.getElementById("root-nodes");
+
+const containerResizeObserver = new ResizeObserver(() => {
+    renderRoots();
+});
+containerResizeObserver.observe(rootNodeContainer);
+
+async function loadRoots() {
+  const text = await fetch("../assets/positions.json");
+  rootNodeData = await text.json();
+
+  renderRoots();
+}
+
+const COLORS = [];
+
+function getColor() {
+  let R = 0xdb / 255;
+  let G = 0x9e / 255;
+  let B = 0x3a / 255;
+
+  R += (Math.random() - 0.5) * 0.2;
+  G += (Math.random() - 0.5) * 0.2;
+  B += (Math.random() - 0.5) * 0.1;
+
+  return "#" + Math.floor(R * 255).toString(16) + Math.floor(G * 255).toString(16) + Math.floor(B * 255).toString(16);
+}
+
+for (let i = 0; i < 400; ++i) {
+  COLORS.push(getColor());
+}
+
+async function loadExampleEntries() {
+  // Load from exampleEntries.json and save into GarlicNotes
+    const text = await fetch("../assets/exampleEntries.json");
+    const exampleEntries = await text.json();
+    journalList = exampleEntries;
+    saveJournalList(journalList);
+}
+
+// For debugging purposes
+globalThis.loadExampleEntries = loadExampleEntries;
+
+function filterJournalsByDate(date) {
+  return journalList.filter((journal) => {
+    const journalDate = new Date(journal.timestamp);
+    return journalDate.getDate() === date.getDate() && journalDate.getMonth() === date.getMonth();
+  });
+}
+
+function renderRoots() {
+  if (!rootNodeData) {
+    return;
+  }
+  const rootRect = document.getElementById("root-container").getBoundingClientRect();
+
+  const width = rootRect.width;
+  const height = rootRect.height;
+
+  function createNodeAt(x, y) {
+    const node = document.createElement("div");
+    node.className = "root-node";
+    node.style.position = "absolute";
+
+    // Move things so that they align correcrtly
+    const SCALE_X = 0.00190;
+    const SCALE_Y = 0.00128;
+
+    node.style.left = `${x * SCALE_X * width}px`;
+    node.style.top = `${y * SCALE_Y * height}px`;
+
+    return node;
+  }
+
+  rootNodeContainer.innerHTML = "";
+
+  let nodeI = 0;
+  for (const [ month, positions ] of Object.entries(rootNodeData)) {
+    const nodes = [];
+
+    for (let i = 0; i < positions.length; i += 2) {
+      if (month === "February" && i === 28 * 2) {
+        break;
+      }
+
+      const MIDWAY = month === "February" ? 14 : 15;
+
+      const YEAR = 2023;
+      // construct from month, year and i
+      const date = new Date(YEAR,
+          ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+              .indexOf(month), (i / 2) + 1);
+
+      const entries = filterJournalsByDate(date);
+
+      if (entries.length === 0) continue;
+
+      const node = createNodeAt(positions[i], positions[i + 1]);
+      const labelText = document.createElement("div");
+
+      labelText.className = "root-node-label";
+      labelText.textContent = `${month} ${date.getDate()}`;
+      node.appendChild(labelText);
+
+      function hideLabel() {
+        labelText.style.display = "none";
+      }
+
+      hideLabel();
+
+      node.style.backgroundColor = COLORS[nodeI++];
+      node.onclick = () => {
+        editJournal(entries[0].timestamp);
+      };
+
+      node.onmouseenter = () => {
+        labelText.style.display = "block";
+      };
+
+      if (i / 2 < MIDWAY) { // Put label text on the bottom left
+        labelText.style.left = "10px";
+        labelText.style.bottom = "20px";
+      } else {
+        labelText.style.right = "100%";
+        labelText.style.top = "0px";
+      }
+
+
+      node.onmouseleave = hideLabel;
+
+      nodes.push(node);
+    }
+
+    for (const node of nodes) {
+      rootNodeContainer.appendChild(node);
+    }
+  }
+}
+
+loadRoots();
