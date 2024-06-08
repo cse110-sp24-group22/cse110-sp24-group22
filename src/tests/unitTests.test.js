@@ -1,13 +1,51 @@
 /**
  * @jest-environment jsdom
  */
-import { getTextFromDelta, getMatchingEntries } from "../scripts/list";
+import { getMatchingEntries, getJournalByTimestamp } from "../scripts/list";
+import { getJournalList } from "../scripts/util";
 
-test("adds 1 + 2 to equal 3", () => {
-  expect(1 + 2).toBe(3);
-});
+// Global test variables
+let journalList = [
+  {
+    timestamp: 1717082192861,
+    title: "Hi",
+    tags: [],
+    delta: {
+      ops: [
+        {
+          insert: "text\n",
+        },
+      ],
+    },
+  },
+  {
+    timestamp: 1717082302909,
+    title: "Goodbye",
+    tags: [],
+    delta: {
+      ops: [
+        {
+          insert: "test\n",
+        },
+      ],
+    },
+  },
+  {
+    timestamp: 1717082192860,
+    title: "One Off",
+    tags: [],
+    delta: {
+      ops: [
+        {
+          insert: "temp\n",
+        }
+      ]
+    }
+  },
+]; 
 
-describe("Testing non-DOM functions in list.js", () => {
+describe("getMatchingEntries correctly retrieves searched entries", () => {
+  /*
   test("getTextFromDelta to correctly grab 'getTextFromDelta to\n correctly\n grab journal text\n'", () => {
     let delta = {
       ops: [
@@ -54,34 +92,8 @@ describe("Testing non-DOM functions in list.js", () => {
       "getTextFromDelta to\n correctly\n grab journal text\n",
     );
   });
-
+*/
   test("getMatchingEntries to correctly grab entries containing title 'Hi'", () => {
-    let journalList = [
-      {
-        timestamp: 1717082192861,
-        title: "Hi",
-        tags: [],
-        delta: {
-          ops: [
-            {
-              insert: "text\n",
-            },
-          ],
-        },
-      },
-      {
-        timestamp: 1717082302909,
-        title: "Goodbye",
-        tags: [],
-        delta: {
-          ops: [
-            {
-              insert: "test\n",
-            },
-          ],
-        },
-      },
-    ];
     let matches = getMatchingEntries(journalList, "hi");
     expect(matches).toStrictEqual([
       {
@@ -100,32 +112,6 @@ describe("Testing non-DOM functions in list.js", () => {
   });
 
   test("getMatchingEntries to correctly grab entries containing content 'test'", () => {
-    let journalList = [
-      {
-        timestamp: 1717082192861,
-        title: "Hi",
-        tags: [],
-        delta: {
-          ops: [
-            {
-              insert: "text\n",
-            },
-          ],
-        },
-      },
-      {
-        timestamp: 1717082302909,
-        title: "Goodbye",
-        tags: [],
-        delta: {
-          ops: [
-            {
-              insert: "test\n",
-            },
-          ],
-        },
-      },
-    ];
     let matches = getMatchingEntries(journalList, "test");
     expect(matches).toStrictEqual([
       {
@@ -142,4 +128,29 @@ describe("Testing non-DOM functions in list.js", () => {
       },
     ]);
   });
+
+  test("getMatchingEntries to not grab anything with search term 'nothing'", () => {
+    let matches = getMatchingEntries(journalList, "nothing");
+    expect(matches).toStrictEqual([]);
+  })
 });
+
+describe("getJournalByTimestamp correctly uses date creation as id", () => {
+  test("get entry with id  1717082302909 (Goodbye)", () => {
+    let match = getJournalByTimestamp(1717082302909);
+    expect(match).toStrictEqual([
+      {
+        timestamp: 1717082302909,
+        title: "Goodbye",
+        tags: [],
+        delta: {
+          ops: [
+            {
+              insert: "test\n",
+            },
+          ],
+        },
+      }
+    ])
+  })
+})

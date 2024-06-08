@@ -1,4 +1,5 @@
 import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
+export { getMatchingEntries, getJournalByTimestamp }
 
 // store the data into localStorage before starting
 let journalList = getJournalList();
