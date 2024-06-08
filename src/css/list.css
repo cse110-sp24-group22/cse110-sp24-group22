@@ -27,7 +27,6 @@ main {
   place-self: center;
 }
 
-/* general format for headers, placed above all content */
 header {
   display: grid;
   justify-content: space-between;
@@ -157,7 +156,7 @@ header.entry-header {
   color: white;
   justify-content: center;
   max-width: 1000px;
-  
+
 }
 
 /* stylizes the search bar and its input */
@@ -196,14 +195,12 @@ header.entry-header {
   z-index: 2;
 }
 
-/* The item-list rule removes the default list style and padding. */
 .item-list {
   list-style-type: none;
   padding: 0;
   display: inline;
 }
 
-/* The item-list li rule sets the appearance and layout of the list items. */
 .item-list li {
   position: relative;
   display: grid;
@@ -248,7 +245,6 @@ header.entry-header {
 /* set button shape and location */
 .delete-button {
   display: none;
-  position:absolute;
   background-image: url('../assets/trash_can.svg');
   border: none;
   cursor: pointer;
@@ -256,19 +252,21 @@ header.entry-header {
   background-color: transparent;
   width: 35px;
   height: 35px;
-  margin-left: 2%;
-  margin-top: -1.25%;
-
+  margin: 0;
+  padding: 0;
 }
 
 /* set delete button width and location on entry */
 #delete-container {
   place-self: left;
-
 }
 
 .item-list li:hover .delete-button {
   display: block;
+}
+
+.item-list > li {
+  min-height: 40px;
 }
 
 .delete-icon {
@@ -282,7 +280,6 @@ header.entry-header {
   transform: translate;
 }
 
-/* The tag rule sets the appearance of the tag, but makes it change when it's hovered over. */
 .tag {
   display: inline-block;
   padding: 2px 5px;
@@ -294,7 +291,6 @@ header.entry-header {
   font-size: 12px;
 }
 
-/* The tag:hover rule changes the color and border color of the tag when it's hovered over. */
 .tag:hover {
   color: yellow;
   border-color: yellow;
@@ -382,12 +378,17 @@ header.entry-header {
 }
 
 .colored-tag {
-    background-color: #007bff;
-    border-radius: 4px;
+    background-color: #D6FBC0;
+    border-radius: 15%;
     padding: 5px 10px;
-    color: white;
+    color: black;
     text-align: center;
     height: 20px;
+    margin: 5px;
+}
+
+.colored-tag:hover {
+    background-color: #FF97B6;
 }
 
 .tags {
@@ -410,10 +411,21 @@ header.entry-header {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin: 5px;
 }
 
 #tag-plus > button:hover {
     background-color: #218838;
+}
+
+#tag-input {
+    margin: 5px;
+    display: none;
+}
+
+#tag-plus {
+    display: flex;
+    align-items: center;
 }
 
 /* The .sort-arrow rule sets the appearance of the sort arrow. */
@@ -437,3 +449,4 @@ header.entry-header {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   padding: 8px;
 }
+
