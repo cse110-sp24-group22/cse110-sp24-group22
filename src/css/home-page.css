@@ -47,18 +47,27 @@ body {
 
 /*Styling Dates*/
 .date-section {
+  height:auto;
   width: 100%;
   padding: 10px;
-  display: flex;
+  display: flow-root;
   justify-content: flex-start;
   position: fixed;
   margin-top: 5%;
   z-index: 1;
 }
 
-#date {
+#weekday {
+  font-family: Gloria Hallelujah;
   color: white;
   font-size: 20px;
+}
+
+#date {
+  font-family: Gloria Hallelujah;
+  color: white;
+  font-size: 25px;
+  margin-top: -1%;
 }
 
 /*Header components*/
