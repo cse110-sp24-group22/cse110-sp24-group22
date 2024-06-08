@@ -1,14 +1,14 @@
-# Team 22's Page
+# Team Garlic
 
-## Name: Team Garlic
-
-<img src="branding/TeamIcon_3Diagonal.png" alt="logo" width="200"/>
+<img src="branding/TeamIcon_3Diagonal.png" alt="logo" width="100"/>
 
 ## Our Values
 
 - Be communicative
 - Be dedicated
 - Don't be afraid of failure
+
+## [Documentation Page](/docs/index.html)
 
 ## Our Roster
 
