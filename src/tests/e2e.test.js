@@ -1,3 +1,41 @@
+const pti = require("puppeteer-to-istanbul");
+const puppeteer = require("puppeteer");
+
+let browser;
+let page;
+
+// Jest's global setup hook
+beforeAll(async () => {
+  browser = await puppeteer.launch();
+  page = await browser.newPage();
+
+  // Enable both JavaScript and CSS coverage
+  await Promise.all([
+    page.coverage.startJSCoverage(),
+    page.coverage.startCSSCoverage(),
+  ]);
+});
+
+// Jest's global teardown hook
+afterAll(async () => {
+  // Disable both JavaScript and CSS coverage
+  const [jsCoverage, cssCoverage] = await Promise.all([
+    page.coverage.stopJSCoverage(),
+    page.coverage.stopCSSCoverage(),
+  ]);
+
+  pti.write([...jsCoverage, ...cssCoverage], {
+    includeHostname: true,
+    storagePath: "./.nyc_output",
+  });
+
+  await browser.close();
+});
+
+// Do not modify above. These are setups for coverage generation
+// ===============================================================
+
+
 describe('Basic user flow for List Page Website', () => {
     // First, visit the website before running any tests
     beforeAll(async () => {
