@@ -626,9 +626,6 @@ describe('Basic User Flow for Root Page', () => {
     // Testing 1: Canceling a new Journal
     it("Canceling creation of journal does not create journal", async() => {
         await page.click('#can-container');
-        page.on('dialog', async dialog => {
-            await dialog.accept();
-        })
         await page.click('.close-button');
         let cancelCount = await countDivsWithClass(page, "root-node");
         expect(cancelCount).toBe(0);
@@ -801,6 +798,16 @@ describe('Basic User Flow for Root Page', () => {
         
     });
 
+    //Testing 14: Checks Delete Button
+    it('Checks the delete button in the modal', async () => {
+        await page.reload();
+        await page.click('.root-node');
+        await page.waitForSelector('#deleteModal');
+        await page.click('#deleteModal');
+        let checkNodeCount = await countDivsWithClass(page, "root-node");
+        expect(checkNodeCount).toBe(0);
+});
+
     // Test 14: Check if having 2 entries on one node does not update node Count.
     it('Check if having 2 entries on one node does not update node Count.', async () => {
         await page.reload();
@@ -812,6 +819,15 @@ describe('Basic User Flow for Root Page', () => {
         await page.keyboard.up('Control');
         await page.keyboard.press('Backspace');
         await page.type('#journalTitle', testEditTitle);
+        await page.click('#closeModal');
+        await page.click('#can-container');
+        let testEdit2Title = "Testing 2 Updated";
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+        await page.type('#journalTitle', testEdit2Title);
         await page.click('#closeModal');
         let noNewCount = await countDivsWithClass(page, "root-node");
         expect(noNewCount).toBe(1);
