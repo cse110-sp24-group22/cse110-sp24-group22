@@ -724,6 +724,29 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 8: Editing title to 'Testing 3 Updated' and saving modal from entry search result updates dropdown to have new title
     it('Editing and saving modal from entry search result updates dropdown', async () => {
+        let testEditTitle = "Testing 3 Updated";
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+        await page.type('#journalTitle', testEditTitle);
+        await page.click('#closeModal');
+        const journalEntries = await page.evaluate(() => {
+            return JSON.parse(localStorage.getItem('GarlicNotes'));
+        });
+        // Check that the title is updated  
+        expect(journalEntries[0].title).toBe(testEditTitle);
+        let editCount = await countDivsWithClass(page, "root-node");
+        expect(editCount).toBe(1);
+        await page.reload();
+        await page.type('#search-bar', testEditTitle);
+
+        const journalEditEntries = await page.$$('#entry-dropdown li');
+
+        expect(journalEditEntries.length).toBe(1);
+
+
     });
 
     // Testing 9: The previous edit to an existing entry didn't add another root node
