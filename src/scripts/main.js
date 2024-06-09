@@ -1,17 +1,20 @@
 // Import utility functions
-import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, createTag, saveJournalTags, getJournalTags, parseTags } from "./util.js";
-
-/**
- * Dummy function for JSDoc
- */
-function dummy() {}
+import {
+  createTag,
+  getJournalList,
+  getJournalTags,
+  getMatchingEntries,
+  isTitleValid,
+  parseTags,
+  saveJournalList,
+  saveJournalTags
+} from "./util.js";
 
 // Globals
 let quill;
 let journalList;
 let journalTags = getJournalTags();
 let tagsList = [];
-let DEFAULT_TITLE = "Untitled";
 let currentPlantStage = localStorage.getItem('currentPlantStage') ? parseInt(localStorage.getItem('currentPlantStage')) : 0;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -304,7 +307,7 @@ function editJournal(id) {
       deleteJournal(noteID);
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
-      
+
       event.stopPropagation();
     }
     else {
@@ -340,7 +343,7 @@ function editJournal(id) {
       // don't save if title is empty
       noteObject.editTime = new Date().getTime();
       saveJournalList(journalList);
-    } 
+    }
   }
 
   /* Adds or modifies tags */
@@ -517,8 +520,13 @@ async function loadRoots() {
   renderRoots(true /* do animation on page load */);
 }
 
+/** @type {string[]} */
 const COLORS = [];
 
+/**
+ * Get a random color for a node on a root
+ * @returns {string} - a random color
+ */
 function getColor() {
   let R = 0xdb / 255;
   let G = 0x9e / 255;
@@ -537,18 +545,24 @@ for (let i = 0; i < 400; ++i) {
 
 async function loadExampleEntries() {
   // Load from exampleEntries.json and save into GarlicNotes
-    const text = await fetch("../assets/exampleEntries.json");
-    const exampleEntries = await text.json();
-    journalList = exampleEntries;
-    saveJournalList(journalList);
+  const text = await fetch("../assets/exampleEntries.json");
+  const exampleEntries = await text.json();
+  journalList = exampleEntries;
+  saveJournalList(journalList);
 }
 
 // For debugging purposes
 globalThis.loadExampleEntries = loadExampleEntries;
 
+/**
+ * Filters journal entries by date.
+ */
 class JournalFilterer {
+  /**
+   * Constructs a JournalFilterer.
+   * @param journalList {JournalEntry[]} - list of journal entries
+   */
   constructor(journalList) {
-      this.journalList = journalList;
       /** @type {Map<number, JournalEntry[]>} */
       this.dateToEntries = new Map();
 
@@ -562,10 +576,15 @@ class JournalFilterer {
       }
   }
 
+  /**
+   * Filters journal entries by date.
+   * @param date {Date} - date to filter by
+   * @returns {JournalEntry[]} - list of journal entries on that date
+   */
   filterByDate(date) {
     // get time at start of day
-    date = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-    return this.dateToEntries.get(date) || [];
+    let num = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    return this.dateToEntries.get(num) || [];
   }
 }
 
@@ -578,8 +597,12 @@ class JournalFilterer {
 function animateNode(node, sizeAtTime, duration) {
   let nodeRemovedFromDOM = false;
 
+  /**
+   * Perform a single tick of the animation.
+   * @param startTime - the time the animation started
+   */
   function doTick(startTime) {
-    if (nodeRemovedFromDOM) {
+    if (nodeRemovedFromDOM) { // If the node is removed from the DOM, stop the animation
       return;
     }
 
@@ -594,8 +617,10 @@ function animateNode(node, sizeAtTime, duration) {
     }
   }
 
+  // Set tup the animation
   requestAnimationFrame(() => doTick(Date.now()));
 
+  // If the node is detached from the DOM, stop the animation
   new MutationObserver(() => {
     if (!node.isConnected) {
       nodeRemovedFromDOM = true;
@@ -603,6 +628,10 @@ function animateNode(node, sizeAtTime, duration) {
   }).observe(node, { childList: true, subtree: true });
 }
 
+/**
+ * Render the roots on the page.
+ * @param doAnimation {boolean} - whether to animate the nodes with an initial growing animation.
+ */
 function renderRoots(doAnimation = false) {
   if (!rootNodeData) {
     return;
@@ -613,6 +642,12 @@ function renderRoots(doAnimation = false) {
   const width = rootRect.width;
   const height = rootRect.height;
 
+  /**
+   * Create a node at a certain position.
+   * @param {number} x - the x position
+   * @param {number} y - the y position
+   * @returns {HTMLDivElement} - the created node
+   */
   function createNodeAt(x, y) {
     const node = document.createElement("div");
     node.className = "root-node";
@@ -631,21 +666,20 @@ function renderRoots(doAnimation = false) {
   rootNodeContainer.innerHTML = "";
 
   const filterer = new JournalFilterer(journalList);
+  let nodeIndex = 0;
 
-  let nodeI = 0;
   for (const [ month, positions ] of Object.entries(rootNodeData)) {
     const nodes = [];
 
     for (let i = 0; i < positions.length; i += 2) {
-      if (month === "February" && i === 28 * 2) {
+      if (month === "February" && i === 28 * 2 && currentYear % 4 !== 0) { // SKIP February 29th if not a leap year
         break;
       }
 
-      const MIDWAY = month === "February" ? 14 : 15;
+      const MIDWAY = month === "February" ? 14 : 15; // February has 28 days, so 14 is the middle
 
-      const YEAR = currentYear;
       // construct from month, year and i
-      const date = new Date(YEAR,
+      const date = new Date(currentYear,
           ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
               .indexOf(month), (i / 2) + 1);
 
@@ -666,23 +700,29 @@ function renderRoots(doAnimation = false) {
 
       hideLabel();
 
-      node.style.backgroundColor = COLORS[nodeI++];
+      node.style.backgroundColor = COLORS[nodeIndex++];
 
-      if(entries.length > 1){
+      if (entries.length > 1) {
+        // if there's more than one entry with that date, go to the list page
         let time = new Date(entries[0].timestamp);
+        // Convert month to string
         let basemonth = ("0" + (time.getMonth() + 1)).slice(-2);
+        // Convert date to string
         let basetime = time.getFullYear() + '-' + basemonth + '-' + ("0" + time.getDate()).slice(-2);
+        // Construct URL to take us to the list page
         let url = './list.html?query=&tags=&startDate='+ basetime + '&endDate='+ basetime;
+
         node.onclick = () => {
           location.href = url;
         }
-      }
-      else{
+      } else {
+        // if there's only one entry with that date, go to the edit page
         node.onclick = () => {
           editJournal(entries[0].timestamp);
         };
       }
 
+      // Show label on hover
       node.onmouseenter = () => {
         labelText.style.display = "block";
       };
@@ -690,12 +730,12 @@ function renderRoots(doAnimation = false) {
       if (i / 2 < MIDWAY) { // Put label text on the bottom left
         labelText.style.left = "10px";
         labelText.style.bottom = "20px";
-      } else {
+      } else { // Put label text on the top right
         labelText.style.right = "100%";
         labelText.style.top = "0px";
       }
 
-
+      // Hide label on mouse leave
       node.onmouseleave = hideLabel;
 
       nodes.push(node);
@@ -714,6 +754,7 @@ function renderRoots(doAnimation = false) {
   }
 }
 
+// Load the roots from the JSON file
 loadRoots();
 
 
@@ -728,6 +769,10 @@ const yearIncrement = document.getElementById("year-increment");
 let currentYear = new Date().getFullYear();
 const maxYear = currentYear;
 
+/**
+ * Set the year display to a certain year.
+ * @param year {number} - the year to set the display to
+ */
 function setYearDisplay(year) {
   yearDisplay.textContent = year;
   renderRoots(true /* do animation when changing years */);
@@ -735,6 +780,7 @@ function setYearDisplay(year) {
 }
 
 yearIncrement.onclick = () => {
+  // Prevent incrementing past the current year
   if (currentYear >= maxYear) return;
   currentYear++;
   setYearDisplay(currentYear);
