@@ -34,7 +34,7 @@ jobs:
       run: npm install -g http-server
 
     - name: Start http-server
-      run: http-server -p 5501 &
+      run: http-server -p 5500 &
       # The ampersand (&) runs http-server in the background
 
     - name: Run tests on List page
