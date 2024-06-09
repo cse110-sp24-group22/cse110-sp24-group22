@@ -763,12 +763,11 @@ describe('Basic User Flow for Root Page', () => {
         });
         // Check that the title is updated  
         expect(journalEntries[0].title).toBe("Testing 3 Updated");
-       await page.reload();
+        await page.reload();
         await page.type('#search-bar', testEditTitle);
 
-        const journalEditEntries = await page.$$('#entry-dropdown li');
-
-        expect(journalEditEntries.length).toBe(0);
+        const journalCancelEntries = await page.$$('#entry-dropdown li');
+        expect(journalCancelEntries.length).toBe(0);
     });
 
     // Testing 11: Increment year button doesn't do anything (doesn't increment to a future year)

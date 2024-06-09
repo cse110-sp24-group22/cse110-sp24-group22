@@ -164,8 +164,8 @@ function updateDropdown() {
     displayEntryDropdownList(matchingEntries);
   } else {
     // Hide dropdown and reset the border radius to normal.
-    entryDropdownList.style.display = "none";
     searchBar.style.borderRadius = "12px";
+    entryDropdownList.innerHTML = "";
   }
 }
 
