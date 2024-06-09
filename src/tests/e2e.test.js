@@ -607,7 +607,6 @@ describe('Basic User Flow for Root Page', () => {
         await page.reload();
         await page.click("#year-increment");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
-
         expect(yearDisplayText).toBe("2024");
     });
 
