@@ -1,95 +1,134 @@
-// Instantiate list of entries.
-let journalList;
+import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
+
+// store the data into localStorage before starting
+let journalList = getJournalList();
+let journalTags = getJournalTags();
+
+let tagSet = new Set();
+let tagsList = [];
+
+// TODO: check need for delete button container, line 200
+
 document.addEventListener("DOMContentLoaded", init);
 
 /**
  * Journal entry object.
  * @typedef {Object} JournalEntry
  * @property {number} timestamp - unique identifier and time it was created
+ * @property {number} editTime - time it was last edited
  * @property {string} title - title of the journal entry
  * @property {string[]} tags - list of tags
  * @property {Object} delta - Quill delta containing text operations
  */
+
 let quill;
 
-let sortDirection = {
-  name: true,
-  timestamp: true,
-};
-
 /**
- * Called on page load.
+ * Initializes the page by setting up event listeners and displaying the list of journal entries.
  */
 function init() {
-  // Store the data into localStorage before starting all the things.
-  journalList = getJournalList();
   const newJournalButton = document.querySelector(".new-journal-button");
-  const filterButton = document.querySelector(".filter-button");
   displayList(journalList);
+  updateDisplay();
 
   setUpSearch();
+  // Parse URL and search for entries
+  window.onload = parseUrlAndSearch;
 
-  newJournalButton.addEventListener("click", function () {
+  newJournalButton.onclick = () => {
     editJournal();
-  });
+  };
 
   // Animation for the filter dropdown
-  filterButton.addEventListener("click", function () {
+  const filterButton = document.getElementById("filter-button");
+  filterButton.onclick = () => {
     const filterHeader = document.querySelector(".filter-container");
     const entryHeader = document.querySelector(".entry-header");
     if (filterHeader.classList.contains("show")) {
       filterHeader.classList.remove("show");
-      entryHeader.style.marginTop = "75px"; // adjust based on filterHeader height
       setTimeout(function () {
         filterHeader.style.display = "none";
       }, 500);
     } else {
-      filterHeader.style.display = "grid";
+      filterHeader.style.display = "flex";
       setTimeout(() => {
         filterHeader.classList.add("show");
-        entryHeader.style.marginTop = "105px"; // adjust based on filterHeader height
       }, 0);
     }
+  };
+
+  // Sorting function for name and recently edited
+  document.getElementById("sort-name").addEventListener("click", () => {
+    sortByCategory("name");
+  });
+  document.getElementById("sort-timestamp").addEventListener("click", () => {
+    sortByCategory("timestamp");
   });
 }
 
-document.getElementById("sort-name").addEventListener("click", () => {
-  sortByCategory("name");
-});
-document.getElementById("sort-timestamp").addEventListener("click", () => {
-  sortByCategory("timestamp");
-});
+/**
+ * Converts a date object to a string in the format "yyyy-mm-dd".
+ * @param date {Date} - date object
+ * @returns {string} - date string in the format "yyyy-mm-dd"
+ */
+function dateToInputString(date) {
+  return date.toISOString().split('T')[0];
+}
+
+/**
+ * Parses the URL for search parameters and filters the journal entries accordingly.
+ *
+ * Search parameters are:
+ * - query: search query
+ * - tags: comma-separated list of tags
+ * - startDate: start date in the format "yyyy-mm-dd"
+ * - endDate: end date in the format "yyyy-mm-dd"
+ *
+ * If a parameter is missing the default value is used.
+ */
+function parseUrlAndSearch() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('query') || '';
+  const tags = urlParams.get('tags') ? urlParams.get('tags').split(',') : [];
+  const startDateParam = urlParams.get('startDate') || '';
+  const endDateParam = urlParams.get('endDate') || '';
+
+  // Fill in the filter stuff with the startDate and endDate
+
+  if (startDateParam) startDate.value = dateToInputString(new Date(startDateParam));
+  if (endDateParam) endDate.value = dateToInputString(new Date(endDateParam));
+
+  const results = searchJournal(query, tags, startDateParam, endDateParam);
+  displayList(results);
+}
+
+
+/** @type {"none"|"name"|"timestamp"} */
+let sortMode = "none";
+let sortDirection = {
+  name: true,
+  editTime: true,
+};
 
 /**
  * Sorts the journal list by the specified category.
  *
  * @param {string} category - The category to sort by. This can be "name" or "timestamp".
+ *
  * If "name" is specified, the journal list is sorted alphabetically by the title of the journal entries.
  * If "timestamp" is specified, the journal list is sorted chronologically by the timestamp of the journal entries.
  * The sort direction (ascending or descending) is toggled each time the function is called with the same category.
  */
 function sortByCategory(category) {
   if (category === "name") {
-    journalList.sort((a, b) => {
-      if (sortDirection.name) {
-        return a.title.localeCompare(b.title);
-      } else {
-        return b.title.localeCompare(a.title);
-      }
-    });
+    sortMode = "name";
     sortDirection.name = !sortDirection.name;
   } else if (category === "timestamp") {
-    journalList.sort((a, b) => {
-      if (sortDirection.editTime) {
-        return a.editTime - b.editTime;
-      } else {
-        return b.editTime - a.editTime;
-      }
-    });
+    sortMode = "timestamp";
     sortDirection.editTime = !sortDirection.editTime;
   }
   updateSortArrows(category);
-  displayList(journalList);
+  updateDisplay();
 }
 
 /**
@@ -134,43 +173,42 @@ function displayList(list) {
  * @param item {JournalEntry} - journal entry
  */
 function createListItem(item) {
-  //Get the essential elements
+  // Get the essential elements
   const itemList = document.getElementById("item-list");
   const listItem = document.createElement("li");
 
-  //Create title container
   const title = document.createElement("div");
-  title.setAttribute("id", "entry-title");
   title.textContent = item.title;
-  title.className = "title";
   listItem.appendChild(title);
 
-  //Generate tags and create tag container
-  const tagsContainer = document.createElement("div");
-  tagsContainer.setAttribute("id", "entry-tags");
-  tagsContainer.textContent = "";
+  const details = document.createElement("div");
+  details.style.fontSize = "small";
 
+  // Generate tags
+  const tagsContainer = document.createElement("div");
+
+  // Create tag elements
   item.tags.forEach((tag) => {
     const tagElement = document.createElement("span");
+
     tagElement.textContent = tag;
     tagElement.className = "tag";
-    tagElement.onclick = () => {
-      // Future feature for filter search
-    };
+
     tagsContainer.appendChild(tagElement);
     tagsContainer.appendChild(document.createTextNode(" ")); // Add space between tags
   });
 
-  listItem.appendChild(tagsContainer);
+  details.appendChild(tagsContainer);
+  listItem.appendChild(details);
 
-  //Create timestamp container
-  let timestamp = parseInt(item.timestamp);
+  // Create timestamp
+  const timestamp = item.timestamp;
   const timestampText = document.createElement("div");
 
   timestampText.setAttribute("id", "entry-timestamp");
 
   let date = new Date(item.editTime);
-
+  // Define the date formatting options
   let options = {
     year: "numeric",
     month: "2-digit",
@@ -187,10 +225,10 @@ function createListItem(item) {
 
   listItem.appendChild(timestampText);
 
-  //Create delete button
+  // Create delete button
   const deleteButtonContainer = document.createElement("div");
   const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
+
   deleteButton.className = "delete-button";
   deleteButtonContainer.id = "delete-container";
   deleteButtonContainer.appendChild(deleteButton);
@@ -209,7 +247,7 @@ function createListItem(item) {
     event.stopPropagation();
   };
 
-  listItem.appendChild(deleteButtonContainer);
+  listItem.appendChild(deleteButton);
   listItem.onmouseover = () => {
     deleteButton.style.display = "inline";
   };
@@ -225,24 +263,12 @@ function createListItem(item) {
 }
 
 /**
- * Retrieves the list of journal entries from localStorage.
- * @returns {JournalEntry[]} - list of journal entries
- */
-function getJournalList() {
-  if (!localStorage.getItem("GarlicNotes")) {
-    return [];
-  } else {
-    return JSON.parse(localStorage.getItem("GarlicNotes"));
-  }
-}
-
-/**
  * Retrieves a journal entry by its timestamp.
- * @param timestamp {number} - unique identifier and time it was created
- * @returns {JournalEntry|undefined} - journal entry or undefined if not found
+ * @param timestamp {number} - timestamp of the journal entry
+ * @returns {JournalEntry|undefined} - journal entry with the specified timestamp, or undefined if not found
  */
 function getJournalByTimestamp(timestamp) {
-  let journal = journalList.find((entry) => entry.timestamp == timestamp);
+  const journal = journalList.find((entry) => entry.timestamp === timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
     return undefined;
@@ -251,35 +277,28 @@ function getJournalByTimestamp(timestamp) {
 
 /**
  * Deletes a journal entry by its timestamp.
- * @param timestamp {number} - unique identifier and time it was created
+ * @param timestamp {number} - timestamp of the journal entry
  */
 function deleteJournal(timestamp) {
-  journalList = journalList.filter((entry) => entry.timestamp != timestamp);
+  journalList = journalList.filter((entry) => entry.timestamp !== timestamp);
   saveJournalList(journalList);
 }
 
 /**
- * Saves the list of journal entries to localStorage.
- * @param journalList {JournalEntry[]} - list of journal entries
+ * Retrieves the set of tags from localStorage.
+ * @returns {Set<string>} - set of tags
  */
-function saveJournalList(journalList) {
-  localStorage.setItem("GarlicNotes", JSON.stringify(journalList));
+function getJournalTags() {
+  if(!localStorage.getItem("GarlicNotesTags")) {
+    return tagSet;
+  }
+  return new Set(JSON.parse(localStorage.getItem("GarlicNotesTags")));
 }
 
-/**
- * Checks if a title is valid.
- * @param title {string} - title of the journal entry
- * @returns {boolean} - true if title is valid, false otherwise
- */
-function isTitleValid(title) {
-  return title.trim().length > 0;
+// storage of tags on localStorage
+function saveJournalTags(journalTags) {
+  localStorage.setItem("GarlicNotesTags", JSON.stringify(journalTags));
 }
-
-/**
- * Default title for a journal entry.
- * @type {string}
- */
-const DEFAULT_TITLE = "Untitled";
 
 /**
  * Opens a modal to edit a journal entry.
@@ -291,22 +310,81 @@ function editJournal(id) {
   const saveJournal = document.getElementById("closeModal");
   /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
+  /** @type {HTMLButtonElement} */
+  const deleteButton = document.getElementById("deleteModal");
+  /** @type {HTMLButtonElement} */
+  const cancelButton = document.getElementById("cancelModal");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
+  /** @type {HTMLButtonElement} */
+  const deleteModal = document.getElementById("deleteModal");
 
+  /* Tags */
+  /** @type {HTMLButtonElement} */
+  const tagAdd = document.getElementById("tag-plus-button");    // button for adding tags
+  /** @type {HTMLDivElement} */
+  const tagInput = document.getElementById("tag-input");        // tags input segment
+  /** @type {HTMLInputElement} */
+  const tagInputBar = document.getElementById("tag-input-bar"); // input bar for tags
+  /** @type {HTMLDataListElement} */
+  const tagList = document.getElementById("tag-list");          // dropdown list for global tags
+  /** @type {HTMLButtonElement} */
+  const tagSave = document.getElementById("save-tag");          // button for saving tags
+  /** @type {HTMLDivElement} */
+  const tagsWrapper = document.getElementById("tag-plus");      // tag buttons segment
+
+  tagInput.style.display = "none";
+  tagAdd.style.display = "block";
+
+  /* Displays modal */
   modal.style.display = "block";
 
+  /* Opens Quill */
   if (!quill) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
+  window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  /* Deletes journal inside modal */
+  deleteModal.onclick = () => {
+    if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
+      modal.style.display = "none";
+      deleteJournal(id);
+      saveJournalList(journalList);
+      displayList(journalList);
+    }
+  }
+
+  saveJournal.onclick = () => {
+    updateTitleHandler();
+    quillUpdateTextHandler();
+    if (isTitleValid(titleBar.value)) {
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      quill.off("text-change", quillUpdateTextHandler);
+    } else {
+      alert('Cannot save journal without a title!');
+    }
+  };
+
+  /* Uses timestamp as id, Creates new noteObject*/
+
   let noteObject;
+  let isNewJournal = false;
+
   if (id === undefined) {
+    isNewJournal = true;
     id = new Date().getTime();
-    noteObject = {
+    let noteObject = {
       timestamp: id,
+      title: "Untitled",
       editTime: id,
-      title: DEFAULT_TITLE,
       tags: [],
       //delta: undefined,
       delta: { ops: [] },
@@ -319,62 +397,76 @@ function editJournal(id) {
 
   noteObject = getJournalByTimestamp(id);
 
+  const noteID = noteObject.timestamp;
+
   let contentScreenShot = noteObject.delta;
+  let titleScreenshot = noteObject.title;
 
   quill.setContents(contentScreenShot);
   titleBar.value = noteObject.title;
 
-  quill.on("text-change", quillUpdateTextHandler);
-
-  titleBar.addEventListener("input", updateTitleHandler);
-
-  // Cancel changes and revert notebook
-  const cancelButton = document.getElementById("cancelModal");
-  cancelButton.addEventListener("click", function () {
-    noteObject.delta = contentScreenShot;
-
-    if (contentScreenShot.ops == [] && !isTitleValid(titleBar.value)) {
-      deleteJournal(noteObject.timestamp);
-    } else if (!isTitleValid(titleBar.value)) {
-      cancelButton.disabled = true;
-    } else {
-      cancelButton.disabled = false;
-    }
-
-    modal.style.display = "none";
-    itemList.innerHTML = "";
-    displayList(journalList);
-    removeJournalEventListeners();
+  quill.on("text-change", () => {
+    const newDelta = quill.getContents();
+    noteObject.delta = newDelta;
+    saveJournalList(journalList);
   });
 
-  saveJournal.addEventListener(
-    "click",
-    function () {
-      updateTitleHandler();
-      quillUpdateTextHandler();
+  /* Adds or modifies title */
+  titleBar.oninput = updateTitleHandler;
+
+  // Delete current journal
+  deleteButton.onclick = (event) => {
+      // Define the deletion logic in a separate function
+    const executeDeletion = () => {
+      deleteJournal(noteID);
       modal.style.display = "none";
       itemList.innerHTML = "";
       displayList(journalList);
-      removeJournalEventListeners();
-    },
-    { once: true },
-  );
+      quill.off("text-change", quillUpdateTextHandler);
+    };
 
-  /**
-   * Updates journal entry title with current contents in the title input bar.
-   */
+    if (isNewJournal) {
+      // If it's a new journal, execute deletion without confirmation
+      executeDeletion();
+    } else {
+      // If it's not a new journal, show the confirmation dialog
+      if (window.confirm(`Are you sure you would like to delete "${noteObject.title}"?`)) {
+        executeDeletion();
+      }
+    }
+    event.stopPropagation();
+  };
+
+  // Cancel changes and revert notebook
+  cancelButton.onclick = (event) => {
+    let tempTitle = noteObject.title;
+    noteObject.delta = contentScreenShot;
+    noteObject.title = titleScreenshot;
+
+    if (isNewJournal) {
+      noteObject.title = tempTitle;
+      deleteJournal(noteID);
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      quill.off("text-change", quillUpdateTextHandler);
+
+      event.stopPropagation();
+    }
+    else {
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      quill.off("text-change", quillUpdateTextHandler);
+    }
+  }
+
   function updateTitleHandler() {
     let title = titleBar.value;
     noteObject.title = title;
-
     if (isTitleValid(title)) {
       // don't save if title is empty
       saveJournalList(journalList);
-
-      saveJournal.disabled = false;
-    } else {
-      saveJournal.disabled = true;
-      saveJournal.title = "Title cannot be empty";
     }
   }
 
@@ -383,98 +475,122 @@ function editJournal(id) {
    */
   function quillUpdateTextHandler() {
     const newDelta = quill.getContents();
+    let title = titleBar.value;
+
     noteObject.delta = newDelta;
 
-    if (isTitleValid(noteObject.title)) {
+    if (isTitleValid(title)) {
       // don't save if title is empty
       saveJournalList(journalList);
-    }
 
+    } else {
+      saveJournal.title = "Title cannot be empty";
+    }
     noteObject.editTime = new Date().getTime();
   }
 
-  /**
-   * Removes event listeners on input fields for the current journal.
-   */
-  function removeJournalEventListeners() {
-    titleBar.removeEventListener("input", updateTitleHandler);
-    quill.off("text-change", quillUpdateTextHandler);
+  /* Adds or modifies tags */
+  tagAdd.onclick = () => {
+    journalTags = getJournalTags();
+    tagInput.style.display = "block";
+    tagAdd.style.display = "none";
+    journalTags.forEach(tag => {
+      const tagItem = document.createElement("option"); // display tag as part of the dropdown list
+      // populate tag with info
+      tagItem.value = tag;
+      tagItem.className = "tag-item";
+      tagList.appendChild(tagItem);
+    })
+  };
+
+  /* Displays tag buttons */
+  const tagsTextNode = tagsWrapper.childNodes[0]; // Get the "Tags: " text node
+
+  let currentNode = tagsTextNode.nextSibling; // Iterate over child nodes and remove dynamically added tags
+  while (currentNode && currentNode !== tagAdd) {
+      const nextNode = currentNode.nextSibling;
+      tagsWrapper.removeChild(currentNode);
+      currentNode = nextNode;
+  }
+
+  noteObject.tags.forEach(tag => {
+    createTag(tag, tagsWrapper, noteObject, tagAdd);
+  });
+
+
+  /* Saves tags to each entry and globally */
+  tagSave.onclick = () => {
+    journalTags = getJournalTags();
+    tagsList = parseTags(tagInputBar.value);  // parse input into array
+    tagsList.forEach(tag => {
+      journalTags.add(tag); // add tag to global set
+      if(noteObject.tags.includes(tag)) { // check if tags already added to the entry
+        alert(`${tag} already added!`);
+        return;
+      }
+      createTag(tag, tagsWrapper, noteObject, tagAdd);  // create new tag buttons and populate with info
+    });
+    noteObject.tags = [...new Set([...noteObject.tags, ...tagsList])]; // save as note's tags
+    saveJournalTags([...journalTags]);
+    saveJournalList(journalList);
+    tagInputBar.value = ""; // clear input bar
+    tagInput.style.display = "none";
+    tagAdd.style.display = "block";
+  };
+}
+
+/**
+ * Creates tag buttons
+ * @param {string} tag - tag name
+ * @param {object} tagsWrapper - HTML element
+ * @param {object} noteObject - entry
+ * @param {object} tagAdd - tag plus button
+ */
+function createTag(tag, tagsWrapper, noteObject, tagAdd) {
+  const newTagElement = document.createElement("div");  // creates HTML element
+  newTagElement.className = "colored-tag";
+  newTagElement.textContent = tag;
+  tagsWrapper.insertBefore(newTagElement, tagAdd);
+
+  newTagElement.onclick = function() {  // remove tag buttons when clicked
+    if(window.confirm(`Are you sure you would like to delete the "${newTagElement.textContent}"?`)) {
+      noteObject.tags = noteObject.tags.filter(t => t != tag);
+      newTagElement.remove();
+    }
   }
 }
 
 /**
  * Searches all journal entries for a string only if the entries include all the specified tags and is within the time period filter.
  * @param {string} query - exact string to search for
- * @param {string[]} tags - list of exact tags to include
+ * @param {Array.string} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
- * @returns matching entries
+ * @returns {any} matching entries
  */
 function searchJournal(query, tags, startDate, endDate) {
   let filteredList = journalList;
 
   // Filter by tags, case-sensitive
-  tags.forEach((tag) => {
-    filteredList = filteredList.filter((entry) => entry.tags.includes(tag));
+  tags.forEach(tag => {
+    filteredList = filteredList.filter(entry => entry.tags.includes(tag));
   });
 
   // Filter by date range
   let startMilliseconds = Date.parse(startDate + "T00:00:00"); // Use user's local timezone
-  let endMilliseconds = Date.parse(endDate + "T00:00:00");
+  let endMilliseconds = Date.parse(endDate + "T23:59:59"); // End before 12:00AM of the next day
   // Only filter if date was correctly formatted
   if (!isNaN(startMilliseconds)) {
-    filteredList = filteredList.filter(
-      (entry) => entry.timestamp >= startMilliseconds,
-    );
+    filteredList = filteredList.filter(entry => entry.timestamp >= startMilliseconds);
   }
   if (!isNaN(endMilliseconds)) {
-    filteredList = filteredList.filter(
-      (entry) => entry.timestamp <= endMilliseconds,
-    );
+    filteredList = filteredList.filter(entry => entry.timestamp <= endMilliseconds);
   }
 
   return getMatchingEntries(filteredList, query);
 }
 
-/**
- * Searches a list of entries for a case-insensitive string.
- * @param {Array.Object} list - list of entries
- * @param {string} query - exact string to search for
- * @returns matching entries
- */
-function getMatchingEntries(list, query) {
-  query = query.toLowerCase();
 
-  let matchingEntriesByTitle = [];
-  let matchingEntriesByContent = [];
-
-  list.forEach((entry) => {
-    if (entry.title.toLowerCase().includes(query)) {
-      matchingEntriesByTitle.push(entry);
-    } else if (getTextFromDelta(entry.delta).toLowerCase().includes(query)) {
-      matchingEntriesByContent.push(entry);
-    }
-  });
-
-  return matchingEntriesByTitle.concat(matchingEntriesByContent);
-}
-
-/**
- * Extracts all the text in a Quill delta.
- * @param {Object} delta - Quill delta containing text operations
- * @returns all the text in a Quill delta
- */
-function getTextFromDelta(delta) {
-  if (!delta || !delta.ops) {
-    return "";
-  }
-
-  let text = "";
-  delta.ops.forEach((op) => {
-    text += op.insert;
-  });
-  return text;
-}
 
 /**
  * Parses a string of comma-separated tags into an array.
@@ -482,35 +598,60 @@ function getTextFromDelta(delta) {
  * @returns array of tags
  */
 function parseTags(tagsString) {
-  return tagsString.split(",").filter((tag) => tag.length > 0);
+  return tagsString.split(",").filter(tag => tag.length > 0);
+}
+
+
+/** @type {HTMLInputElement} */
+const searchBar = document.getElementById("search-bar");
+const tagsBar = document.getElementById("tags-bar");
+/** @type {HTMLInputElement} */
+const startDate = document.getElementById("start-date");
+const endDate = document.getElementById("end-date");
+
+/**
+ * Updates the display of journal entries based on the search parameters.
+ */
+function updateDisplay() {
+  const searchResults = searchJournal(
+      searchBar.value,
+      parseTags(tagsBar.value),
+      startDate.value,
+      endDate.value,
+  );
+
+  if (sortMode === "name") {
+    searchResults.sort((a, b) => {
+      if (sortDirection.name) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+  } else if (sortMode === "timestamp") {
+    searchResults.sort((a, b) => {
+      if (sortDirection.editTime) {
+        return a.editTime - b.editTime;
+      } else {
+        return b.editTime - a.editTime;
+      }
+    });
+  }
+  displayList(searchResults);
 }
 
 /**
- * Prepares search functionality on the page.
+ * Sets up search function by adding eventListener.
  */
 function setUpSearch() {
-  const searchBar = document.getElementById("search-bar");
-  const tagsBar = document.getElementById("tags-bar");
-  const startDate = document.getElementById("start-date");
-  const endDate = document.getElementById("end-date");
-
   const searchElements = [searchBar, tagsBar, startDate, endDate];
   const itemList = document.getElementById("item-list");
 
   // EventListener: After typing in any input, filter items to those that match search
-  searchElements.forEach((element) => {
+  searchElements.forEach(element => {
     element.oninput = () => {
       itemList.replaceChildren(); // Empty item list
-      displayList(
-        searchJournal(
-          searchBar.value,
-          parseTags(tagsBar.value),
-          startDate.value,
-          endDate.value,
-        ),
-      );
+      updateDisplay();
     };
   });
 }
-
-export { getTextFromDelta, getMatchingEntries };

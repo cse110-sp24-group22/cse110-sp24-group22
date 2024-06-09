@@ -1,33 +1,133 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="../scripts/main.js" type="module"></script>
+    <script defer src="../scripts/util.js" type="module"></script>
     <title>Root Page</title>
-    <link rel="stylesheet" href="../css/home-page.css" />
+    <link rel="icon" type = "image/x-icon" href ="..\assets\garlic_in_the_flesh.png">
+    <link rel="stylesheet" href="../css/home-page.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
+    <!-- Quill injected CSS & JS -->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   </head>
   <body>
+    <!-- Header with logo, search, and switch to list view button -->
     <div class="top-section">
-      <a href="https://cse110-sp24-group22.github.io/cse110-sp24-group22/admin/team.html" target="_blank">
-        <img id="logo" alt="logo" src="../assets/TeamIcon_3Diagonal.png" />
-      </a>
-      <input type="text" placeholder="Search Entries..." id="search-bar" />
-      <button type="button" onclick="window.location.href ='./list.html'">
+      <img src="..\assets\TeamIcon_3Diagonal.png"
+      ,
+      class="logo"
+      ,
+      height="55"
+      ,
+      width="55"
+      ,
+      alt="logo" />
+      <div class="search-container">
+        <input type="text" placeholder="Search..." id="search-bar" />
+      </div>
+      <div class ="button-contain">
+        <button type="button" onclick="window.location.href ='./list.html'">
+
         List View
-      </button>
+        </button>
+      </div>
+      <!-- Dropdown below search bar -->
+      <ul class="entry-dropdown" id="entry-dropdown">
+        <!-- Items will be dynamically inserted here -->
+      </ul>
     </div>
+    <!-- Today's date -->
+    <div class="date-section">
+      <div id ="weekday"></div>
+      <div id="date"></div>
+    </div>
+    <!-- Sky Asset Location -->
     <div class="background section1">
-      <img alt="sky" src="./src/assets/background_sky.svg" />
+      <img id="sky" alt="sky" src="../assets/background_sky.svg">
     </div>
+    <!-- Upper Soil Section and Can/Pot/Sun Assets -->
     <div class="background section3">
       <div id="watering-can">
-        <img alt="watering-can" src="./src/assets/watering-can.svg" />
+        <input type="image" id="can-container" alt="watering-can" src="../assets/watering-can.svg">
       </div>
-      <div id="pot">
-        <img alt="pot" src="./src/assets/pot.svg" />
+          <!-- Wrapping Pot and Plant assets -->
+      <div id="pot=plant-container">
+        <div id="pot">
+          <img id="pot-container" alt="pot" src="../assets/pot.svg">
+        </div>
+        <div id="plant">
+          <img id="plant-container" alt="plant" src="">
+        </div>
       </div>
-      <img alt="top-soil" src="./src/assets/background_top_soil.svg" />
+      <!-- Switch between years -->
+      <div id="year-nav">
+        <button id="year-decrement">《</button>
+        <div id="year-display"><p id="year-display-inner">2021</p></div>
+        <button id="year-increment">》</button>
+      </div>
+      <div id="sun">
+        <img id="sun-container" alt="sun" src="../assets/sun.svg">
+      </div>
+      <div id="root">
+        <img id="root-container" alt="root" src="../assets/root.svg">
+        <div id="root-nodes"> <!-- generated in the JS --> </div>
+      </div>
+      <img id="top-soil" alt="top-soil" src="../assets/background_top_soil.svg">
+
     </div>
-    <div class="background section2"></div>
+    <!-- Lower Soil Section -->
+    <div class="background section2">
+      <img alt="lower soil" src="../assets/background_deep_ground.svg">
+    </div>
+
+    <!-- Quill Editor Modal from clicking Can for New Entry or dropdown search result -->
+    <div class="modal" id="journalModal">
+      <div class="modal-content">
+        <input
+          type="text"
+          id="journalTitle"
+          placeholder="Enter title here..."
+        />
+        <div class="tags" id="tags">
+          <div class="tag-interface">
+            <div id="tag-plus"> Tags:
+              <!-- Tags will be dynamically inserted here -->
+              <button id="tag-plus-button">+</button>
+            </div>
+            <!-- Should remain hidden until add button is clicked-->
+            <div id="tag-input">
+              <input list="tag-list" type="text" id="tag-input-bar" placeholder="New tag" />
+              <button id="save-tag">Add</button>
+              <!-- Dropdown menu for available tags-->
+              <datalist id="tag-list">
+              </datalist>
+            </div>
+          </div>
+        </div>
+        <div id="editor"></div>
+        <div id="butforlist">
+          <button class="close-button" id="cancelModal">Cancel</button>
+          <button class="DeleteJournal" id="deleteModal">
+            Delete Journal
+          </button>
+          <button class="Save-Close" id="closeModal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay if the screen is too narrow -->
+    <div class="overlay" id="overlay">
+        <div class="overlay-content">
+            <h1>Screen too narrow</h1>
+            <p>Please rotate your device to landscape mode</p>
+        </div>
+    </div>
   </body>
 </html>
