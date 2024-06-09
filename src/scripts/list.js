@@ -63,14 +63,28 @@ function init() {
   });
 }
 
+/**
+ * Converts a date object to a string in the format "yyyy-mm-dd".
+ * @param date {Date} - date object
+ * @returns {string} - date string in the format "yyyy-mm-dd"
+ */
+function dateToInputString(date) {
+  return date.toISOString().split('T')[0];
+}
+
 function parseUrlAndSearch() {
   const urlParams = new URLSearchParams(window.location.search);
   const query = urlParams.get('query') || '';
   const tags = urlParams.get('tags') ? urlParams.get('tags').split(',') : [];
-  const startDate = urlParams.get('startDate') || '';
-  const endDate = urlParams.get('endDate') || '';
+  const startDateParam = urlParams.get('startDate') || '';
+  const endDateParam = urlParams.get('endDate') || '';
 
-  const results = searchJournal(query, tags, startDate, endDate);
+  // Fill in the filter stuff with the startDate and endDate
+
+  if (startDateParam) startDate.value = dateToInputString(new Date(startDateParam));
+  if (endDateParam) endDate.value = dateToInputString(new Date(endDateParam));
+
+  const results = searchJournal(query, tags, startDateParam, endDateParam);
   displayList(results);
 }
 
@@ -300,7 +314,7 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
- 
+
   window.addEventListener("click", function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
@@ -324,7 +338,7 @@ function editJournal(id) {
       modal.style.display = "none";
       itemList.innerHTML = "";
       displayList(journalList);
-      quill.off("text-change", quillUpdateTextHandler); 
+      quill.off("text-change", quillUpdateTextHandler);
     } else {
       alert('Cannot save journal without a title!');
     }
@@ -409,7 +423,7 @@ function editJournal(id) {
       itemList.innerHTML = "";
       displayList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
-      
+
       event.stopPropagation();
     }
     else {
@@ -428,7 +442,7 @@ function editJournal(id) {
       saveJournalList(journalList);
     }
   };
-  
+
   /**
    * Updates journal entry with current contents of the Quill editor.
    */
@@ -564,6 +578,7 @@ function parseTags(tagsString) {
 /** @type {HTMLInputElement} */
 const searchBar = document.getElementById("search-bar");
 const tagsBar = document.getElementById("tags-bar");
+/** @type {HTMLInputElement} */
 const startDate = document.getElementById("start-date");
 const endDate = document.getElementById("end-date");
 
