@@ -753,11 +753,32 @@ describe('Basic User Flow for Root Page', () => {
         expect(editCount).toBe(1);
     });
 
-    // Testing 10: Editing and cancelling modal from entry search result doesn't update dropdown
+    // Testing 10: Cancelling modal from entry search result doesn't update dropdown
     it('Editing and cancelling modal from entry search result doesn\'t update dropdown', async () => {
+        const dropDownEditEntry = await page.$('#entry-dropdown li');
+        await dropDownEditEntry.click();
+        let testEditTitle = "Testing 2 Updated";
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+        await page.type('#journalTitle', testEditTitle);
+        await page.click('#cancelModal');
+        const journalEntries = await page.evaluate(() => {
+            return JSON.parse(localStorage.getItem('GarlicNotes'));
+        });
+     /*   // Check that the title is updated  
+        expect(journalEntries[0].title).toBe("Testing 3 Updated");
+       */await page.reload();
+        await page.type('#search-bar', testEditTitle);
+
+        const journalEditEntries = await page.$$('#entry-dropdown li');
+
+        expect(journalEditEntries.length).toBe(0);
     });
 
-    // Testing 10: Increment year button doesn't do anything (doesn't increment to a future year)
+    // Testing 11: Increment year button doesn't do anything (doesn't increment to a future year)
     it('Increment year button doesn\'t do anything (doesn\'t increment to a future year)', async () => {
         await page.reload();
         await page.click("#year-increment");
@@ -765,7 +786,7 @@ describe('Basic User Flow for Root Page', () => {
         expect(yearDisplayText).toBe("2024");
     });
 
-    // Testing 11: Decrement year button correctly changes year-display year and changes root to have 0 nodes
+    // Testing 12: Decrement year button correctly changes year-display year and changes root to have 0 nodes
     it('Decrement year button correctly changes year-display year and changes root to have 0 nodes', async () => {
         await page.click("#year-decrement");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
@@ -774,7 +795,7 @@ describe('Basic User Flow for Root Page', () => {
         expect(intIncrementNode).toBe(0);
     });
 
-    // Testing 12: Increment year button correctly changes year-display year and changes root to have previous amount of nodes
+    // Testing 13: Increment year button correctly changes year-display year and changes root to have previous amount of nodes
     it('Increment year button correctly changes year-display year and changes root to have previous amount of nodes', async () => {
         await page.click("#year-increment");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
