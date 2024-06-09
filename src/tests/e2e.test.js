@@ -397,11 +397,14 @@ describe('Basic user flow for Website', () => {
         await page.type('#journalTitle', testTitle);
 
         // Delete tag
-        await page.click('.colored-tag');
+        await page.click("#tag-plus > div");
 
         page.on('dialog', async dialog => {
+            //get alert message
+            console.log(dialog.message());
+            //accept alert
             await dialog.accept();
-        })
+         })
         await page.click('#closeModal');
 
         // Check that the tags in the noteObject contains testTag
@@ -412,11 +415,17 @@ describe('Basic user flow for Website', () => {
 
     //Test # ,Test traveling through the pages
     it('Go to root page', async() => {
+        const response = await page.goto('http://127.0.0.1:3000/src/html/list.html');
         //refresh page
         await page.reload();
         //click "Root View"
         await page.click('.return-button');
-        await expect(page).toMatchLocation("./src/html/home.html", { timeout: 5000 });
+        let result = false;
+        //check url
+        if(page.url() == "http://127.0.0.1:3000/src/html/home.html"){
+            result = true;
+        }
+        expect(result).toBe(true);
     });
 
 });

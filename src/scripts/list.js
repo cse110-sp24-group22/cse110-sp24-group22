@@ -4,7 +4,6 @@ import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from
 let journalList = getJournalList();
 let journalTags = getJournalTags();
 
-let tagSet = new Set();
 let tagsList = [];
 
 // TODO: check need for delete button container, line 200
@@ -290,7 +289,7 @@ function deleteJournal(timestamp) {
  */
 function getJournalTags() {
   if(!localStorage.getItem("GarlicNotesTags")) {
-    return tagSet;
+    return new Set();
   }
   return new Set(JSON.parse(localStorage.getItem("GarlicNotesTags")));
 }
