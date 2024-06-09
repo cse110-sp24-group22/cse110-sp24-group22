@@ -1,7 +1,7 @@
 describe('Basic user flow for Website', () => {
     // First, visit the website before running any tests
     beforeAll(async () => {
-      await page.goto('http://127.0.0.1:5501/src/html/list.html');
+      await page.goto('http://127.0.0.1:5500/src/html/list.html');
     });
 
     // Testing 1: Initial check for 0 journals
@@ -227,13 +227,22 @@ describe('Basic user flow for Website', () => {
         expect(journalEntries.length).toBe(1);
     });
     
-  /*
+  
     // Testing 8: Filter the journal by date (to be implemented)
     it('Filter the journal by date', async () => {
+        const testTime = new Date();
+        const testMonth = ("0" + (testTime.getMonth() + 1)).slice(-2);
+        const testDate = testMonth + ("0" + testTime.getDate()).slice(-2) + testTime.getFullYear()
         await page.reload();
+        //clicks on filter button
+        await page.click('.filter-button');
+        await page.type('#start-date', testDate);
+        await page.type('#end-date', testDate);
+        const journalEntriesFilter = await page.$$('#item-list li');
+        expect(journalEntriesFilter.length).toBe(3);
 
-        await page.click()
-    });*/
+
+    });
 
    /* // Testing 9: Sort the journal by title alphabetically
     it('Sort the journal by title alphabetically', async () => {
@@ -415,17 +424,18 @@ describe('Basic user flow for Website', () => {
 
     //Test # ,Test traveling through the pages
     it('Go to root page', async() => {
-        const response = await page.goto('http://127.0.0.1:5501/src/html/list.html');
+        const response = await page.goto('http://127.0.0.1:5500/src/html/list.html');
         //refresh page
         await page.reload();
         //click "Root View"
         await page.click('.return-button');
         let result = false;
         //check url
-        if(page.url() == "http://127.0.0.1:5501/src/html/home.html"){
+        if(page.url() == "http://127.0.0.1:5500/src/html/home.html"){
             result = true;
         }
         expect(result).toBe(true);
     });
+
 
 });
