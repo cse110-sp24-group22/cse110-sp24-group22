@@ -6,6 +6,7 @@
     <script defer src="../scripts/main.js" type="module"></script>
     <script defer src="../scripts/util.js" type="module"></script>
     <title>Root Page</title>
+    <link rel="icon" type = "image/x-icon" href ="..\assets\garlic_in_the_flesh.png">
     <link rel="stylesheet" href="../css/home-page.css">
     <link rel="stylesheet" href="../css/modal.css">
     <link rel="stylesheet" href="../css/dropdown.css">
@@ -63,7 +64,13 @@
         <div id="plant">
           <img id="plant-container" alt="plant" src="">
         </div>
-      </div>  
+      </div>
+      <!-- Switch between years -->
+      <div id="year-nav">
+        <button id="year-decrement">《</button>
+        <div id="year-display"><p id="year-display-inner">2021</p></div>
+        <button id="year-increment">》</button>
+      </div>
       <div id="sun">
         <img id="sun-container" alt="sun" src="../assets/sun.svg">
       </div>
@@ -87,9 +94,9 @@
           id="journalTitle"
           placeholder="Enter title here..."
         />
-        <div class="tags" id="tags"> 
+        <div class="tags" id="tags">
           <div class="tag-interface">
-            <div id="tag-plus"> Tags: 
+            <div id="tag-plus"> Tags:
               <!-- Tags will be dynamically inserted here -->
               <button id="tag-plus-button">+</button>
             </div>
@@ -112,6 +119,14 @@
           <button class="Save-Close" id="closeModal">Save Changes</button>
         </div>
       </div>
+    </div>
+
+    <!-- Overlay if the screen is too narrow -->
+    <div class="overlay" id="overlay">
+        <div class="overlay-content">
+            <h1>Screen too narrow</h1>
+            <p>Please rotate your device to landscape mode</p>
+        </div>
     </div>
   </body>
 </html>
