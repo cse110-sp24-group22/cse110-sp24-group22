@@ -574,6 +574,20 @@ describe('Basic User Flow for Root Page', () => {
 
     //Testing 1: There are 0 nodes on the current page.
     it('Check for no nodes', async () => {
+        
+        await page.evaluate(_ => {
+            window.scrollBy(0, window.innerHeight)
+          })
+        
+          console.log('how many?', (await page.$$('.root-nodes')).length);
+    });
+    // Testing 2: Canceling a new Journal
+    it("Canceling creation of journal does not create journal", async() => {
+        await page.click('#watering-can');
+        page.on('dialog', async dialog => {
+            await dialog.accept();
+        })
+        await page.click('.close-button');
         let nodeExist = false;
         if(await page.$('.root-node') !== null){
             nodeExist = true;
@@ -582,6 +596,29 @@ describe('Basic User Flow for Root Page', () => {
     });
     // Testing 1: Expect date and weekday display to be correct
     it('Check for correct date and weekday', async () => {
+        
+         // Click the new journal button to open the editor
+         await page.click('#watering-can');
+        
+        // Enter the title
+        await page.type('#journalTitle', 'Test Title');
+
+        // Enter the contents
+        await page.evaluate(() => {
+            const quill = new Quill('#editor', { theme: 'snow' });
+            quill.setText('Test Content');
+        });
+
+        // Click the save journal button
+        await page.click('#closeModal');
+
+        // Get all journal entries on the page
+       let nodeExist = false;
+        if(await page.$('.root-node') !== null){
+            nodeExist = true;
+        }
+        expect(nodeExist).toBe(true);
+
     });
 
     // Testing 2: Pressing create opens modal
