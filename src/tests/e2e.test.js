@@ -598,7 +598,39 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 2: Expect date and weekday display to be correct
     it('Check for correct date and weekday', async () => {
-
+        let todayTime = new Date();
+        let testWeekDay = await getTextById(page, 'weekday');
+        console.log(testWeekDay);
+        let testWeekDayValue;
+        switch(testWeekDay){
+            case 'Sunday':
+                testWeekDayValue = 0;
+                break;
+            case 'Monday':
+                testWeekDayValue = 1;
+                break;
+            case 'Tuesday':
+                testWeekDayValue = 2;
+                break;
+            case 'Wednesday':
+                testWeekDayValue = 3;
+                break;
+            case 'Thursday':
+                testWeekDayValue = 4;
+                break;
+            case 'Friday':
+                testWeekDayValue = 5;
+                break;
+            case 'Saturday':
+                testWeekDayValue = 6;
+                break;
+        };
+        expect(testWeekDayValue).toBe(todayTime.getDay());
+        let testDate = await getTextById(page, 'date');
+        let todayMonth = todayTime.getMonth() + 1
+        let todayDate = todayMonth + "/" + todayTime.getDate() + "/" + todayTime.getFullYear();
+        expect(testDate).toBe(todayDate);
+  
     });
     
     // Testing 3: Pressing create opens modal
