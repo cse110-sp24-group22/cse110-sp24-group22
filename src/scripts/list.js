@@ -1,5 +1,5 @@
 // Import utility functions
-import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
+import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, parseTags } from "./util.js";
 
 // Export functions for unit tests
 export { getJournalByTimestamp, searchJournal }
@@ -562,18 +562,6 @@ function searchJournal(query, tags, startDate, endDate, journalListParam) {
 
   return getMatchingEntries(filteredList, query);
 }
-
-
-
-/**
- * Parses a string of comma-separated tags into an array.
- * @param {string} tagsString - string of comma-separated tags
- * @returns array of tags
- */
-function parseTags(tagsString) {
-  return tagsString.split(",").filter(tag => tag.length > 0);
-}
-
 
 /** @type {HTMLInputElement} */
 const searchBar = document.getElementById("search-bar");
