@@ -557,6 +557,14 @@ describe('Basic User Flow for Root Page', () => {
     beforeAll(async () => {
         await page.goto('http://127.0.0.1:5501/src/html/home.html');
     });
+    async function getTextById(page, id) {
+        const element = await page.$(`#${id}`);
+        if (element) {
+            const textContent = await element.evaluate(el => el.textContent.trim());
+            return textContent;
+        }
+        return null;
+    }
 
     // Testing 1: Expect date and weekday display to be correct
     it('Check for correct date and weekday', async () => {
@@ -596,6 +604,11 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 10: Increment year button doesn't do anything (doesn't increment to a future year)
     it('Increment year button doesn\'t do anything (doesn\'t increment to a future year)', async () => {
+        await page.reload();
+        await page.click("#year-increment");
+        const yearDisplayText = await getTextById(page, 'year-display-inner');
+
+        expect(yearDisplayText).toBe("2024");
     });
 
     // Testing 11: Decrement year button correctly changes year-display year and changes root to have 0 nodes
@@ -604,6 +617,8 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 12: Increment year button correctly changes year-display year and changes root to have previous amount of nodes
     it('Increment year button correctly changes year-display year and changes root to have previous amount of nodes', async () => {
+        
+        
     });
 
     // Testing #: Clicking List View button changes page to list.html
