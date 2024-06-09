@@ -6,7 +6,6 @@
 html,
 body {
   font-family: Single Day;
-  min-width: 900px;
   margin: 0;
   padding: 0;
   overscroll-behavior: none;
@@ -187,12 +186,11 @@ body {
   position: absolute;
   display: flex;
   flex-direction: row;
-  right: 37%;
+  right: 47%;
   top: 27%;
-  width: 10%;
   height: 30px;
   z-index: 1;
-  transform: translateX(-50%);
+  transform: translate(50%, -50%);
 }
 
 #year-decrement, #year-increment {
@@ -206,6 +204,16 @@ body {
   z-index: 5;
 }
 
+#year-decrement {
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+#year-increment {
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
 /* on hover */
 #year-decrement:hover, #year-increment:hover {
   background-color: rgba(255, 212, 171, 1.0);
@@ -214,7 +222,7 @@ body {
 #year-display {
   font-size: 20px;
   background-color: rgba(255, 212, 171, 0.6);
-  padding: 10px;
+  padding: 10px 0;
   flex: 0 0 40px;
   /* center text immediately */
   display: flex;
@@ -367,4 +375,30 @@ body {
 
 .rumble {
   animation: rumble 1s linear; /* Longer duration with faster speed */
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background-color: rgb(128, 128, 128);
+  z-index: 10;
+}
+
+/* enable overlay if screen is small */
+@media screen and (max-width: 560px) {
+  #overlay {
+    display: block;
+  }
+}
+
+.overlay-content {
+  /* center the content */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

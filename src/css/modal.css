@@ -21,12 +21,12 @@
   position: relative;
   display: block;
   background-color: #ffe2b6;
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 20px;
   padding-bottom: 45px;
   border: 1px solid #888;
   width: 80%;
-  height: fit-content;
+  height: 70%;
 }
 
 /* Cancel button */
@@ -46,7 +46,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-  
+
 /* Save button */
 .Save-Close {
   bottom: 5%;
@@ -84,7 +84,7 @@
 
 /* Quill editor */
 #editor {
-  height: 300px;
+  height: calc(100% - 200px); /* Adjust height to fit within padding */
 }
 
 /* Editor background */
