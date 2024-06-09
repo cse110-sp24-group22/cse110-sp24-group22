@@ -798,17 +798,40 @@ describe('Basic User Flow for Root Page', () => {
         
     });
 
+    //Test 14: Checks clicking on the nodes
+    it('Checks clicking on the nodes', async () => {
+        await page.reload();
+        await page.click('.root-node');
+        await page.waitForSelector('#deleteModal');
+        const nodeModal = await isModalVisible(page);
+        expect(nodeModal).toBe(true);
+});
+    it('Checks the save button after clicking on the node', async() => {
+        let testEditTitle = "Testing 14 Updated";
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+        await page.type('#journalTitle', testEditTitle);
+        await page.click('#closeModal');
+        const journalEntries = await page.evaluate(() => {
+            return JSON.parse(localStorage.getItem('GarlicNotes'));
+        });
+        // Check that the title is updated  
+        expect(journalEntries[0].title).toBe("Testing 14 Updated");
+    })
+
     //Testing 14: Checks Delete Button
     it('Checks the delete button in the modal', async () => {
         await page.reload();
         await page.click('.root-node');
-        await page.waitForSelector('#deleteModal');
         await page.click('#deleteModal');
         let checkNodeCount = await countDivsWithClass(page, "root-node");
         expect(checkNodeCount).toBe(0);
 });
 
-    // Test 14: Check if having 2 entries on one node does not update node Count.
+    // Test 15: Check if having 2 entries on one node does not update node Count.
     it('Check if having 2 entries on one node does not update node Count.', async () => {
         await page.reload();
         await page.click('#can-container');
@@ -833,7 +856,7 @@ describe('Basic User Flow for Root Page', () => {
         expect(noNewCount).toBe(1);
     });
 
-    // Test 15: Checking if having 2 entries on one node redirects
+    // Test 16: Checking if having 2 entries on one node redirects
     it('Checking if having 2 entries on one node redirects', async () => {
         await page.reload();
         await page.click('.root-node');
