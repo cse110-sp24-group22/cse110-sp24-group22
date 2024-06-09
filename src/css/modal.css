@@ -84,7 +84,7 @@
 
 /* Quill editor */
 #editor {
-  height: calc(100% - 200px); /* Adjust height to fit within padding */
+  height: calc(100% - 160px); /* Adjust height to fit within padding */
 }
 
 /* Editor background */
