@@ -255,6 +255,7 @@ describe('Basic user flow for List Page Website', () => {
         const testTime = new Date();
         const testMonth = ("0" + (testTime.getMonth() + 1)).slice(-2);
         const testDate = testMonth + ("0" + testTime.getDate()).slice(-2) + testTime.getFullYear()
+
         await page.reload();
         //clicks on filter button
         await page.click('.filter-button');
@@ -262,6 +263,35 @@ describe('Basic user flow for List Page Website', () => {
         await page.type('#end-date', testDate);
         const journalEntriesFilter = await page.$$('#item-list li');
         expect(journalEntriesFilter.length).toBe(3);
+    });
+
+    // Testing 9.5
+    it('Check if the filter tag works correctly', async () => {
+        const testTime = new Date();
+        const testMonth = ("0" + (testTime.getMonth() + 1)).slice(-2);
+        const testDate = testMonth + ("0" + testTime.getDate()).slice(-2) + testTime.getFullYear();
+    
+        await page.reload();
+
+        // Clicks on filter button
+        await page.click('.filter-button');
+        await page.type('#start-date', testDate);
+        await page.type('#end-date', testDate);
+        await page.click('#tags-bar', 'exampleTag'); 
+    
+    // Apply the filter by triggering the input event
+    await page.evaluate(() => {
+        document.getElementById('start-date').dispatchEvent(new Event('input'));
+        document.getElementById('end-date').dispatchEvent(new Event('input'));
+        document.getElementById('tags-bar').dispatchEvent(new Event('input'));
+    });
+
+    // Verify that the tags input contains the correct tag
+    const tagsBarValue = await page.$eval('#tags-bar', el => el.value);
+    expect(tagsBarValue).toBe('exampleTag');
+
+    const journalEntriesFilter = await page.$$('#item-list li');
+    expect(journalEntriesFilter.length).toBe(3);
     });
 
     // Testing 10: Sort the journal by title reverse alphabetically
