@@ -608,6 +608,17 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing #: Clicking List View button changes page to list.html
     it('Clicking List View button changes page to list.html', async () => {
+        const response = await page.goto('http://127.0.0.1:5501/src/html/home.html');
+        //refresh page
+        await page.reload();
+        //click "List View"
+        await page.click('.list-view-button');
+        let result = false;
+        //check url
+        if(page.url() == "http://127.0.0.1:5501/src/html/list.html"){
+            result = true;
+        }
+        expect(result).toBe(true);
     });
 
 });
