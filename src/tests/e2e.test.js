@@ -737,8 +737,6 @@ describe('Basic User Flow for Root Page', () => {
         });
         // Check that the title is updated  
         expect(journalEntries[0].title).toBe(testEditTitle);
-        let editCount = await countDivsWithClass(page, "root-node");
-        expect(editCount).toBe(1);
         await page.reload();
         await page.type('#search-bar', testEditTitle);
 
@@ -751,6 +749,8 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 9: The previous edit to an existing entry didn't add another root node
     it('The previous edit to an existing entry didn\'t add another root node', async () => {
+        let editCount = await countDivsWithClass(page, "root-node");
+        expect(editCount).toBe(1);
     });
 
     // Testing 10: Editing and cancelling modal from entry search result doesn't update dropdown
