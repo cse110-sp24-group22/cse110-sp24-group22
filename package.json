@@ -14,7 +14,13 @@
     "verbose": true
   },
   "nyc": {
-    "all": false
+    "all": false,
+    "nyc": {
+      "exclude": [
+        "cdn.quilljs.com",
+        "fonts.googleapis.com"
+      ]
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
