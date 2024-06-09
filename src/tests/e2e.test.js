@@ -302,7 +302,45 @@ describe('Basic user flow for List Page Website', () => {
 
     });
 
-    // Testing 10: Sort the journal by date (to be implemented)
+    // Testing 10: Sort the journal by title alphabetically 
+    it('Sort the journal by title alphabetically', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
+
+        function isSortedAlphabetically(arr) {
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (arr[i].localeCompare(arr[i + 1]) > 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        await page.click('#sort-name');
+
+        // Get all journal entries on the page
+        const journalEntriesAlphaSort = await page.$$('#item-list li');
+        // Fetch the title of the journal entries
+        let result = [];
+        for(let t of journalEntriesAlphaSort){
+            const textContent = await t.evaluate(x => x.textContent);
+            result.push(extractTextWithoutDateTime(textContent));
+        }
+        let result2 = await Promise.all(journalEntriesAlphaSort.map(async (t) =>{
+            const textContent = await t.evaluate(x => x.textContent);
+            return extractTextWithoutDateTime(textContent);
+        }))
+
+        testResult = isSortedAlphabetically(result);
+        testResult2 = isSortedAlphabetically(result2);
+        expect(testResult).toBe(true);
+        expect(testResult2).toBe(true);
+
+    });
+
+    // Testing 11: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -331,7 +369,7 @@ describe('Basic user flow for List Page Website', () => {
     
     // Tags
 
-    // Testing 11: Add new tags to jounal inside modal 
+    // Testing 12: Add new tags to jounal inside modal 
     it('Add new tags to journal', async() => {
         await page.reload();
         for(let i = 0; i < 3; i++){
@@ -368,7 +406,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
 
-    // Testing 12: Add tags when there are tags inside modal
+    // Testing 13: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
         await page.waitForSelector('#item-list li');
@@ -394,7 +432,7 @@ describe('Basic user flow for List Page Website', () => {
 
 
     // Testing 
-    // Testing 13: Adding duplicate tags
+    // Testing 14: Adding duplicate tags
     it('Adding duplicate tags', async () => {
         await page.reload();
 
@@ -433,7 +471,7 @@ describe('Basic user flow for List Page Website', () => {
     })
 
     
-    // Testing 14: delete tags in modal
+    // Testing 15: delete tags in modal
     it('Delete tags in modal', async() => {
         await page.reload();
 
