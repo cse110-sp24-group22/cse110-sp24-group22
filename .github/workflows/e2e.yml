@@ -4,10 +4,7 @@ on:
   pull_request:
     branches:
       - main
-  
-  push:
-    branches:
-      - coverage-e2e
+      - main-doc
       
 jobs:
   e2e-test:
