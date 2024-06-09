@@ -240,35 +240,33 @@ describe('Basic user flow for Website', () => {
         await page.type('#end-date', testDate);
         const journalEntriesFilter = await page.$$('#item-list li');
         expect(journalEntriesFilter.length).toBe(3);
-
-
     });
 
-   /* // Testing 9: Sort the journal by title alphabetically
+    // Testing 9: Sort the journal by title alphabetically
     it('Sort the journal by title alphabetically', async () => {
-    await page.reload();
-    await page.click('#sort-name');
+        await page.reload();
+        await page.click('#sort-name');
 
-    // Get all journal entries on the page
-    const journalEntries = await page.$$('#item-list li');
+        // Get all journal entries on the page
+        const journalEntriesAlphaSort = await page.$$('#item-list li');
+        console.log(journalEntriesAlphaSort);
+       /* // Fetch the title of the journal entries
+        const titles = await Promise.all(journalEntries.map(async (entry) => {
+            const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
+            const title = await (await titleHandle.getProperty('textContent')).jsonValue();
+            return title.trim(); // Trim any extra whitespace
+        }));
 
-    // Fetch the title of the journal entries
-    const titles = await Promise.all(journalEntries.map(async (entry) => {
-        const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
-        const title = await (await titleHandle.getProperty('textContent')).jsonValue();
-        return title.trim(); // Trim any extra whitespace
-    }));
+        console.log(titles);
 
-    console.log(titles);
+        // Check if the titles array is sorted in ascending order
+        const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
+        expect(isSorted).toBe(true);
 
-    // Check if the titles array is sorted in ascending order
-    const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
-    expect(isSorted).toBe(true);
-
-    // Check that the number of journal entries is correct
-    // Adjust this if you expect a different number of entries
-    expect(journalEntries.length).toBe(titles.length);
-});*/
+        // Check that the number of journal entries is correct
+        // Adjust this if you expect a different number of entries
+        expect(journalEntries.length).toBe(titles.length); */
+    });
 
   /*  // Testing 10: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
