@@ -616,6 +616,17 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 3: Edit and save a journal to have title Testing 3
     it('Edit and save a journal to have title Testing 3', async () => {
+        const testTitle = "Testing 3";
+        await page.type('#journalTitle', testTitle);
+
+        await page.click('#closeModal');
+        
+        const journaltitle = await page.evaluate(() => {
+            const titleElement = document.querySelector('#item-list li:first-child');
+            return titleElement.textContent.split(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}/)[0].trim();
+        });
+        // Check that the title is updated  
+        expect(journaltitle).toBe('Updated Title');
     });
 
     // Testing 4: New root node appears after saving a journal labeled with current day
