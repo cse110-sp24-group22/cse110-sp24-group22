@@ -324,7 +324,6 @@ describe('Basic user flow for List Page Website', () => {
              const textContent = await t.evaluate(x => x.textContent);
              return extractTextWithoutDateTime(textContent);
          }))
-         console.log(result);
          expect(result).toEqual([ 'This is testing', 'Test 2', 'Test Title' ]);
          expect(result2).toEqual([ 'This is testing', 'Test 2', 'Test Title' ]);
 
@@ -368,31 +367,31 @@ describe('Basic user flow for List Page Website', () => {
         await page.evaluate(() => document.querySelector('ul').replaceChildren());
     });
     
-/*
+
     // Testing 12: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
-
-        // Wait for the search bar to be available
-        await page.waitForSelector('#search-bar');
-
-        // Enter the search term
-        await page.type('#search-bar', "Dummy");
-
-        const journalEntries = await page.$$('#item-list li');
-
-        // FIX 
-        let targetEntry = null;
-        for (const entry of journalEntries) {
-            const title = await entry.$eval('.title-class', el => el.innerText); // Adjust the selector to match your title element
-            if (title.includes("Dummy")) {
-                targetEntry = entry;
-                break;
-            }
+        await page.waitForSelector('#item-list li');
+        const journalEntryMultiTag = await page.$('#item-list li');
+        await journalEntryMultiTag.click();
+        await page.click('#tag-plus-button');
+        const testTag2 = "Test2";
+        await page.type('#tag-input-bar', testTag2);
+        await page.click('#save-tag');
+        await page.click('#closeModal');
+        let tags = await page.$$('li span');
+        let result = [];
+        for(let t of tags) {
+            result.push(await t.evaluate(x => x.textContent));
         }
-        
+    
+        let result2 = await Promise.all(tags.map(async (t) => {
+            return await t.evaluate(x => x.textContent);
+        }))
+        expect(result.length).toEqual(2);
+        expect(result2.length).toEqual(2); 
     });
-*/
+
 
     // Testing 
     // Testing 13: Adding duplicate tags
@@ -462,7 +461,6 @@ describe('Basic user flow for List Page Website', () => {
 
          //make sure a tag was added
          let tags = await page.$$('.tags');
-         console.log(`Number of tags after adding: ${tags.length}`);
          expect(tags.length).toBe(1);
 
         // Delete tag by clicking on it
