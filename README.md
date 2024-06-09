@@ -65,10 +65,10 @@ Let's get your project growing!
 
 ## Repository Organization
 
-- `admin\`: Admin resources which incluse branding assets, information on our CI/CD pipeline, weekly meeting notes, our team page, and video links.
-- `docs\`: Our JS Documentation
-- `specs\`: Our ADRs, brainstorming, pitch information, and wireframe.
-- `src\`: Our source code.
+- `admin/`: Admin resources which include branding assets, information on our CI/CD pipeline, weekly meeting notes, our team page, and video links.
+- `docs/`: Our JS Documentation
+- `specs/`: Our ADRs, brainstorming, pitch information, and wireframes.
+- `src/`: Our source code.
 
 ## Design Process
 - [Link to our Figma](https://www.figma.com/design/jI9imcuPdGE3AL2bU9qolt/Project-Workfllow?node-id=0-1&t=UjUWEJOyvV7pFALc-0): We used this for all asset designing (ie. our background, tree, roots, etc.)
