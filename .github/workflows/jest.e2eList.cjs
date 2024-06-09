@@ -1,5 +1,5 @@
 module.exports = {
     preset: 'jest-puppeteer',
-    testMatch: ['**/tests/e2e.test.js'],
+    testMatch: ['**/tests/e2e.testList.js'],
     rootDir: "../../",
   };

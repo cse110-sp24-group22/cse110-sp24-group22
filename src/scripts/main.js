@@ -164,8 +164,8 @@ function updateDropdown() {
     displayEntryDropdownList(matchingEntries);
   } else {
     // Hide dropdown and reset the border radius to normal.
-    entryDropdownList.style.display = "none";
     searchBar.style.borderRadius = "12px";
+    entryDropdownList.innerHTML = "";
   }
 }
 
@@ -223,7 +223,7 @@ function editJournal(id) {
   deleteModal.onclick = () => {
     if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
-      deleteJournal(id);
+      deleteJournal();
       renderRoots();
     }
   }
@@ -236,6 +236,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+      renderRoots();
     } else {
         alert('Cannot save journal without a title!');
       }
@@ -261,7 +262,7 @@ function editJournal(id) {
     saveJournalList(journalList);
   }
 
-  noteObject = getJournalByTimestamp(id);
+  noteObject = getJournalByTimestamp(id, journalList);
 
   const noteID = noteObject.timestamp;
 
@@ -284,6 +285,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+      renderRoots();
     };
     if(isNewJournal){
       executeDeletion();
@@ -312,6 +314,7 @@ function editJournal(id) {
     }
     else {
       modal.style.display = "none";
+      saveJournalList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
     }
     renderRoots();
@@ -401,7 +404,7 @@ function editJournal(id) {
 * @param timestamp {number} - unique identifier and time it was created
 * @returns {JournalEntry|undefined} - journal entry or undefined if not found
 */
-function getJournalByTimestamp(timestamp) {
+function getJournalByTimestamp(timestamp, journalList) {
   let journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
@@ -653,7 +656,7 @@ function renderRoots(doAnimation = false) {
     node.className = "root-node";
     node.style.position = "absolute";
 
-    // Move things so that they align correcrtly
+    // Move things so that they align correctly
     const SCALE_X = 0.00190;
     const SCALE_Y = 0.00128;
 
