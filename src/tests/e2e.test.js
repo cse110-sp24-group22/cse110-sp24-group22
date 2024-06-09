@@ -553,4 +553,61 @@ describe('Basic user flow for List Page Website', () => {
 
 });
 describe('Basic User Flow for Root Page', () => {
+    // First, visit the website before running any tests
+    beforeAll(async () => {
+        await page.goto('http://127.0.0.1:5501/src/html/home.html');
     });
+
+    // Testing 1: Expect date and weekday display to be correct
+    it('Check for correct date and weekday', async () => {
+    });
+
+    // Testing 2: Pressing create opens modal
+    it('Pressing create opens modal', async () => {
+    });
+
+    // Testing 3: Edit and save a journal to have title Testing 3
+    it('Edit and save a journal to have title Testing 3', async () => {
+    });
+
+    // Testing 4: New root node appears after saving a journal labeled with current day
+    it('New root node appears after saving a journal', async () => {
+    });
+
+    // Testing 5: Search for 'Testing 3' journal by title
+    it('Search for a journal by title', async () => {
+    });
+
+    // Testing 6: Pressing entry search result opens modal
+    it('Pressing entry search result opens modal', async () => {
+    });
+
+    // Testing 7: Editing title to 'Testing 3 Updated' and saving modal from entry search result updates dropdown to have new title
+    it('Editing and saving modal from entry search result updates dropdown', async () => {
+    });
+
+    // Testing 8: The previous edit to an existing entry didn't add another root node
+    it('The previous edit to an existing entry didn\'t add another root node', async () => {
+    });
+
+    // Testing 9: Editing and cancelling modal from entry search result doesn't update dropdown
+    it('Editing and cancelling modal from entry search result doesn\'t update dropdown', async () => {
+    });
+
+    // Testing 10: Increment year button doesn't do anything (doesn't increment to a future year)
+    it('Increment year button doesn\'t do anything (doesn\'t increment to a future year)', async () => {
+    });
+
+    // Testing 11: Decrement year button correctly changes year-display year and changes root to have 0 nodes
+    it('Decrement year button correctly changes year-display year and changes root to have 0 nodes', async () => {
+    });
+
+    // Testing 12: Increment year button correctly changes year-display year and changes root to have previous amount of nodes
+    it('Increment year button correctly changes year-display year and changes root to have previous amount of nodes', async () => {
+    });
+
+    // Testing #: Clicking List View button changes page to list.html
+    it('Clicking List View button changes page to list.html', async () => {
+    });
+
+});
