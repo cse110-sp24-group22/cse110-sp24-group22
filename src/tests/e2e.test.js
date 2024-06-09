@@ -250,7 +250,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
   
-    // Testing 9: Filter the journal by date (to be implemented)
+    // Testing 9: Filter the journal by date
     it('Filter the journal by date', async () => {
         const testTime = new Date();
         const testMonth = ("0" + (testTime.getMonth() + 1)).slice(-2);
