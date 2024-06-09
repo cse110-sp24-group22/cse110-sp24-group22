@@ -118,8 +118,8 @@ header.entry-header {
 
 /* style for when the filter container is showing */
 .filter-container.show {
-  height: 3em;
-  padding-bottom: 10px 0px 10px 0px;
+  height: auto;
+  padding: 10px 0px 10px 0px;
 }
 
 /* container layout within filter-container */
@@ -129,7 +129,6 @@ header.entry-header {
   justify-content: start;
   width: 100%;
   padding: 1em;
-  padding-bottom: 1em;
 }
 
 /* Sets height and layout for tags text input */
@@ -141,7 +140,7 @@ header.entry-header {
 /* Sets formatting for filter sub-heading text */
 #filter-text {
   margin: 0;
-  padding-right: 10px;
+  padding: 0px 10px 0px 10px;
 }
 
 /* Sets position of the date filtering section */
