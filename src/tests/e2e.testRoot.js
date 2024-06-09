@@ -17,7 +17,7 @@ describe("Basic user flow for Website", () => {
           includeRawScriptCoverage: false,
           useBlockCoverage: true
         }),
-        page.coverage.startCSSCoverage()
+        // page.coverage.startCSSCoverage()
       ]);
   
       await page.goto("http://127.0.0.1:5500/src/html/home.html");
@@ -317,12 +317,12 @@ describe("Basic user flow for Website", () => {
 
   afterAll(async () => {
     // Disable both JavaScript and CSS coverage
-    const [jsCoverage, cssCoverage] = await Promise.all([
+    const [jsCoverage] = await Promise.all([
       page.coverage.stopJSCoverage(),
-      page.coverage.stopCSSCoverage(),
+    //   page.coverage.stopCSSCoverage(),
     ]);
 
-    pti.write([...jsCoverage, ...cssCoverage], {
+    pti.write([...jsCoverage], {
       includeHostname: true,
       storagePath: "./.nyc_output",
     });
