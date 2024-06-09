@@ -661,6 +661,8 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 5: New root node appears after saving a journal labeled with current day
     it('New root node appears after saving a journal', async () => {
+        let newCount = await countDivsWithId(page, "root-node");
+        expect(newCount).toBe(1);
     });
 
     // Testing 6: Search for 'Testing 3' journal by title
