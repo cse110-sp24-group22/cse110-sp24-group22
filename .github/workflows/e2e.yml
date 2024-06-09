@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
+      - e2e-testing
       
   pull_request:
     branches:
       - main
-      - main-doc
       
 jobs:
   e2e-test:
