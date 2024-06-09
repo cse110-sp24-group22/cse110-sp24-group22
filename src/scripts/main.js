@@ -223,7 +223,7 @@ function editJournal(id) {
   deleteModal.onclick = () => {
     if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
-      deleteJournal(id);
+      deleteJournal();
       renderRoots();
     }
   }
@@ -236,6 +236,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+      renderRoots();
     } else {
         alert('Cannot save journal without a title!');
       }
@@ -284,6 +285,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+      renderRoots();
     };
     if(isNewJournal){
       executeDeletion();

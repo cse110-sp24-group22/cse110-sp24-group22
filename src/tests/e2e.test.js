@@ -341,7 +341,7 @@ describe('Basic user flow for List Page Website', () => {
 
     });
 
-    // Testing 12: Sort the journal by date (to be implemented)
+    // Testing 12: Sort the journal by date 
     it('Sort the journal by date', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -369,7 +369,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
     // Testing 13: Sort the journal by date in reverse
-    it('Sort the journal by date', async () => {
+    it('Sort the journal by date in reverse', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
             return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
@@ -698,6 +698,8 @@ describe('Basic User Flow for Root Page', () => {
         await page.click("#year-decrement");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
         expect(yearDisplayText).toBe("2023");
+        let intIncrementNode = await countDivsWithId(page, 'root-node');
+        expect(intIncrementNode).toBe(0);
     });
 
     // Testing 12: Increment year button correctly changes year-display year and changes root to have previous amount of nodes
@@ -705,6 +707,8 @@ describe('Basic User Flow for Root Page', () => {
         await page.click("#year-increment");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
         expect(yearDisplayText).toBe("2024");
+        let intIncrementNode = await countDivsWithId(page, 'root-node');
+        expect(intIncrementNode).toBe(1);
         
     });
 
