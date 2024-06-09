@@ -801,7 +801,40 @@ describe('Basic User Flow for Root Page', () => {
         
     });
 
-    // Test 
+    // Test 14: Check if having 2 entries on one node does not update node Count.
+    it('Check if having 2 entries on one node does not update node Count.', async () => {
+        await page.reload();
+        await page.click('#can-container');
+        let testEditTitle = "Testing 3 Updated";
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+        await page.type('#journalTitle', testEditTitle);
+        await page.click('#closeModal');
+        let noNewCount = await countDivsWithClass(page, "root-node");
+        expect(noNewCount).toBe(1);
+    });
+
+    // Test 15: Checking if having 2 entries on one node redirects
+    it('Checking if having 2 entries on one node redirects', async () => {
+        await page.reload();
+        await page.click('.root-node');
+        let testEntriesDate = new Date();
+        let result = false;
+         // Convert month to string
+         let basemonth = ("0" + (testEntriesDate.getMonth() + 1)).slice(-2);
+         // Convert date to string
+         let basetime = testEntriesDate.getFullYear() + '-' + basemonth + '-' + ("0" + testEntriesDate.getDate()).slice(-2);
+         // Construct URL to take us to the list page
+         let url = 'http://127.0.0.1:5501/src/html/list.html?query=&tags=&startDate='+ basetime + '&endDate='+ basetime;
+         if(page.url() == url){
+            result = true;
+         }
+         expect(result).toBe(true);
+
+    });
     // Testing #: Clicking List View button changes page to list.html
     it('Clicking List View button changes page to list.html', async () => {
         const response = await page.goto('http://127.0.0.1:5501/src/html/home.html');
