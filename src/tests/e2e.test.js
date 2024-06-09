@@ -612,11 +612,16 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 11: Decrement year button correctly changes year-display year and changes root to have 0 nodes
     it('Decrement year button correctly changes year-display year and changes root to have 0 nodes', async () => {
+        await page.click("#year-decrement");
+        const yearDisplayText = await getTextById(page, 'year-display-inner');
+        expect(yearDisplayText).toBe("2023");
     });
 
     // Testing 12: Increment year button correctly changes year-display year and changes root to have previous amount of nodes
     it('Increment year button correctly changes year-display year and changes root to have previous amount of nodes', async () => {
-        
+        await page.click("#year-increment");
+        const yearDisplayText = await getTextById(page, 'year-display-inner');
+        expect(yearDisplayText).toBe("2024");
         
     });
 
