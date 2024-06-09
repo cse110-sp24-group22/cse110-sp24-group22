@@ -1,7 +1,7 @@
-describe('Basic user flow for Website', () => {
+describe('Basic user flow for Link Page Website', () => {
     // First, visit the website before running any tests
     beforeAll(async () => {
-      await page.goto('http://127.0.0.1:5500/src/html/list.html');
+      await page.goto('http://127.0.0.1:5501/src/html/list.html');
     });
 
     // Testing 1: Initial check for 0 journals
@@ -149,6 +149,12 @@ describe('Basic user flow for Website', () => {
         await page.click('.new-journal-button');
         
         // Enter the title
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+
         await page.type('#journalTitle', 'Test Title');
 
         // Enter the contents
@@ -170,6 +176,11 @@ describe('Basic user flow for Website', () => {
         await page.click('.new-journal-button');
         
         // Enter the title
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
         await page.type('#journalTitle', 'Test 2');
 
         // Enter the contents
@@ -190,6 +201,11 @@ describe('Basic user flow for Website', () => {
         await page.click('.new-journal-button');
         
         // Enter the title
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
         await page.type('#journalTitle', 'This is testing');
 
         // Enter the contents
@@ -240,35 +256,60 @@ describe('Basic user flow for Website', () => {
         await page.type('#end-date', testDate);
         const journalEntriesFilter = await page.$$('#item-list li');
         expect(journalEntriesFilter.length).toBe(3);
-
-
     });
 
-   /* // Testing 9: Sort the journal by title alphabetically
-    it('Sort the journal by title alphabetically', async () => {
-    await page.reload();
-    await page.click('#sort-name');
+    // Testing 9: Sort the journal by title reverse alphabetically
+    it('Sort the journal by title reverse alphabetically', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
 
-    // Get all journal entries on the page
-    const journalEntries = await page.$$('#item-list li');
+        function isSortedReverseAlphabetically(arr) {
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (arr[i].localeCompare(arr[i + 1]) < 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
-    // Fetch the title of the journal entries
-    const titles = await Promise.all(journalEntries.map(async (entry) => {
-        const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
-        const title = await (await titleHandle.getProperty('textContent')).jsonValue();
-        return title.trim(); // Trim any extra whitespace
-    }));
+        await page.reload();
+        await page.click('#sort-name');
 
-    console.log(titles);
+        // Get all journal entries on the page
+        const journalEntriesAlphaSort = await page.$$('#item-list li');
+        // Fetch the title of the journal entries
+        let result = [];
+        for(let t of journalEntriesAlphaSort){
+            const textContent = await t.evaluate(x => x.textContent);
+            result.push(extractTextWithoutDateTime(textContent));
+        }
+        let result2 = await Promise.all(journalEntriesAlphaSort.map(async (t) =>{
+            const textContent = await t.evaluate(x => x.textContent);
+            return extractTextWithoutDateTime(textContent);
+        }))
 
-    // Check if the titles array is sorted in ascending order
-    const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
-    expect(isSorted).toBe(true);
+        testResult = isSortedReverseAlphabetically(result);
+        testResult2 = isSortedReverseAlphabetically(result2);
+        expect(testResult).toBe(true);
+        expect(testResult2).toBe(true);
+        /*const titles = await Promise.all(journalEntriesAlphaSort.map(async (entry) => {
+            const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
+            const title = await (await titleHandle.getProperty('textContent')).jsonValue();
+            return title.trim(); // Trim any extra whitespace
+        }));
 
-    // Check that the number of journal entries is correct
-    // Adjust this if you expect a different number of entries
-    expect(journalEntries.length).toBe(titles.length);
-});*/
+        console.log(titles);
+
+       /* // Check if the titles array is sorted in ascending order
+        const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
+        expect(isSorted).toBe(true);
+
+        // Check that the number of journal entries is correct
+        // Adjust this if you expect a different number of entries
+        expect(journalEntries.length).toBe(titles.length); */
+    });
 
   /*  // Testing 10: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
@@ -426,21 +467,21 @@ describe('Basic user flow for Website', () => {
         tags = await page.$$('.colored-tag');
         expect(tags.length).toBe(0);
     });
-
-    //Test # ,Test traveling through the pages
+         //Test # ,Test traveling through the pages
     it('Go to root page', async() => {
-        const response = await page.goto('http://127.0.0.1:5500/src/html/list.html');
+        const response = await page.goto('http://127.0.0.1:5501/src/html/list.html');
         //refresh page
         await page.reload();
         //click "Root View"
         await page.click('.return-button');
         let result = false;
         //check url
-        if(page.url() == "http://127.0.0.1:5500/src/html/home.html"){
+        if(page.url() == "http://127.0.0.1:5501/src/html/home.html"){
             result = true;
         }
         expect(result).toBe(true);
     });
 
-
 });
+describe('Basic User Flow for Root Page', () => {
+    });
