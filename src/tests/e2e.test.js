@@ -571,12 +571,13 @@ describe('Basic User Flow for Root Page', () => {
         return null;
     }
 
-    async function countDivsWithId(page, id) {
-        const count = await page.evaluate((id) => {
-            return document.querySelectorAll(`div[id="${id}"]`).length;
-        }, id);
+    async function countDivsWithClass(page, className) {
+        const count = await page.evaluate((className) => {
+            return document.querySelectorAll(`div.${className}`).length;
+        }, className);
         return count;
     }
+
 
     async function isModalVisible(page) {
         const isVisible = await page.evaluate(() => {
@@ -592,7 +593,7 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 0: There are 0 nodes on the current page.
     it('Check for no nodes', async () => {
-        let intCount = await countDivsWithId(page, "root-node");
+        let intCount = await countDivsWithClass(page, "root-node");
         expect(intCount).toBe(0);
     });
 
@@ -603,7 +604,7 @@ describe('Basic User Flow for Root Page', () => {
             await dialog.accept();
         })
         await page.click('.close-button');
-        let cancelCount = await countDivsWithId(page, "root-node");
+        let cancelCount = await countDivsWithClass(page, "root-node");
         expect(cancelCount).toBe(0);
     });
 
@@ -611,7 +612,6 @@ describe('Basic User Flow for Root Page', () => {
     it('Check for correct date and weekday', async () => {
         let todayTime = new Date();
         let testWeekDay = await getTextById(page, 'weekday');
-        console.log(testWeekDay);
         let testWeekDayValue;
         switch(testWeekDay){
             case 'Sunday':
@@ -654,7 +654,7 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 4: Edit and save a journal to have title Testing 4
     it('Edit and save a journal to have title Testing 4', async () => {
-        const testTitle = "Testing 4";
+        let testTitle = "Testing 4";
         await page.type('#journalTitle', testTitle);
 
         await page.click('#closeModal');
@@ -669,7 +669,7 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 5: New root node appears after saving a journal labeled with current day
     it('New root node appears after saving a journal', async () => {
-        let newCount = await countDivsWithId(page, "root-node");
+        let newCount = await countDivsWithClass(page, "root-node");
         expect(newCount).toBe(1);
     });
 
@@ -686,6 +686,10 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 7: Pressing entry search result opens modal
     it('Pressing entry search result opens modal', async () => {
+        const dropDownEntry = await page.$('#entry-dropdown li');
+        await dropDownEntry.click();
+        const modalEntry = await isModalVisible(page);
+        expect(modalEntry).toBe(true);
     });
 
     // Testing 8: Editing title to 'Testing 3 Updated' and saving modal from entry search result updates dropdown to have new title
@@ -713,7 +717,7 @@ describe('Basic User Flow for Root Page', () => {
         await page.click("#year-decrement");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
         expect(yearDisplayText).toBe("2023");
-        let intIncrementNode = await countDivsWithId(page, 'root-node');
+        let intIncrementNode = await countDivsWithClass(page, 'root-node');
         expect(intIncrementNode).toBe(0);
     });
 
@@ -722,7 +726,7 @@ describe('Basic User Flow for Root Page', () => {
         await page.click("#year-increment");
         const yearDisplayText = await getTextById(page, 'year-display-inner');
         expect(yearDisplayText).toBe("2024");
-        let intIncrementNode = await countDivsWithId(page, 'root-node');
+        let intIncrementNode = await countDivsWithClass(page, 'root-node');
         expect(intIncrementNode).toBe(1);
         
     });
