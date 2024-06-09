@@ -670,13 +670,11 @@ function renderRoots(doAnimation = false) {
 
       if(entries.length > 1){
         let time = new Date(entries[0].timestamp);
-        let baseurl = window.location.origin;
         let basemonth = ("0" + (time.getMonth() + 1)).slice(-2);
         let basetime = time.getFullYear() + '-' + basemonth + '-' + ("0" + time.getDate()).slice(-2);
-        baseurl += '/src/html/list.html?query=&tags=&startDate='+ basetime + '&endDate='+ basetime;
-        console.log(basetime);
+        let url = './list.html?query=&tags=&startDate='+ basetime + '&endDate='+ basetime;
         node.onclick = () => {
-          location.href = baseurl;
+          location.href = url;
         }
       }
       else{
