@@ -13,6 +13,13 @@
     "transform": {},
     "verbose": true
   },
+  "nyc": {
+    "all": false,
+    "exclude": [
+      "cdn.quilljs.com",
+      "fonts.googleapis.com"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
