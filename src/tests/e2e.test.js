@@ -571,15 +571,18 @@ describe('Basic User Flow for Root Page', () => {
         return null;
     }
 
+    async function countDivsWithId(page, id) {
+        const count = await page.evaluate((id) => {
+            return document.querySelectorAll(`div[id="${id}"]`).length;
+        }, id);
+        return count;
+    }
+
 
     // Testing 0: There are 0 nodes on the current page.
     it('Check for no nodes', async () => {
-        
-        await page.evaluate(_ => {
-            window.scrollBy(0, window.innerHeight)
-          })
-        
-          console.log('how many?', (await page.$$('.root-nodes')).length);
+        let intCount = await countDivsWithId(page, "root-node");
+        expect(intCount).toBe(0);
     });
     // Testing 2: Canceling a new Journal
     it("Canceling creation of journal does not create journal", async() => {
