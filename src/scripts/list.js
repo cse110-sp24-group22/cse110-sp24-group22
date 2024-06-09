@@ -462,6 +462,7 @@ function editJournal(id) {
     else {
       modal.style.display = "none";
       itemList.innerHTML = "";
+      saveJournalList(journalList);
       displayList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
     }
