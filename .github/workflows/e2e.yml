@@ -45,12 +45,13 @@ jobs:
       run: nyc report --reporter=lcov
     
     - name: Filter report
-      run: lcov --remove ./coverage/lcov.info '*/node_modules/*' '*/cdn.quilljs.com/*' '*/fonts.googleapis.com/*' --output-file coverage.info
+      run: lcov --remove ./coverage/lcov.info '*/node_modules/*' '*/cdn.quilljs.com/*' '*/fonts.googleapis.com/*' --output-file ./coverage.info
 
+    
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v6.0.0
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CC_ID}}
       with:
-        coverageLocations: ${{ github.workspace }}coverage.info:lcov
+        coverageLocations: ${{ github.workspace }}/coverage.info:lcov
         debug: true
