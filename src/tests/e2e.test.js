@@ -572,7 +572,7 @@ describe('Basic User Flow for Root Page', () => {
     }
 
 
-    //Testing 1: There are 0 nodes on the current page.
+    // Testing 0: There are 0 nodes on the current page.
     it('Check for no nodes', async () => {
         let nodeExist = false;
         if(await page.$('.root-node') !== null){
@@ -586,6 +586,13 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 2: Pressing create opens modal
     it('Pressing create opens modal', async () => {
+        await page.reload();
+
+        await page.click('#can-container');
+
+        const modal = await page.waitForSelector('#journalModal');
+
+        expect(modal.style.display).toBe('block');
     });
 
     // Testing 3: Edit and save a journal to have title Testing 3
