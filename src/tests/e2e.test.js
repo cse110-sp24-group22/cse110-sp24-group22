@@ -646,7 +646,7 @@ describe('Basic User Flow for Root Page', () => {
 
     // Testing 4: Edit and save a journal to have title Testing 4
     it('Edit and save a journal to have title Testing 4', async () => {
-        const testTitle = "Testing 3";
+        const testTitle = "Testing 4";
         await page.type('#journalTitle', testTitle);
 
         await page.click('#closeModal');
@@ -665,8 +665,15 @@ describe('Basic User Flow for Root Page', () => {
         expect(newCount).toBe(1);
     });
 
-    // Testing 6: Search for 'Testing 3' journal by title
+    // Testing 6: Search for 'Testing 4' journal by title
     it('Search for a journal by title', async () => {
+        await page.reload();
+        
+        await page.type('#search-bar', 'Testing 4');
+
+        const journalEntries = await page.$$('#entry-dropdown li');
+
+        expect(journalEntries.length).toBe(1);
     });
 
     // Testing 7: Pressing entry search result opens modal
