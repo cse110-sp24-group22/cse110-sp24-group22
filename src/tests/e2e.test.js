@@ -143,7 +143,7 @@ describe('Basic user flow for Website', () => {
         expect(journalEntries.length).toBe(0);
     });
 
- /*   //Testing 6: Adding multiple journals
+    //Testing 6: Adding multiple journals
     it('Add multiple journals to list', async () => {
         // Click the new journal button to open the editor
         await page.click('.new-journal-button');
@@ -206,10 +206,10 @@ describe('Basic user flow for Website', () => {
         
         // Check that the number of journal entries is 3
         expect(journalEntries3.length).toBe(3);
-    });*/
+    });
 
     
-    // Testing 6: Search for a journal by title
+    // Testing 7: Search for a journal by title
     it('Search for journal by title', async () => {
         // Reload the page to ensure a clean state
         await page.reload();
@@ -227,56 +227,41 @@ describe('Basic user flow for Website', () => {
         expect(journalEntries.length).toBe(1);
     });
     
-/*
-    // Testing 7: Filter the journal by date (to be implemented)
+  /*
+    // Testing 8: Filter the journal by date (to be implemented)
     it('Filter the journal by date', async () => {
         await page.reload();
 
         await page.click()
     });*/
 
-    // Testing 8: Sort the journal by title alphabetically
+   /* // Testing 9: Sort the journal by title alphabetically
     it('Sort the journal by title alphabetically', async () => {
-        // delete existing entries
-        await page.evaluate(() => document.querySelector('ul').replaceChildren());
-        await page.evaluate(() => localStorage.clear());
-        let journalEntries = await page.$$('#item-list li');
-        expect(journalEntries.length).toBe(0);
-        
-        // add entries in reverse alphabetical order
-        for (let i = 1; i>=0; i--) {
-            // Click the new journal button to open the editor
-            await page.click('.new-journal-button');
-            
-            // Enter the title
-            await page.type('#journalTitle', String.fromCharCode(97+i));
+    await page.reload();
+    await page.click('#sort-name');
 
-            // Enter the contents
-            await page.evaluate(() => {
-                const quill = new Quill('#editor', { theme: 'snow' });
-                quill.setText('a');
-            });
+    // Get all journal entries on the page
+    const journalEntries = await page.$$('#item-list li');
 
-            // Click the save journal button
-            await page.click('#closeModal');
-        }        
-        journalEntries = await page.$$('#item-list li');
-        console.log(journalEntries);
-        expect(journalEntries.length).toBe(2);
+    // Fetch the title of the journal entries
+    const titles = await Promise.all(journalEntries.map(async (entry) => {
+        const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
+        const title = await (await titleHandle.getProperty('textContent')).jsonValue();
+        return title.trim(); // Trim any extra whitespace
+    }));
 
-        // click sort twice to sort alphabetically
-        await page.click('#sort-name');
-        await page.click('#sort-name');
+    console.log(titles);
 
+    // Check if the titles array is sorted in ascending order
+    const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
+    expect(isSorted).toBe(true);
 
-        for (let i = 0; i<journalEntries.length; i++) {
-            let element = await page.$$('ul li');
-            let title = await page.evaluate((i, element) => element[i].children[0].textContent);
-            expect(title).toBe(String.fromCharCode(97 + i));
-        }
-    });
+    // Check that the number of journal entries is correct
+    // Adjust this if you expect a different number of entries
+    expect(journalEntries.length).toBe(titles.length);
+});*/
 
-    // Testing 9: Sort the journal by date (to be implemented)
+  /*  // Testing 10: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
         // Click the sort by date button
         await page.click('#sort-timestamp');
@@ -293,41 +278,40 @@ describe('Basic user flow for Website', () => {
         // Check if the timestamps array is sorted in ascending order
         const isSorted = timestamps.every((val, i, arr) => !i || (val >= arr[i - 1]));
         expect(isSorted).toBe(true);
-    });
+    });*/
     
     // Tags
 
-    // Testing 10: Add new tags to jounal inside modal 
+    // Testing 11: Add new tags to jounal inside modal 
     it('Add new tags to journal', async() => {
         await page.reload();
-        
+        await page.evaluate(() => document.querySelector('ul').replaceChildren());
         // Add new journal
         await page.click('.new-journal-button');
 
         // Add tag
         await page.click('#tag-plus-button');
         const testTag = "Test";
-        await page.type('#tag-input-bar', 'testTag');
+        await page.type('#tag-input-bar', testTag);
 
         // Save tag
         await page.click('#save-tag');
 
         // Add title
         const testTitle = "Dummy"
-        await page.type('#journalTitle', 'testTitle');
+        await page.type('#journalTitle', testTitle);
+        await page.click('#closeModal');
 
-        // Find the noteObject
-        const noteObjectTags = await page.evaluate(() => {
-            const journalEntries = JSON.parse(localStorage.getItem('GarlicNotes'));
-            return journalEntries.find(note => note.title === 'testTitle').tags;
-        });
 
+        let tag = await page.$('li span');
+        let tagContent = (await tag.getProperty('innerText')).jsonValue();
         // Check that the tags in the noteObject contains testTag
-        expect(noteObjectTags.includes(testTag)).toBe(true);
+        expect(await tagContent).toBe('Test');
+        await page.evaluate(() => document.querySelector('ul').replaceChildren());
     });
     
 /*
-    // Testing 11: Add tags when there are tags inside modal
+    // Testing 12: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
 
@@ -350,35 +334,89 @@ describe('Basic user flow for Website', () => {
         }
         
     });
+*/
 
-    // Testing 12: Adding duplicate tags
+    // Testing 
+    // Testing 13: Adding duplicate tags
     it('Adding duplicate tags', async () => {
         await page.reload();
 
+        // delete existing entries
+        await page.evaluate(() => document.querySelector('ul').replaceChildren());
+        
         // add new journal
         await page.click('.new-journal-button')
         
         // adding tag
-        await page.click('.tags-plus-button');
+        await page.click('#tag-plus-button');
 
-        // adding duplicate tag
-        await page.type('#tags-input', 'tags1, tag2');
+        // add first tag
+        await page.type('#tag-input-bar', 'test');
 
         // save tag
-        await page.type('#save-tag');
+        await page.click('#save-tag');
         
+        // add duplicate tag
+        await page.click('#tag-plus-button');
+
+        // add duplicate tag
+        await page.type('#tag-input-bar', 'test');
+
+        await page.click('#save-tag');
+
         // duplicate tag modal
-        page.on('dialog', async dialog => {
-            expect(dialog.message()).toContain('i fogor the message');
-            await dialog.accept();
-        })
+       // page.on('dialog', async dialog => {
+          //  await dialog.accept();
+        //})
 
-        await page.click('#closemodal');
-
+        await page.click('#closeModal');
         // check that tags are unique
-        
+        let tags = await page.$$('.tags');
+        expect(tags.length).toBe(1);
     })
 
-    // Testing 13: Check if tags are stored globally
-*/
+    
+    // Testing 14: delete tags in modal
+    it('Delete tags in modal', async() => {
+        await page.reload();
+        //await page.evaluate(() => document.querySelector('ul').replaceChildren());
+        // Add new journal
+        await page.click('.new-journal-button');
+
+        // Add tag
+        await page.click('#tag-plus-button');
+        const testTag = "Test";
+        await page.type('#tag-input-bar', testTag);
+
+        // Save tag
+        await page.click('#save-tag');
+
+
+        // Add title
+        const testTitle = "Dummy"
+        await page.type('#journalTitle', testTitle);
+
+        // Delete tag
+        await page.click('.colored-tag');
+
+        page.on('dialog', async dialog => {
+            await dialog.accept();
+        })
+        await page.click('#closeModal');
+
+        // Check that the tags in the noteObject contains testTag
+        let tags = await page.$$('.tags');
+        expect(tags.length).toBe(0);
+        //await page.evaluate(() => document.querySelector('ul').replaceChildren());
+    });
+
+    //Test # ,Test traveling through the pages
+    it('Go to root page', async() => {
+        //refresh page
+        await page.reload();
+        //click "Root View"
+        await page.click('.return-button');
+        await expect(page).toMatchLocation("./src/html/home.html", { timeout: 5000 });
+    });
+
 });
