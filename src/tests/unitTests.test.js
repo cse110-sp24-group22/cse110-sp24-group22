@@ -1,15 +1,15 @@
 /**
  * @jest-environment jsdom
  */
-import { getMatchingEntries, getJournalByTimestamp } from "../scripts/list";
-import { getJournalList } from "../scripts/util";
+import { getJournalByTimestamp } from "../scripts/list";
+import { getJournalList, getMatchingEntries} from "../scripts/util";
 
 // Global test variables
 let journalList = [
   {
     timestamp: 1717082192861,
     title: "Hi",
-    tags: [],
+    tags: ["tag1"],
     delta: {
       ops: [
         {
@@ -21,7 +21,7 @@ let journalList = [
   {
     timestamp: 1717082302909,
     title: "Goodbye",
-    tags: [],
+    tags: ["tag1", "tag2  "],
     delta: {
       ops: [
         {
@@ -137,8 +137,9 @@ describe("getMatchingEntries correctly retrieves searched entries", () => {
 
 describe("getJournalByTimestamp correctly uses date creation as id", () => {
   test("get entry with id 1717082302909 (Goodbye)", () => {
-    let match = getJournalByTimestamp(1717082302909);
-    expect(match).toStrictEqual([
+
+    let match = getJournalByTimestamp(1717082302909, journalList);
+    expect(match).toStrictEqual(
       {
         timestamp: 1717082302909,
         title: "Goodbye",
@@ -151,12 +152,12 @@ describe("getJournalByTimestamp correctly uses date creation as id", () => {
           ],
         },
       }
-    ]);
+    );
   });
 
   test("get entry with id 1717082192860 (One Off) that is one off another entry", () => {
-    let match = getJournalByTimestamp(1717082192860);
-    expect(match).toStrictEqual([
+    let match = getJournalByTimestamp(1717082192860, journalList);
+    expect(match).toStrictEqual(
       {
         timestamp: 1717082192860,
         title: "One Off",
@@ -169,11 +170,14 @@ describe("getJournalByTimestamp correctly uses date creation as id", () => {
           ]
         }
       }
-    ]);
+    );
   });
 
   test("get no with id 1715082192860", () => {
-    let match = getJournalByTimestamp(1715082192860);
-    expect(match).toStrictEqual([]);
+    let match = getJournalByTimestamp(1715082192860, journalList);
+    expect(match).toBe(undefined);
   });
-})
+});
+
+describe("searchJournal correctly filters entries with a combination of search queries", () => {
+});

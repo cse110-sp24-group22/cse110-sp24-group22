@@ -257,7 +257,7 @@ function editJournal(id) {
     saveJournalList(journalList);
   }
 
-  noteObject = getJournalByTimestamp(id);
+  noteObject = getJournalByTimestamp(id, journalList);
 
   const noteID = noteObject.timestamp;
 
@@ -396,7 +396,7 @@ function editJournal(id) {
 * @param timestamp {number} - unique identifier and time it was created
 * @returns {JournalEntry|undefined} - journal entry or undefined if not found
 */
-function getJournalByTimestamp(timestamp) {
+function getJournalByTimestamp(timestamp, journalList) {
   let journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);

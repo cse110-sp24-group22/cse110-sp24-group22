@@ -1,5 +1,5 @@
 import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
-export { getMatchingEntries, getJournalByTimestamp }
+export { getJournalByTimestamp }
 
 // store the data into localStorage before starting
 let journalList = getJournalList();
@@ -227,7 +227,15 @@ function createListItem(item) {
   itemList.appendChild(listItem);
 }
 
-function getJournalByTimestamp(timestamp) {
+/**
+ * Finds an entry using the time of creation as the id.
+ *
+ * @param {int} timestamp - a 13 digit snapshot of the time of creation that is used as an id.
+ * @param {JournalEntry[]} journalList - an array of all entries that are saved in local storage.
+ * @returns {noteObject} the matching entry of the given id if it was found. 
+ * If an entry is not found, undefined is return and an error message is logged. 
+ */
+function getJournalByTimestamp(timestamp, journalList) {
   const journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
@@ -239,6 +247,7 @@ function deleteJournal(timestamp) {
   journalList = journalList.filter((entry) => entry.timestamp != timestamp);
   saveJournalList(journalList);
 }
+
 
 function getJournalTags() {
   if(!localStorage.getItem("GarlicNotesTags")) {
@@ -354,7 +363,7 @@ function editJournal(id) {
     saveJournalList(journalList);
   }
 
-  noteObject = getJournalByTimestamp(id);
+  noteObject = getJournalByTimestamp(id, journalList);
 
   const noteID = noteObject.timestamp;
 
