@@ -12,6 +12,7 @@ describe('Basic user flow for List Page Website', () => {
         expect(journalEntries.length).toBe(0);
     });
     
+    // Testing 2: Canceling a new Journal
     it("Canceling creation of journal does not create journal", async() => {
         await page.click('.new-journal-button');
         page.on('dialog', async dialog => {
@@ -22,7 +23,7 @@ describe('Basic user flow for List Page Website', () => {
     expect(journalEntries.length).toBe(0);
     });
       
-    // Testing 2: Add a journal to the list
+    // Testing 3: Add a journal to the list
     it('Add journal to list', async () => {
         // Click the new journal button to open the editor
         await page.click('.new-journal-button');
@@ -46,7 +47,7 @@ describe('Basic user flow for List Page Website', () => {
         expect(journalEntries.length).toBe(1);
     });
 
-    // Testing 3: Edit a journal
+    // Testing 4: Edit a journal
     it('Edit journal', async () => {
         // Reload the page to ensure a clean state
         await page.reload();
@@ -85,7 +86,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
 
-    //Testing 4: Delete a journal from the list entry
+    //Testing 5: Delete a journal from the list entry
     it('Delete journal from the list entry', async () => {
         // Reload the page to ensure a clean state
         await page.reload();
@@ -101,7 +102,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
 
-    // Testing 5: Delete a journal from the modal
+    // Testing 6: Delete a journal from the modal
     it('Delete journal from the modal', async () => {
         // Reload the page to ensure a clean state
         await page.reload();
@@ -143,7 +144,7 @@ describe('Basic user flow for List Page Website', () => {
         expect(journalEntries.length).toBe(0);
     });
 
-    //Testing 6: Adding multiple journals
+    //Testing 7: Adding multiple journals
     it('Add multiple journals to list', async () => {
         function timeout(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
@@ -230,7 +231,7 @@ describe('Basic user flow for List Page Website', () => {
     });
 
     
-    // Testing 7: Search for a journal by title
+    // Testing 8: Search for a journal by title
     it('Search for journal by title', async () => {
         // Reload the page to ensure a clean state
         await page.reload();
@@ -249,7 +250,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
   
-    // Testing 8: Filter the journal by date (to be implemented)
+    // Testing 9: Filter the journal by date (to be implemented)
     it('Filter the journal by date', async () => {
         const testTime = new Date();
         const testMonth = ("0" + (testTime.getMonth() + 1)).slice(-2);
@@ -263,7 +264,7 @@ describe('Basic user flow for List Page Website', () => {
         expect(journalEntriesFilter.length).toBe(3);
     });
 
-    // Testing 9: Sort the journal by title reverse alphabetically
+    // Testing 10: Sort the journal by title reverse alphabetically
     it('Sort the journal by title reverse alphabetically', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -302,7 +303,7 @@ describe('Basic user flow for List Page Website', () => {
 
     });
 
-    // Testing 10: Sort the journal by title alphabetically 
+    // Testing 11: Sort the journal by title alphabetically 
     it('Sort the journal by title alphabetically', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -340,7 +341,7 @@ describe('Basic user flow for List Page Website', () => {
 
     });
 
-    // Testing 11: Sort the journal by date (to be implemented)
+    // Testing 12: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -367,7 +368,7 @@ describe('Basic user flow for List Page Website', () => {
 
     });
     
-    // Testing 12: Sort the journal by date in reverse
+    // Testing 13: Sort the journal by date in reverse
     it('Sort the journal by date', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -395,7 +396,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     // Tags
 
-    // Testing 13: Add new tags to jounal inside modal 
+    // Testing 14: Add new tags to jounal inside modal 
     it('Add new tags to journal', async() => {
         await page.reload();
         for(let i = 0; i < 3; i++){
@@ -432,7 +433,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
 
-    // Testing 14: Add tags when there are tags inside modal
+    // Testing 15: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
         await page.waitForSelector('#item-list li');
@@ -457,8 +458,7 @@ describe('Basic user flow for List Page Website', () => {
     });
 
 
-    // Testing 
-    // Testing 15: Adding duplicate tags
+    // Testing 16: Adding duplicate tags
     it('Adding duplicate tags', async () => {
         await page.reload();
 
@@ -496,8 +496,7 @@ describe('Basic user flow for List Page Website', () => {
         expect(tags.length).toBe(1);
     })
 
-    
-    // Testing 16: delete tags in modal
+    // Testing 17: delete tags in modal
     it('Delete tags in modal', async() => {
         await page.reload();
 
