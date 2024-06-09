@@ -595,14 +595,12 @@ describe('Basic User Flow for Root Page', () => {
         let cancelCount = await countDivsWithId(page, "root-node");
         expect(cancelCount).toBe(0);
     });
+
     // Testing 2: Expect date and weekday display to be correct
     it('Check for correct date and weekday', async () => {
-        let todayDate = new Date();
-        let testWeekDay = 
-        
 
     });
-
+    
     // Testing 3: Pressing create opens modal
     it('Pressing create opens modal', async () => {
         await page.reload();
@@ -614,42 +612,42 @@ describe('Basic User Flow for Root Page', () => {
         expect(modal.style.display).toBe('block');
     });
 
-    // Testing 3: Edit and save a journal to have title Testing 3
-    it('Edit and save a journal to have title Testing 3', async () => {
+    // Testing 4: Edit and save a journal to have title Testing 4
+    it('Edit and save a journal to have title Testing 4', async () => {
         const testTitle = "Testing 3";
         await page.type('#journalTitle', testTitle);
 
         await page.click('#closeModal');
         
-        const journaltitle = await page.evaluate(() => {
-            const titleElement = document.querySelector('#item-list li:first-child');
-            return titleElement.textContent.split(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}/)[0].trim();
+        const journalEntries = await page.evaluate(() => {
+            return JSON.parse(localStorage.getItem('GarlicNotes'));
         });
+
         // Check that the title is updated  
-        expect(journaltitle).toBe('Updated Title');
+        expect(journalEntries[0].title).toBe(testTitle);
     });
 
-    // Testing 4: New root node appears after saving a journal labeled with current day
+    // Testing 5: New root node appears after saving a journal labeled with current day
     it('New root node appears after saving a journal', async () => {
     });
 
-    // Testing 5: Search for 'Testing 3' journal by title
+    // Testing 6: Search for 'Testing 3' journal by title
     it('Search for a journal by title', async () => {
     });
 
-    // Testing 6: Pressing entry search result opens modal
+    // Testing 7: Pressing entry search result opens modal
     it('Pressing entry search result opens modal', async () => {
     });
 
-    // Testing 7: Editing title to 'Testing 3 Updated' and saving modal from entry search result updates dropdown to have new title
+    // Testing 8: Editing title to 'Testing 3 Updated' and saving modal from entry search result updates dropdown to have new title
     it('Editing and saving modal from entry search result updates dropdown', async () => {
     });
 
-    // Testing 8: The previous edit to an existing entry didn't add another root node
+    // Testing 9: The previous edit to an existing entry didn't add another root node
     it('The previous edit to an existing entry didn\'t add another root node', async () => {
     });
 
-    // Testing 9: Editing and cancelling modal from entry search result doesn't update dropdown
+    // Testing 10: Editing and cancelling modal from entry search result doesn't update dropdown
     it('Editing and cancelling modal from entry search result doesn\'t update dropdown', async () => {
     });
 
