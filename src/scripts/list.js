@@ -1,4 +1,8 @@
-import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
+// Import utility functions
+import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, parseTags } from "./util.js";
+
+// Export functions for unit tests
+export { getJournalByTimestamp, searchJournal }
 
 // store the data into localStorage before starting
 let journalList = getJournalList();
@@ -98,7 +102,7 @@ function parseUrlAndSearch() {
   if (startDateParam) startDate.value = dateToInputString(new Date(startDateParam));
   if (endDateParam) endDate.value = dateToInputString(new Date(endDateParam));
 
-  const results = searchJournal(query, tags, startDateParam, endDateParam);
+  const results = searchJournal(query, tags, startDateParam, endDateParam, journalList);
   displayList(results);
 }
 
@@ -263,12 +267,15 @@ function createListItem(item) {
 }
 
 /**
- * Retrieves a journal entry by its timestamp.
- * @param timestamp {number} - timestamp of the journal entry
- * @returns {JournalEntry|undefined} - journal entry with the specified timestamp, or undefined if not found
+ * Finds an entry using the time of creation as the id.
+ *
+ * @param {int} timestamp - a 13 digit snapshot of the time of creation that is used as an id.
+ * @param {JournalEntry[]} journalListParam - an array of all entries that are saved in local storage.
+ * @returns {noteObject} the matching entry of the given id if it was found. 
+ * If an entry is not found, undefined is return and an error message is logged. 
  */
-function getJournalByTimestamp(timestamp) {
-  const journal = journalList.find((entry) => entry.timestamp === timestamp);
+function getJournalByTimestamp(timestamp, journalListParam) {
+  const journal = journalListParam.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
     return undefined;
@@ -395,7 +402,7 @@ function editJournal(id) {
     saveJournalList(journalList);
   }
 
-  noteObject = getJournalByTimestamp(id);
+  noteObject = getJournalByTimestamp(id, journalList);
 
   const noteID = noteObject.timestamp;
 
@@ -566,10 +573,11 @@ function createTag(tag, tagsWrapper, noteObject, tagAdd) {
  * @param {Array.string} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
+ * @param {noteObject[]} journalListParam - Current list of entries in local storage
  * @returns {any} matching entries
  */
-function searchJournal(query, tags, startDate, endDate) {
-  let filteredList = journalList;
+function searchJournal(query, tags, startDate, endDate, journalListParam) {
+  let filteredList = journalListParam;
 
   // Filter by tags, case-sensitive
   tags.forEach(tag => {
@@ -590,18 +598,6 @@ function searchJournal(query, tags, startDate, endDate) {
   return getMatchingEntries(filteredList, query);
 }
 
-
-
-/**
- * Parses a string of comma-separated tags into an array.
- * @param {string} tagsString - string of comma-separated tags
- * @returns array of tags
- */
-function parseTags(tagsString) {
-  return tagsString.split(",").filter(tag => tag.length > 0);
-}
-
-
 /** @type {HTMLInputElement} */
 const searchBar = document.getElementById("search-bar");
 const tagsBar = document.getElementById("tags-bar");
@@ -618,6 +614,7 @@ function updateDisplay() {
       parseTags(tagsBar.value),
       startDate.value,
       endDate.value,
+      journalList
   );
 
   if (sortMode === "name") {
