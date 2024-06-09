@@ -15,12 +15,11 @@
   },
   "nyc": {
     "all": false,
-    "nyc": {
-      "exclude": [
-        "cdn.quilljs.com",
-        "fonts.googleapis.com"
-      ]
-    }
+    "exclude": [
+      "cdn.quilljs.com",
+      "fonts.googleapis.com"
+    ]
+
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
