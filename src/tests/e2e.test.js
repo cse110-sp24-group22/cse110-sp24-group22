@@ -1,4 +1,4 @@
-describe('Basic user flow for Link Page Website', () => {
+describe('Basic user flow for List Page Website', () => {
     // First, visit the website before running any tests
     beforeAll(async () => {
       await page.goto('http://127.0.0.1:5501/src/html/list.html');
@@ -335,6 +335,14 @@ describe('Basic user flow for Link Page Website', () => {
     // Testing 11: Add new tags to jounal inside modal 
     it('Add new tags to journal', async() => {
         await page.reload();
+        for(let i = 0; i < 3; i++){
+            await page.hover('li');
+            // Click the delete icon
+            await page.click('.delete-button');
+        }
+        // Get all journal entries on the page
+        const journalEntriesTagAddition = await page.$$('#item-list li');
+        expect(journalEntriesTagAddition.length).toBe(0);
         await page.evaluate(() => document.querySelector('ul').replaceChildren());
         // Add new journal
         await page.click('.new-journal-button');
