@@ -302,7 +302,45 @@ describe('Basic user flow for List Page Website', () => {
 
     });
 
-    // Testing 10: Sort the journal by date (to be implemented)
+    // Testing 10: Sort the journal by title alphabetically 
+    it('Sort the journal by title alphabetically', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
+
+        function isSortedAlphabetically(arr) {
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (arr[i].localeCompare(arr[i + 1]) > 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        await page.click('#sort-name');
+
+        // Get all journal entries on the page
+        const journalEntriesAlphaSort = await page.$$('#item-list li');
+        // Fetch the title of the journal entries
+        let result = [];
+        for(let t of journalEntriesAlphaSort){
+            const textContent = await t.evaluate(x => x.textContent);
+            result.push(extractTextWithoutDateTime(textContent));
+        }
+        let result2 = await Promise.all(journalEntriesAlphaSort.map(async (t) =>{
+            const textContent = await t.evaluate(x => x.textContent);
+            return extractTextWithoutDateTime(textContent);
+        }))
+
+        testResult = isSortedAlphabetically(result);
+        testResult2 = isSortedAlphabetically(result2);
+        expect(testResult).toBe(true);
+        expect(testResult2).toBe(true);
+
+    });
+
+    // Testing 11: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
         function extractTextWithoutDateTime(text) {
             // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
@@ -324,15 +362,40 @@ describe('Basic user flow for List Page Website', () => {
              const textContent = await t.evaluate(x => x.textContent);
              return extractTextWithoutDateTime(textContent);
          }))
-         console.log(result);
          expect(result).toEqual([ 'This is testing', 'Test 2', 'Test Title' ]);
          expect(result2).toEqual([ 'This is testing', 'Test 2', 'Test Title' ]);
 
     });
     
+    // Testing 12: Sort the journal by date in reverse
+    it('Sort the journal by date', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
+        // Click the sort by date button
+        await page.click('#sort-timestamp');
+    
+
+         // Get all journal entries on the page
+         const journalEntriesTimeSort = await page.$$('#item-list li');
+         // Fetch the title of the journal entries
+         let result = [];
+         for(let t of journalEntriesTimeSort){
+             const textContent = await t.evaluate(x => x.textContent);
+             result.push(extractTextWithoutDateTime(textContent));
+         }
+         let result2 = await Promise.all(journalEntriesTimeSort.map(async (t) =>{
+             const textContent = await t.evaluate(x => x.textContent);
+             return extractTextWithoutDateTime(textContent);
+         }))
+         expect(result).toEqual([ 'Test Title', 'Test 2', 'This is testing' ]);
+         expect(result2).toEqual([ 'Test Title', 'Test 2', 'This is testing' ]);
+
+    });
     // Tags
 
-    // Testing 11: Add new tags to jounal inside modal 
+    // Testing 13: Add new tags to jounal inside modal 
     it('Add new tags to journal', async() => {
         await page.reload();
         for(let i = 0; i < 3; i++){
@@ -368,34 +431,34 @@ describe('Basic user flow for List Page Website', () => {
         await page.evaluate(() => document.querySelector('ul').replaceChildren());
     });
     
-/*
-    // Testing 12: Add tags when there are tags inside modal
+
+    // Testing 14: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
-
-        // Wait for the search bar to be available
-        await page.waitForSelector('#search-bar');
-
-        // Enter the search term
-        await page.type('#search-bar', "Dummy");
-
-        const journalEntries = await page.$$('#item-list li');
-
-        // FIX 
-        let targetEntry = null;
-        for (const entry of journalEntries) {
-            const title = await entry.$eval('.title-class', el => el.innerText); // Adjust the selector to match your title element
-            if (title.includes("Dummy")) {
-                targetEntry = entry;
-                break;
-            }
+        await page.waitForSelector('#item-list li');
+        const journalEntryMultiTag = await page.$('#item-list li');
+        await journalEntryMultiTag.click();
+        await page.click('#tag-plus-button');
+        const testTag2 = "Test2";
+        await page.type('#tag-input-bar', testTag2);
+        await page.click('#save-tag');
+        await page.click('#closeModal');
+        let tags = await page.$$('li span');
+        let result = [];
+        for(let t of tags) {
+            result.push(await t.evaluate(x => x.textContent));
         }
-        
+    
+        let result2 = await Promise.all(tags.map(async (t) => {
+            return await t.evaluate(x => x.textContent);
+        }))
+        expect(result.length).toEqual(2);
+        expect(result2.length).toEqual(2); 
     });
-*/
+
 
     // Testing 
-    // Testing 13: Adding duplicate tags
+    // Testing 15: Adding duplicate tags
     it('Adding duplicate tags', async () => {
         await page.reload();
 
@@ -434,7 +497,7 @@ describe('Basic user flow for List Page Website', () => {
     })
 
     
-    // Testing 14: delete tags in modal
+    // Testing 16: delete tags in modal
     it('Delete tags in modal', async() => {
         await page.reload();
 
