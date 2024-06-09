@@ -118,7 +118,7 @@ header.entry-header {
 
 /* style for when the filter container is showing */
 .filter-container.show {
-  height: auto;
+  height: 2em;
   padding: 10px 0px 10px 0px;
 }
 
