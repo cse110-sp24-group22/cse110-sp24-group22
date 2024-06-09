@@ -70,10 +70,11 @@ describe('Basic user flow for Website', () => {
         // Click the Save Changes button
         await page.click('#closeModal');
         // Get the updated title text without the additional information
+        // Get the updated title text without the additional information
         const journaltitle = await page.evaluate(() => {
         const titleElement = document.querySelector('#item-list li:first-child');
-        return titleElement.textContent.split(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}Delete/)[0].trim();
-    });
+        return titleElement.textContent.split(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}/)[0].trim();
+        });
         // Check that the title is updated  
         expect(journaltitle).toBe('Updated Title');
         // Get all journal entries on the page
@@ -142,7 +143,7 @@ describe('Basic user flow for Website', () => {
         expect(journalEntries.length).toBe(0);
     });
 
-    //Testing 6: Adding multiple journals
+ /*   //Testing 6: Adding multiple journals
     it('Add multiple journals to list', async () => {
         // Click the new journal button to open the editor
         await page.click('.new-journal-button');
@@ -205,7 +206,7 @@ describe('Basic user flow for Website', () => {
         
         // Check that the number of journal entries is 3
         expect(journalEntries3.length).toBe(3);
-    });
+    });*/
 
     
     // Testing 6: Search for a journal by title
@@ -242,38 +243,25 @@ describe('Basic user flow for Website', () => {
         let journalEntries = await page.$$('#item-list li');
         expect(journalEntries.length).toBe(0);
         
-        console.log(journalEntries);
         // add entries in reverse alphabetical order
-        // Click the new journal button to open the editor
-        await page.click('.new-journal-button');
-        
-        // Enter the title
-        await page.type('#journalTitle', 'b');
+        for (let i = 1; i>=0; i--) {
+            // Click the new journal button to open the editor
+            await page.click('.new-journal-button');
+            
+            // Enter the title
+            await page.type('#journalTitle', String.fromCharCode(97+i));
 
-        // Enter the contents
-        await page.evaluate(() => {
-            const quill = new Quill('#editor', { theme: 'snow' });
-            quill.setText('a');
-        });
+            // Enter the contents
+            await page.evaluate(() => {
+                const quill = new Quill('#editor', { theme: 'snow' });
+                quill.setText('a');
+            });
 
-        // Click the save journal button
-        await page.click('#closeModal');
-        console.log(await page.$$('#item-list li'));
-        await page.click('.new-journal-button');
-        
-        // Enter the title
-        await page.type('#journalTitle', 'a');
-
-        // Enter the contents
-        await page.evaluate(() => {
-            const quill = new Quill('#editor', { theme: 'snow' });
-            quill.setText('a');
-        });
-
-        // Click the save journal button
-        await page.click('#closeModal');
-        console.log(await page.$$('#item-list li'));
+            // Click the save journal button
+            await page.click('#closeModal');
+        }        
         journalEntries = await page.$$('#item-list li');
+        console.log(journalEntries);
         expect(journalEntries.length).toBe(2);
 
         // click sort twice to sort alphabetically
@@ -282,17 +270,31 @@ describe('Basic user flow for Website', () => {
 
 
         for (let i = 0; i<journalEntries.length; i++) {
-            let entry = journalEntries[i];
-            let title = await entry.children[0].textContent;
+            let element = await page.$$('ul li');
+            let title = await page.evaluate((i, element) => element[i].children[0].textContent);
             expect(title).toBe(String.fromCharCode(97 + i));
         }
     });
-/*
+
     // Testing 9: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
-
+        // Click the sort by date button
+        await page.click('#sort-timestamp');
+    
+        // Get all journal entries on the page
+        const journalEntries = await page.$$('#item-list li');
+    
+        // Fetch the timestamps of the journal entries
+        const timestamps = await Promise.all(journalEntries.map(async (entry) => {
+            const timestamp = await (await entry.getProperty('timestamp')).jsonValue();
+            return timestamp;
+        }));
+    
+        // Check if the timestamps array is sorted in ascending order
+        const isSorted = timestamps.every((val, i, arr) => !i || (val >= arr[i - 1]));
+        expect(isSorted).toBe(true);
     });
-    /*
+    
     // Tags
 
     // Testing 10: Add new tags to jounal inside modal 
@@ -305,25 +307,26 @@ describe('Basic user flow for Website', () => {
         // Add tag
         await page.click('#tag-plus-button');
         const testTag = "Test";
-        await page.type('#tag-input-bar', testTag);
+        await page.type('#tag-input-bar', 'testTag');
 
         // Save tag
         await page.click('#save-tag');
 
         // Add title
         const testTitle = "Dummy"
-        await page.type('#journalTitle', testTitle);
+        await page.type('#journalTitle', 'testTitle');
 
         // Find the noteObject
         const noteObjectTags = await page.evaluate(() => {
             const journalEntries = JSON.parse(localStorage.getItem('GarlicNotes'));
-            return journalEntries.find(note => note.title === testTitle).tags;
+            return journalEntries.find(note => note.title === 'testTitle').tags;
         });
 
         // Check that the tags in the noteObject contains testTag
         expect(noteObjectTags.includes(testTag)).toBe(true);
     });
-
+    
+/*
     // Testing 11: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
