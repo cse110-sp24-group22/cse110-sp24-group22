@@ -5,14 +5,20 @@
     "quill": "^2.0.2"
   },
   "scripts": {
-    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config .github/workflows/jest.unit.cjs  --coverage",
-    "test:e2e": "jest --maxWorkers=1 --config .github/workflows/jest.e2e.cjs --coverage"
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config .github/workflows/jest.unit.cjs",
+    "test:e2e": "jest --maxWorkers=1 --config .github/workflows/jest.e2e.cjs"
   },
   "type": "module",
   "jest": {
-    "collectCoverage": true,
     "transform": {},
     "verbose": true
+  },
+  "nyc": {
+    "all": false,
+    "exclude": [
+      "cdn.quilljs.com",
+      "fonts.googleapis.com"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",

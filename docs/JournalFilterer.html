@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: JournalFilterer</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: JournalFilterer</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>JournalFilterer<span class="signature">(journalList)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Filters journal entries by date.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="JournalFilterer"><span class="type-signature"></span>new JournalFilterer<span class="signature">(journalList)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Constructs a JournalFilterer.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>journalList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#JournalEntry">JournalEntry</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">list of journal entries</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line560">line 560</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="dateToEntries"><span class="type-signature"></span>dateToEntries<span class="type-signature"> :Map.&lt;number, Array.&lt;<a href="global.html#JournalEntry">JournalEntry</a>>></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Map.&lt;number, Array.&lt;<a href="global.html#JournalEntry">JournalEntry</a>>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line567">line 567</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="filterByDate"><span class="type-signature"></span>filterByDate<span class="signature">(date)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="global.html#JournalEntry">JournalEntry</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Filters journal entries by date.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>date</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">date to filter by</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="main.js.html">main.js</a>, <a href="main.js.html#line584">line 584</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - list of journal entries on that date
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="global.html#JournalEntry">JournalEntry</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JournalFilterer.html">JournalFilterer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#animateNode">animateNode</a></li><li><a href="global.html#COLORS">COLORS</a></li><li><a href="global.html#createEntryDropdownItem">createEntryDropdownItem</a></li><li><a href="global.html#createListItem">createListItem</a></li><li><a href="global.html#createTag">createTag</a></li><li><a href="global.html#dateToInputString">dateToInputString</a></li><li><a href="global.html#deleteJournal">deleteJournal</a></li><li><a href="global.html#displayEntryDropdownList">displayEntryDropdownList</a></li><li><a href="global.html#displayList">displayList</a></li><li><a href="global.html#displayPlantImage">displayPlantImage</a></li><li><a href="global.html#editJournal">editJournal</a></li><li><a href="global.html#entryDropdownList">entryDropdownList</a></li><li><a href="global.html#getColor">getColor</a></li><li><a href="global.html#getJournalByTimestamp">getJournalByTimestamp</a></li><li><a href="global.html#getJournalEntryCount">getJournalEntryCount</a></li><li><a href="global.html#getJournalList">getJournalList</a></li><li><a href="global.html#getJournalTags">getJournalTags</a></li><li><a href="global.html#getMatchingEntries">getMatchingEntries</a></li><li><a href="global.html#getPlantImage">getPlantImage</a></li><li><a href="global.html#getTextFromDelta">getTextFromDelta</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#isTitleValid">isTitleValid</a></li><li><a href="global.html#newListOnCanClick">newListOnCanClick</a></li><li><a href="global.html#parseTags">parseTags</a></li><li><a href="global.html#parseUrlAndSearch">parseUrlAndSearch</a></li><li><a href="global.html#renderRoots">renderRoots</a></li><li><a href="global.html#rootNodeContainer">rootNodeContainer</a></li><li><a href="global.html#rootNodeData">rootNodeData</a></li><li><a href="global.html#saveJournalList">saveJournalList</a></li><li><a href="global.html#saveJournalTags">saveJournalTags</a></li><li><a href="global.html#searchBar">searchBar</a></li><li><a href="global.html#searchJournal">searchJournal</a></li><li><a href="global.html#setUpHomeSearch">setUpHomeSearch</a></li><li><a href="global.html#setUpSearch">setUpSearch</a></li><li><a href="global.html#setYearDisplay">setYearDisplay</a></li><li><a href="global.html#sortByCategory">sortByCategory</a></li><li><a href="global.html#sortMode">sortMode</a></li><li><a href="global.html#startDate">startDate</a></li><li><a href="global.html#updateDisplay">updateDisplay</a></li><li><a href="global.html#updateDropdown">updateDropdown</a></li><li><a href="global.html#updatePlantImage">updatePlantImage</a></li><li><a href="global.html#updateSortArrows">updateSortArrows</a></li><li><a href="global.html#yearDisplay">yearDisplay</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Jun 09 2024 03:41:44 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

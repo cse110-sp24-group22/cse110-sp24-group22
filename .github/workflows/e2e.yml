@@ -1,9 +1,15 @@
 name: E2E Tests
 
 on:
+  push:
+    branches:
+      - main
+      - e2e-testing
+      
   pull_request:
     branches:
       - main
+      - main-doc
       
 jobs:
   e2e-test:
@@ -21,6 +27,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Install nyc
+      run: npm i nyc -g
+
     - name: Install http-server
       run: npm install -g http-server
 
@@ -28,11 +37,23 @@ jobs:
       run: http-server -p 5501 &
       # The ampersand (&) runs http-server in the background
 
+    - name: Run tests
+      run: npm run test:e2e
+    
+    - name: Install lcov
+      run: sudo apt-get install lcov
+    
+    - name: Generate lcov report
+      run: nyc report --reporter=lcov
+    
+    - name: Filter report
+      run: lcov --remove ./coverage/lcov.info '*/node_modules/*' '*/cdn.quilljs.com/*' '*/fonts.googleapis.com/*' --output-file ./coverage.info
+
+    
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v6.0.0
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CC_ID}}
       with:
-        coverageCommand: npm run test:e2e
-        coverageLocations: ${{ github.workspace }}/coverage/lcov.info:lcov
+        coverageLocations: ${{ github.workspace }}/coverage.info:lcov
         debug: true
