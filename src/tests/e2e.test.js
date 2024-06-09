@@ -535,6 +535,11 @@ describe('Basic user flow for List Page Website', () => {
         // Check that the tags in the noteObject contains testTag
         tags = await page.$$('.colored-tag');
         expect(tags.length).toBe(0);
+        for(let i = 0; i < 3; i++){
+            await page.hover('li');
+            // Click the delete icon
+            await page.click('.delete-button');
+        }
     });
          //Test # ,Test traveling through the pages
     it('Go to root page', async() => {
@@ -566,6 +571,15 @@ describe('Basic User Flow for Root Page', () => {
         return null;
     }
 
+
+    //Testing 1: There are 0 nodes on the current page.
+    it('Check for no nodes', async () => {
+        let nodeExist = false;
+        if(await page.$('.root-node') !== null){
+            nodeExist = true;
+        }
+        expect(nodeExist).toBe(false);
+    });
     // Testing 1: Expect date and weekday display to be correct
     it('Check for correct date and weekday', async () => {
     });
