@@ -261,7 +261,7 @@ function editJournal(id) {
     saveJournalList(journalList);
   }
 
-  noteObject = getJournalByTimestamp(id);
+  noteObject = getJournalByTimestamp(id, journalList);
 
   const noteID = noteObject.timestamp;
 
@@ -401,7 +401,7 @@ function editJournal(id) {
 * @param timestamp {number} - unique identifier and time it was created
 * @returns {JournalEntry|undefined} - journal entry or undefined if not found
 */
-function getJournalByTimestamp(timestamp) {
+function getJournalByTimestamp(timestamp, journalList) {
   let journal = journalList.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
@@ -653,7 +653,7 @@ function renderRoots(doAnimation = false) {
     node.className = "root-node";
     node.style.position = "absolute";
 
-    // Move things so that they align correcrtly
+    // Move things so that they align correctly
     const SCALE_X = 0.00190;
     const SCALE_Y = 0.00128;
 
