@@ -249,9 +249,17 @@ describe('Basic user flow for Link Page Website', () => {
 
         // Get all journal entries on the page
         const journalEntriesAlphaSort = await page.$$('#item-list li');
-        console.log(journalEntriesAlphaSort);
-       /* // Fetch the title of the journal entries
-        const titles = await Promise.all(journalEntries.map(async (entry) => {
+        // Fetch the title of the journal entries
+        let result = [];
+        for(let t of journalEntriesAlphaSort){
+            result.push(await t.evaluate(x=>x.textContent));
+        }
+        let result2 = await Promise.all(journalEntriesAlphaSort.map(async (t) =>{
+            return await t.evaluate(x=> x.textContent);
+        }))
+
+        console.log({result : result, result2 : result2});
+        /*const titles = await Promise.all(journalEntriesAlphaSort.map(async (entry) => {
             const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
             const title = await (await titleHandle.getProperty('textContent')).jsonValue();
             return title.trim(); // Trim any extra whitespace
@@ -259,7 +267,7 @@ describe('Basic user flow for Link Page Website', () => {
 
         console.log(titles);
 
-        // Check if the titles array is sorted in ascending order
+       /* // Check if the titles array is sorted in ascending order
         const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
         expect(isSorted).toBe(true);
 
