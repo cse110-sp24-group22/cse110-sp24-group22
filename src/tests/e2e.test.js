@@ -768,9 +768,9 @@ describe('Basic User Flow for Root Page', () => {
         const journalEntries = await page.evaluate(() => {
             return JSON.parse(localStorage.getItem('GarlicNotes'));
         });
-     /*   // Check that the title is updated  
+        // Check that the title is updated  
         expect(journalEntries[0].title).toBe("Testing 3 Updated");
-       */await page.reload();
+       await page.reload();
         await page.type('#search-bar', testEditTitle);
 
         const journalEditEntries = await page.$$('#entry-dropdown li');
