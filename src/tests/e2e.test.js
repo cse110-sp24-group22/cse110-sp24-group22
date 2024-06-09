@@ -1,7 +1,7 @@
-describe('Basic user flow for Website', () => {
+describe('Basic user flow for Link Page Website', () => {
     // First, visit the website before running any tests
     beforeAll(async () => {
-      await page.goto('http://127.0.0.1:5500/src/html/list.html');
+      await page.goto('http://127.0.0.1:5501/src/html/list.html');
     });
 
     // Testing 1: Initial check for 0 journals
@@ -419,21 +419,21 @@ describe('Basic user flow for Website', () => {
         expect(tags.length).toBe(0);
         //await page.evaluate(() => document.querySelector('ul').replaceChildren());
     });
-
-    //Test # ,Test traveling through the pages
+         //Test # ,Test traveling through the pages
     it('Go to root page', async() => {
-        const response = await page.goto('http://127.0.0.1:5500/src/html/list.html');
+        const response = await page.goto('http://127.0.0.1:5501/src/html/list.html');
         //refresh page
         await page.reload();
         //click "Root View"
         await page.click('.return-button');
         let result = false;
         //check url
-        if(page.url() == "http://127.0.0.1:5500/src/html/home.html"){
+        if(page.url() == "http://127.0.0.1:5501/src/html/home.html"){
             result = true;
         }
         expect(result).toBe(true);
     });
 
-
 });
+describe('Basic User Flow for Root Page', () => {
+    });
