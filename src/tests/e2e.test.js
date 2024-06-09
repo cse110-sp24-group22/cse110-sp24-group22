@@ -578,6 +578,17 @@ describe('Basic User Flow for Root Page', () => {
         return count;
     }
 
+    async function isModalVisible(page) {
+        const isVisible = await page.evaluate(() => {
+            // Get the modal element
+            const modal = document.getElementById('journalModal');
+            // Check if the modal is visible (display: block)
+            const isVisible = window.getComputedStyle(modal).getPropertyValue('display') === 'block';
+            return isVisible;
+        });
+        return isVisible;
+    }
+
 
     // Testing 0: There are 0 nodes on the current page.
     it('Check for no nodes', async () => {
@@ -636,12 +647,9 @@ describe('Basic User Flow for Root Page', () => {
     // Testing 3: Pressing create opens modal
     it('Pressing create opens modal', async () => {
         await page.reload();
-
         await page.click('#can-container');
-
-        const modal = await page.waitForSelector('#journalModal');
-
-        expect(modal.style.display).toBe('block');
+        const modal = await isModalVisible(page);
+        expect(modal).toBe(true);
     });
 
     // Testing 4: Edit and save a journal to have title Testing 4
