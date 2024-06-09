@@ -367,9 +367,35 @@ describe('Basic user flow for List Page Website', () => {
 
     });
     
+    // Testing 12: Sort the journal by date in reverse
+    it('Sort the journal by date', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
+        // Click the sort by date button
+        await page.click('#sort-timestamp');
+    
+
+         // Get all journal entries on the page
+         const journalEntriesTimeSort = await page.$$('#item-list li');
+         // Fetch the title of the journal entries
+         let result = [];
+         for(let t of journalEntriesTimeSort){
+             const textContent = await t.evaluate(x => x.textContent);
+             result.push(extractTextWithoutDateTime(textContent));
+         }
+         let result2 = await Promise.all(journalEntriesTimeSort.map(async (t) =>{
+             const textContent = await t.evaluate(x => x.textContent);
+             return extractTextWithoutDateTime(textContent);
+         }))
+         expect(result).toEqual([ 'Test Title', 'Test 2', 'This is testing' ]);
+         expect(result2).toEqual([ 'Test Title', 'Test 2', 'This is testing' ]);
+
+    });
     // Tags
 
-    // Testing 12: Add new tags to jounal inside modal 
+    // Testing 13: Add new tags to jounal inside modal 
     it('Add new tags to journal', async() => {
         await page.reload();
         for(let i = 0; i < 3; i++){
@@ -406,7 +432,7 @@ describe('Basic user flow for List Page Website', () => {
     });
     
 
-    // Testing 13: Add tags when there are tags inside modal
+    // Testing 14: Add tags when there are tags inside modal
     it('Add tags when there are tags inside modal', async() => {
         await page.reload();
         await page.waitForSelector('#item-list li');
@@ -432,7 +458,7 @@ describe('Basic user flow for List Page Website', () => {
 
 
     // Testing 
-    // Testing 14: Adding duplicate tags
+    // Testing 15: Adding duplicate tags
     it('Adding duplicate tags', async () => {
         await page.reload();
 
@@ -471,7 +497,7 @@ describe('Basic user flow for List Page Website', () => {
     })
 
     
-    // Testing 15: delete tags in modal
+    // Testing 16: delete tags in modal
     it('Delete tags in modal', async() => {
         await page.reload();
 
