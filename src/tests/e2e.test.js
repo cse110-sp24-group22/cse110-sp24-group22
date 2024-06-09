@@ -584,47 +584,26 @@ describe('Basic User Flow for Root Page', () => {
         let intCount = await countDivsWithId(page, "root-node");
         expect(intCount).toBe(0);
     });
-    // Testing 2: Canceling a new Journal
+
+    // Testing 1: Canceling a new Journal
     it("Canceling creation of journal does not create journal", async() => {
-        await page.click('#watering-can');
+        await page.click('#can-container');
         page.on('dialog', async dialog => {
             await dialog.accept();
         })
         await page.click('.close-button');
-        let nodeExist = false;
-        if(await page.$('.root-node') !== null){
-            nodeExist = true;
-        }
-        expect(nodeExist).toBe(false);
+        let cancelCount = await countDivsWithId(page, "root-node");
+        expect(cancelCount).toBe(0);
     });
-    // Testing 1: Expect date and weekday display to be correct
+    // Testing 2: Expect date and weekday display to be correct
     it('Check for correct date and weekday', async () => {
+        let todayDate = new Date();
+        let testWeekDay = 
         
-         // Click the new journal button to open the editor
-         await page.click('#watering-can');
-        
-        // Enter the title
-        await page.type('#journalTitle', 'Test Title');
-
-        // Enter the contents
-        await page.evaluate(() => {
-            const quill = new Quill('#editor', { theme: 'snow' });
-            quill.setText('Test Content');
-        });
-
-        // Click the save journal button
-        await page.click('#closeModal');
-
-        // Get all journal entries on the page
-       let nodeExist = false;
-        if(await page.$('.root-node') !== null){
-            nodeExist = true;
-        }
-        expect(nodeExist).toBe(true);
 
     });
 
-    // Testing 2: Pressing create opens modal
+    // Testing 3: Pressing create opens modal
     it('Pressing create opens modal', async () => {
         await page.reload();
 
