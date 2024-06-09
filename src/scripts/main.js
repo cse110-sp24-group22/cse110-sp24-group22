@@ -314,6 +314,7 @@ function editJournal(id) {
     }
     else {
       modal.style.display = "none";
+      saveJournalList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
     }
     renderRoots();
