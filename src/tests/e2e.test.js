@@ -145,6 +145,9 @@ describe('Basic user flow for Link Page Website', () => {
 
     //Testing 6: Adding multiple journals
     it('Add multiple journals to list', async () => {
+        function timeout(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
         // Click the new journal button to open the editor
         await page.click('.new-journal-button');
         
@@ -181,6 +184,7 @@ describe('Basic user flow for Link Page Website', () => {
         await page.keyboard.press('A');
         await page.keyboard.up('Control');
         await page.keyboard.press('Backspace');
+        await timeout(2000);
         await page.type('#journalTitle', 'Test 2');
 
         // Enter the contents
@@ -206,6 +210,7 @@ describe('Basic user flow for Link Page Website', () => {
         await page.keyboard.press('A');
         await page.keyboard.up('Control');
         await page.keyboard.press('Backspace');
+        await timeout(2000);
         await page.type('#journalTitle', 'This is testing');
 
         // Enter the contents
@@ -294,41 +299,36 @@ describe('Basic user flow for Link Page Website', () => {
         testResult2 = isSortedReverseAlphabetically(result2);
         expect(testResult).toBe(true);
         expect(testResult2).toBe(true);
-        /*const titles = await Promise.all(journalEntriesAlphaSort.map(async (entry) => {
-            const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
-            const title = await (await titleHandle.getProperty('textContent')).jsonValue();
-            return title.trim(); // Trim any extra whitespace
-        }));
 
-        console.log(titles);
-
-       /* // Check if the titles array is sorted in ascending order
-        const isSorted = titles.every((val, i, arr) => !i || (val >= arr[i - 1]));
-        expect(isSorted).toBe(true);
-
-        // Check that the number of journal entries is correct
-        // Adjust this if you expect a different number of entries
-        expect(journalEntries.length).toBe(titles.length); */
     });
 
-  /*  // Testing 10: Sort the journal by date (to be implemented)
+    // Testing 10: Sort the journal by date (to be implemented)
     it('Sort the journal by date', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
         // Click the sort by date button
         await page.click('#sort-timestamp');
     
-        // Get all journal entries on the page
-        const journalEntries = await page.$$('#item-list li');
-    
-        // Fetch the timestamps of the journal entries
-        const timestamps = await Promise.all(journalEntries.map(async (entry) => {
-            const timestamp = await (await entry.getProperty('timestamp')).jsonValue();
-            return timestamp;
-        }));
-    
-        // Check if the timestamps array is sorted in ascending order
-        const isSorted = timestamps.every((val, i, arr) => !i || (val >= arr[i - 1]));
-        expect(isSorted).toBe(true);
-    });*/
+
+         // Get all journal entries on the page
+         const journalEntriesTimeSort = await page.$$('#item-list li');
+         // Fetch the title of the journal entries
+         let result = [];
+         for(let t of journalEntriesTimeSort){
+             const textContent = await t.evaluate(x => x.textContent);
+             result.push(extractTextWithoutDateTime(textContent));
+         }
+         let result2 = await Promise.all(journalEntriesTimeSort.map(async (t) =>{
+             const textContent = await t.evaluate(x => x.textContent);
+             return extractTextWithoutDateTime(textContent);
+         }))
+         console.log(result);
+         expect(result).toEqual([ 'This is testing', 'Test 2', 'Test Title' ]);
+         expect(result2).toEqual([ 'This is testing', 'Test 2', 'Test Title' ]);
+
+    });
     
     // Tags
 
