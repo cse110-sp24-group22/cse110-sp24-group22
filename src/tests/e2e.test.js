@@ -149,6 +149,12 @@ describe('Basic user flow for Link Page Website', () => {
         await page.click('.new-journal-button');
         
         // Enter the title
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
+
         await page.type('#journalTitle', 'Test Title');
 
         // Enter the contents
@@ -170,6 +176,11 @@ describe('Basic user flow for Link Page Website', () => {
         await page.click('.new-journal-button');
         
         // Enter the title
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
         await page.type('#journalTitle', 'Test 2');
 
         // Enter the contents
@@ -190,6 +201,11 @@ describe('Basic user flow for Link Page Website', () => {
         await page.click('.new-journal-button');
         
         // Enter the title
+        await page.click('#journalTitle');
+        await page.keyboard.down('Control');
+        await page.keyboard.press('A');
+        await page.keyboard.up('Control');
+        await page.keyboard.press('Backspace');
         await page.type('#journalTitle', 'This is testing');
 
         // Enter the contents
@@ -242,8 +258,22 @@ describe('Basic user flow for Link Page Website', () => {
         expect(journalEntriesFilter.length).toBe(3);
     });
 
-    // Testing 9: Sort the journal by title alphabetically
-    it('Sort the journal by title alphabetically', async () => {
+    // Testing 9: Sort the journal by title reverse alphabetically
+    it('Sort the journal by title reverse alphabetically', async () => {
+        function extractTextWithoutDateTime(text) {
+            // Adjust the regex pattern to match "DD/MM/YYYY HH:MM"
+            return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, '').trim();
+        }
+
+        function isSortedReverseAlphabetically(arr) {
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (arr[i].localeCompare(arr[i + 1]) < 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         await page.reload();
         await page.click('#sort-name');
 
@@ -252,13 +282,18 @@ describe('Basic user flow for Link Page Website', () => {
         // Fetch the title of the journal entries
         let result = [];
         for(let t of journalEntriesAlphaSort){
-            result.push(await t.evaluate(x=>x.textContent));
+            const textContent = await t.evaluate(x => x.textContent);
+            result.push(extractTextWithoutDateTime(textContent));
         }
         let result2 = await Promise.all(journalEntriesAlphaSort.map(async (t) =>{
-            return await t.evaluate(x=> x.textContent);
+            const textContent = await t.evaluate(x => x.textContent);
+            return extractTextWithoutDateTime(textContent);
         }))
 
-        console.log({result : result, result2 : result2});
+        testResult = isSortedReverseAlphabetically(result);
+        testResult2 = isSortedReverseAlphabetically(result2);
+        expect(testResult).toBe(true);
+        expect(testResult2).toBe(true);
         /*const titles = await Promise.all(journalEntriesAlphaSort.map(async (entry) => {
             const titleHandle = await entry.$('.title'); // Adjust the selector to match the title element
             const title = await (await titleHandle.getProperty('textContent')).jsonValue();
