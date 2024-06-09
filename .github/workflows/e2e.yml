@@ -37,9 +37,21 @@ jobs:
       run: http-server -p 5501 &
       # The ampersand (&) runs http-server in the background
 
-    - name: Run tests
-      run: npm run test:e2e
+    - name: Run tests on List page
+      run: |
+        npm run test:e2eList
+        mv .nyc_output/out.json .nyc_output/listCoverage.json
+
+    - name: Run tests on Root page
+      run: |
+        npm run test:e2eRoot
+        mv .nyc_output/out.json .nyc_output/rootCoverage.json
     
+    - name: Merge Coverage reports
+      run: |
+        nyc merge .nyc_output ./.nyc_output/coverage.json
+        rm .nyc_output/listCoverage.json .nyc_output/rootCoverage.json
+
     - name: Install lcov
       run: sudo apt-get install lcov
     
