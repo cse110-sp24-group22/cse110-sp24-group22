@@ -79,6 +79,6 @@ Let's get your project growing!
 We utilized the Jest framework in conjunction with the Puppeteer library to implement unit and end to end (E2E) testing to ensure intended functionality.
 
 ## Other Links
-- [Team Page](/admin/team.md)
+- [Team Page](https://cse110-sp24-group22.github.io/cse110-sp24-group22/admin/team.html)
 - [Group Intro](https://youtu.be/Pr2DBvsQnfE)
-- [Documentation Page](/docs/index.html)
+- [Documentation Page](https://cse110-sp24-group22.github.io/cse110-sp24-group22/docs/index.html)
