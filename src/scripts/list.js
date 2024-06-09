@@ -1,5 +1,8 @@
+// Import utility functions
 import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList} from "./util.js";
-export { getJournalByTimestamp }
+
+// Export functions for unit tests
+export { getJournalByTimestamp, searchJournal }
 
 // store the data into localStorage before starting
 let journalList = getJournalList();
@@ -71,7 +74,7 @@ function parseUrlAndSearch() {
   const startDate = urlParams.get('startDate') || '';
   const endDate = urlParams.get('endDate') || '';
 
-  const results = searchJournal(query, tags, startDate, endDate);
+  const results = searchJournal(query, tags, startDate, endDate, journalList);
   displayList(results);
 }
 
@@ -231,12 +234,12 @@ function createListItem(item) {
  * Finds an entry using the time of creation as the id.
  *
  * @param {int} timestamp - a 13 digit snapshot of the time of creation that is used as an id.
- * @param {JournalEntry[]} journalList - an array of all entries that are saved in local storage.
+ * @param {JournalEntry[]} journalListParam - an array of all entries that are saved in local storage.
  * @returns {noteObject} the matching entry of the given id if it was found. 
  * If an entry is not found, undefined is return and an error message is logged. 
  */
-function getJournalByTimestamp(timestamp, journalList) {
-  const journal = journalList.find((entry) => entry.timestamp == timestamp);
+function getJournalByTimestamp(timestamp, journalListParam) {
+  const journal = journalListParam.find((entry) => entry.timestamp == timestamp);
   if (journal === undefined) {
     console.error(`Error: No journal entry found with timestamp ${timestamp}`);
     return undefined;
@@ -535,10 +538,11 @@ function createTag(tag, tagsWrapper, noteObject, tagAdd) {
  * @param {Array.string} tags - list of exact tags to include
  * @param {string} startDate - start date formatted yyyy-mm-dd
  * @param {string} endDate - end date formatted yyyy-mm-dd
+ * @param {noteObject[]} journalListParam - Current list of entries in local storage
  * @returns {any} matching entries
  */
-function searchJournal(query, tags, startDate, endDate) {
-  let filteredList = journalList;
+function searchJournal(query, tags, startDate, endDate, journalListParam) {
+  let filteredList = journalListParam;
 
   // Filter by tags, case-sensitive
   tags.forEach(tag => {
@@ -583,6 +587,7 @@ function updateDisplay() {
       parseTags(tagsBar.value),
       startDate.value,
       endDate.value,
+      journalList
   );
 
   if (sortMode === "name") {

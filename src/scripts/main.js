@@ -567,7 +567,7 @@ function renderRoots() {
     node.className = "root-node";
     node.style.position = "absolute";
 
-    // Move things so that they align correcrtly
+    // Move things so that they align correctly
     const SCALE_X = 0.00190;
     const SCALE_Y = 0.00128;
 
