@@ -1,9 +1,6 @@
 name: Unit Tests
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -21,11 +18,5 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Test & publish code coverage
-      uses: paambaati/codeclimate-action@v6.0.0
-      env:
-        CC_TEST_REPORTER_ID: ${{secrets.CC_ID}}
-      with:
-        coverageCommand: npm run test:unit
-        coverageLocations: ${{ github.workspace }}/coverage/lcov.info:lcov
-        debug: true
+    - name: Test unit tests
+      run: npm run test:unit
