@@ -388,7 +388,7 @@ describe('Basic user flow for Website', () => {
     // Testing 14: delete tags in modal
     it('Delete tags in modal', async() => {
         await page.reload();
-        //await page.evaluate(() => document.querySelector('ul').replaceChildren());
+
         // Add new journal
         await page.click('.new-journal-button');
 
@@ -405,21 +405,26 @@ describe('Basic user flow for Website', () => {
         const testTitle = "Dummy"
         await page.type('#journalTitle', testTitle);
 
-        // Delete tag
-        await page.click("#tag-plus > div");
-
+        // Handle the dialog within the context of clicking the tag
         page.on('dialog', async dialog => {
             //get alert message
             console.log(dialog.message());
-            //accept alert
-            await dialog.accept();
          })
-        await page.click('#closeModal');
 
+         //make sure a tag was added
+         let tags = await page.$$('.tags');
+         console.log(`Number of tags after adding: ${tags.length}`);
+         expect(tags.length).toBe(1);
+
+        // Delete tag by clicking on it
+        await page.click('.colored-tag');
+
+        // Save the journal entry
+        await page.click('#closeModal');
+       
         // Check that the tags in the noteObject contains testTag
-        let tags = await page.$$('.tags');
+        tags = await page.$$('.colored-tag');
         expect(tags.length).toBe(0);
-        //await page.evaluate(() => document.querySelector('ul').replaceChildren());
     });
 
     //Test # ,Test traveling through the pages
