@@ -462,7 +462,6 @@ describe('Basic user flow for List Page Website', () => {
 
          //make sure a tag was added
          let tags = await page.$$('.tags');
-         console.log(`Number of tags after adding: ${tags.length}`);
          expect(tags.length).toBe(1);
 
         // Delete tag by clicking on it
