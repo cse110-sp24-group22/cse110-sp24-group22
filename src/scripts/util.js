@@ -1,5 +1,14 @@
 // Export utility functions
-export { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, createTag, saveJournalTags, getJournalTags, parseTags };
+export { 
+  getMatchingEntries, 
+  saveJournalList, 
+  isTitleValid, 
+  getJournalList, 
+  createTag, 
+  saveJournalTags, 
+  getJournalTags, 
+  parseTags 
+};
 
 // Search-related utility functions
 

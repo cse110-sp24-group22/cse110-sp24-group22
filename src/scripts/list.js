@@ -1,8 +1,17 @@
 // Import utility functions
-import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, parseTags } from "./util.js";
+import { 
+  getMatchingEntries, 
+  saveJournalList, 
+  isTitleValid, 
+  getJournalList, 
+  parseTags 
+} from "./util.js";
 
 // Export functions for unit tests
-export { getJournalByTimestamp, searchJournal }
+export { 
+  getJournalByTimestamp, 
+  searchJournal 
+}
 
 // store the data into localStorage before starting
 let journalList = getJournalList();
