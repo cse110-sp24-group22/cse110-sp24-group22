@@ -80,7 +80,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: doc
-          base: main
+          branch: main
+          base: doc
           title: 'Update Documentation'
           body: 'Automated PR to merge doc into main.'
