@@ -44,6 +44,14 @@ function init() {
     newListOnCanClick();
     setUpHomeSearch();
     updatePlantImage();
+
+    document.addEventListener("keydown", (event) => {
+      const modal = document.getElementById("journalModal");
+      if ((event.ctrlKey || event.metaKey) && event.key === "s" && modal.style.display !== "none") {
+        event.preventDefault();
+        document.getElementById("closeModal").click();
+      }
+  });
 }
 
 /**
