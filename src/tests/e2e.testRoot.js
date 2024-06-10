@@ -315,6 +315,147 @@ describe("Basic user flow for Website", () => {
   });
 // ==============================================================
 
+  
+  // Tags
+
+  // Testing 16: Add new tags to journal inside modal
+  it("Add new tags to journal", async () => {
+    await page.reload();
+    
+    // Add new journal
+    await page.click("#can-container");
+
+    // Add tag
+    await page.click("#tag-plus-button");
+    const testTag = "Test";
+    await page.type("#tag-input-bar", testTag);
+
+    // Save tag
+    await page.click("#save-tag");
+
+    // Add title
+    const testTitle = "Dummy";
+    await page.type("#journalTitle", testTitle);
+    await page.click("#closeModal");
+
+    // Get local storage
+    const journalEntries = await page.evaluate(() => {
+      return JSON.parse(localStorage.getItem("GarlicNotes"));
+    });
+    // Check that the tags are updated
+    expect(journalEntries.find((entry) => entry.title == testTitle).tags).toStrictEqual([testTag]);
+
+    // Check that the tags are updated in modal
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+    const journalEditEntries = await page.$$("#entry-dropdown li");
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+
+    let tag = await page.$(".colored-tag");
+    let tagContent = await (await tag.getProperty("innerText")).jsonValue();
+    // Check that the tags in the noteObject contains testTag
+    expect(tagContent).toBe(testTag);
+  });
+
+  // Testing 17: Add tags when there are tags inside modal
+  it("Add tags when there are tags inside modal", async () => {
+    const testTag = "Test";
+    const testTitle = "Dummy";
+
+    // Get Dummy entry
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+
+    let journalEditEntries = await page.$$("#entry-dropdown li");
+
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+    await page.click("#tag-plus-button");
+    const testTag2 = "Test2";
+    await page.type("#tag-input-bar", testTag2);
+    await page.click("#save-tag");
+    await page.click("#closeModal");
+
+    // Get local storage
+    const journalEntries = await page.evaluate(() => {
+      return JSON.parse(localStorage.getItem("GarlicNotes"));
+    });
+    // Check that the tags are updated
+    expect(journalEntries.find((entry) => entry.title == testTitle).tags).toStrictEqual([testTag, testTag2]);
+
+    // Check that the tags are updated in modal
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+    journalEditEntries = await page.$$("#entry-dropdown li");
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+
+    // Grab tags from modal
+    let tags = await page.$$(".colored-tag");
+    let result = [];
+    for (let t of tags) {
+      result.push(await t.evaluate((x) => x.textContent));
+    }
+
+    // Grab tags content
+    let result2 = await Promise.all(
+      tags.map(async (t) => {
+        return await t.evaluate((x) => x.textContent);
+      })
+    );
+    expect(result.length).toEqual(2);
+    expect(result2.length).toEqual(2);
+    expect(result2).toStrictEqual([testTag, testTag2]);
+  });
+
+  // Testing 18: delete tags in modal
+  it("Delete tags in modal", async () => {
+    await page.reload();
+
+    // Add new journal
+    await page.click("#can-container");
+
+    // Add tag
+    await page.click("#tag-plus-button");
+    const testTag = "Test";
+    await page.type("#tag-input-bar", testTag);
+
+    // Save tag
+    await page.click("#save-tag");
+
+    // Add title
+    const testTitle = "Dummy2";
+    await page.type("#journalTitle", testTitle);
+
+    // Handle the dialog within the context of clicking the tag
+    page.on("dialog", async (dialog) => {
+      //get alert message
+      await dialog.accept();
+    });
+
+    //make sure a tag was added
+    let tags = await page.$$(".tags");
+    expect(tags.length).toBe(1);
+
+    // Delete tag by clicking on it
+    await page.click(".colored-tag");
+
+    // Save the journal entry
+    await page.click("#closeModal");
+
+    // Check that the tags in the noteObject contains testTag
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+
+    let journalEditEntries = await page.$$("#entry-dropdown li");
+
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+    tags = await page.$$(".colored-tag");
+    expect(tags.length).toBe(0);
+  });
+
   afterAll(async () => {
     // Disable both JavaScript and CSS coverage
     const [jsCoverage] = await Promise.all([
