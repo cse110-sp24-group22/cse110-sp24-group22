@@ -222,17 +222,18 @@ function editJournal(id) {
 
 
    // Ensures that when clicking outside from the editor, it will not close the modal
-   window.addEventListener("click",  function (event) {
+  window.onclick = function (event) {
     if (!modal.contains(event.target)) {
         modal.style.display = "block";
     }
-  });
+  };
 
 
   /* Deletes journal inside modal */
   deleteModal.onclick = () => {
     if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
+      window.onclick = null;
       deleteJournal();
       renderRoots();
     }
@@ -244,6 +245,7 @@ function editJournal(id) {
     quillUpdateTextHandler();
     if(isTitleValid(titleBar.value)){
       modal.style.display = "none";
+      window.onclick = null;
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
       renderRoots();
@@ -293,6 +295,7 @@ function editJournal(id) {
     const executeDeletion = () => {
       deleteJournal(noteID);
       modal.style.display = "none";
+      window.onclick = null;
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
       renderRoots();
@@ -318,12 +321,14 @@ function editJournal(id) {
       noteObject.title = tempTitle;
       deleteJournal(noteID);
       modal.style.display = "none";
+      window.onclick = null;
       quill.off("text-change", quillUpdateTextHandler);
 
       event.stopPropagation();
     }
     else {
       modal.style.display = "none";
+      window.onclick = null;
       saveJournalList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
     }
