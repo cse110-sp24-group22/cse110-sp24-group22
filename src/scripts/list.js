@@ -46,7 +46,6 @@ function init() {
   const filterButton = document.getElementById("filter-button");
   filterButton.onclick = () => {
     const filterHeader = document.querySelector(".filter-container");
-    const entryHeader = document.querySelector(".entry-header");
     if (filterHeader.classList.contains("show")) {
       filterHeader.classList.remove("show");
       setTimeout(function () {
