@@ -27,4 +27,4 @@ jobs:
       run: sleep 5
       
     - name: Run Lighthouse
-      run: lhci autorun
+      run: lhci autorun --config=.github/workflows/lighthouserc.json
