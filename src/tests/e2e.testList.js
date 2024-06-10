@@ -25,7 +25,6 @@ describe("Basic user flow for List Page Website", () => {
 
   // ==============================================================
   // Testing 1: Initial check for 0 journals
-  // Testing 1: Initial check for 0 journals
   it("Initial Check for 0 journals", async () => {
     // Get all journal entries on the page
     const journalEntries = await page.$$("#item-list li");
@@ -35,12 +34,15 @@ describe("Basic user flow for List Page Website", () => {
 
   // Testing 2: Canceling a new Journal
   it("Canceling creation of journal does not create journal", async () => {
+    // Create new journal
     await page.click(".new-journal-button");
     page.on("dialog", async (dialog) => {
       await dialog.accept();
     });
+    // Cancel it right away
     await page.click("#cancelModal");
     const journalEntries = await page.$$("#item-list li");
+    // Check that the number of journal entries is 0
     expect(journalEntries.length).toBe(0);
   });
 
@@ -91,7 +93,6 @@ describe("Basic user flow for List Page Website", () => {
 
     // Click the Save Changes button
     await page.click("#closeModal");
-    // Get the updated title text without the additional information
     // Get the updated title text without the additional information
     const journaltitle = await page.evaluate(() => {
       const titleElement = document.querySelector("#item-list li:first-child");
@@ -271,17 +272,20 @@ describe("Basic user flow for List Page Website", () => {
 
   // Testing 9: Filter the journal by date
   it("Filter the journal by date", async () => {
+    // Create a date
     const testTime = new Date();
     const testMonth = ("0" + (testTime.getMonth() + 1)).slice(-2);
     const testDate =
       testMonth + ("0" + testTime.getDate()).slice(-2) + testTime.getFullYear();
 
     await page.reload();
-    //clicks on filter button
+    // Click on filter button
     await page.click(".filter-button");
+    // Limit date range 
     await page.type("#start-date", testDate);
     await page.type("#end-date", testDate);
     const journalEntriesFilter = await page.$$("#item-list li");
+    // Check that the number of journal entries within the timeframe is 1
     expect(journalEntriesFilter.length).toBe(3);
   });
 
@@ -292,6 +296,7 @@ describe("Basic user flow for List Page Website", () => {
       return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, "").trim();
     }
 
+    // Checks that an array is reverse sorted alphabtically 
     function isSortedReverseAlphabetically(arr) {
       for (let i = 0; i < arr.length - 1; i++) {
         if (arr[i].localeCompare(arr[i + 1]) < 0) {
@@ -302,6 +307,7 @@ describe("Basic user flow for List Page Website", () => {
     }
 
     await page.reload();
+    // Sort journals
     await page.click("#sort-name");
 
     // Get all journal entries on the page
@@ -319,6 +325,7 @@ describe("Basic user flow for List Page Website", () => {
       })
     );
 
+    // Check that the journal entries are indeed reverse sorted alphabetically
     testResult = isSortedReverseAlphabetically(result);
     testResult2 = isSortedReverseAlphabetically(result2);
     expect(testResult).toBe(true);
@@ -332,6 +339,7 @@ describe("Basic user flow for List Page Website", () => {
       return text.replace(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/, "").trim();
     }
 
+    // Checks that an array is sorted alphabtically 
     function isSortedAlphabetically(arr) {
       for (let i = 0; i < arr.length - 1; i++) {
         if (arr[i].localeCompare(arr[i + 1]) > 0) {
@@ -358,6 +366,7 @@ describe("Basic user flow for List Page Website", () => {
       })
     );
 
+    // Check that the journal entries are indeed sorted alphabetically
     testResult = isSortedAlphabetically(result);
     testResult2 = isSortedAlphabetically(result2);
     expect(testResult).toBe(true);
@@ -460,9 +469,11 @@ describe("Basic user flow for List Page Website", () => {
     await page.waitForSelector("#item-list li");
     const journalEntryMultiTag = await page.$("#item-list li");
     await journalEntryMultiTag.click();
+    // Add tags to a journal with tags 
     await page.click("#tag-plus-button");
     const testTag2 = "Test2";
     await page.type("#tag-input-bar", testTag2);
+    // Save tag and close
     await page.click("#save-tag");
     await page.click("#closeModal");
     let tags = await page.$$("li span");
@@ -476,6 +487,7 @@ describe("Basic user flow for List Page Website", () => {
         return await t.evaluate((x) => x.textContent);
       })
     );
+    // Check that the number of tags is 2 with the newly added one 
     expect(result.length).toEqual(2);
     expect(result2.length).toEqual(2);
   });
