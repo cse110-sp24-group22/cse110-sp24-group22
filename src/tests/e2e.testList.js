@@ -176,8 +176,6 @@ describe("Basic user flow for List Page Website", () => {
 
     // Enter the title
     await page.click("#journalTitle");
-
-    await page.click("#journalTitle");
     await page.evaluate(() => {
       const titleInput = document.querySelector("#journalTitle");
       titleInput.focus();

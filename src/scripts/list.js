@@ -369,7 +369,7 @@ function editJournal(id) {
 
   // Ensures that when clicking outside from the editor, it will not close the modal
   window.addEventListener("click", function (event) {
-    if (event.target !== modal) {
+    if (!modal.contains(event.target)) {
       modal.style.display = "block";
     }
   });
