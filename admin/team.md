@@ -8,7 +8,7 @@
 - Be dedicated
 - Don't be afraid of failure
 
-## [Documentation Page](/docs/index.html)
+## [Documentation Page](https://cse110-sp24-group22.github.io/cse110-sp24-group22/docs/index.html)
 
 ## Our Roster
 

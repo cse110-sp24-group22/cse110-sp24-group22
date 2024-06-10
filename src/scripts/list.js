@@ -46,7 +46,6 @@ function init() {
   const filterButton = document.getElementById("filter-button");
   filterButton.onclick = () => {
     const filterHeader = document.querySelector(".filter-container");
-    const entryHeader = document.querySelector(".entry-header");
     if (filterHeader.classList.contains("show")) {
       filterHeader.classList.remove("show");
       setTimeout(function () {
@@ -67,6 +66,15 @@ function init() {
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
   });
+
+  // Save function by completing the key combination ctrl + s
+  document.addEventListener("keydown", (event) => {
+    const modal = document.getElementById("journalModal");
+    if ((event.ctrlKey || event.metaKey) && event.key === "s" && modal.style.display !== "none") {
+      event.preventDefault();
+      document.getElementById("closeModal").click();
+    }
+});
 }
 
 /**
