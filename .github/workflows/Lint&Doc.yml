@@ -27,7 +27,7 @@ jobs:
 
       - name: Merge main into doc
         run: |
-          git merge main
+          git merge main --allow-unrelated-histories
           git push origin doc
 
   prettier-linting:
