@@ -1,8 +1,17 @@
 // Import utility functions
-import { getMatchingEntries, saveJournalList, isTitleValid, getJournalList, parseTags } from "./util.js";
+import { 
+  getMatchingEntries, 
+  saveJournalList, 
+  isTitleValid, 
+  getJournalList, 
+  parseTags 
+} from "./util.js";
 
 // Export functions for unit tests
-export { getJournalByTimestamp, searchJournal }
+export { 
+  getJournalByTimestamp, 
+  searchJournal 
+}
 
 // store the data into localStorage before starting
 let journalList = getJournalList();
@@ -358,9 +367,10 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
+  // Ensures that when clicking outside from the editor, it will not close the modal
   window.addEventListener("click", function (event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
+    if (event.target !== modal) {
+      modal.style.display = "block";
     }
   });
 

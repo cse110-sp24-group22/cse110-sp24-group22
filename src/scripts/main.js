@@ -221,11 +221,13 @@ function editJournal(id) {
   }
 
 
-  window.addEventListener("click", function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+   // Ensures that when clicking outside from the editor, it will not close the modal
+   window.addEventListener("click", function (event) {
+    if (event.target !== modal) {
+      modal.style.display = "block";
     }
   });
+
 
   /* Deletes journal inside modal */
   deleteModal.onclick = () => {
