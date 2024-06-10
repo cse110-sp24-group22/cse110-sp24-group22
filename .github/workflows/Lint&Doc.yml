@@ -69,7 +69,7 @@ jobs:
           message: JSDoc updated by GitHub Action
           committer_name: GitHub Actions
           committer_email: actions@github.com
-          push: origin HEAD:${{github.ref_name}}
+          push: origin HEAD:doc
 
   create-pr:
     needs: JSDoc-generation
