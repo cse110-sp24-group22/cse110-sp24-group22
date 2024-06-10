@@ -69,7 +69,8 @@ function init() {
   });
 
   document.addEventListener("keydown", (event) => {
-    if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+    const modal = document.getElementById("journalModal");
+    if ((event.ctrlKey || event.metaKey) && event.key === "s" && modal.style.display !== "none") {
       event.preventDefault();
       document.getElementById("closeModal").click();
     }
