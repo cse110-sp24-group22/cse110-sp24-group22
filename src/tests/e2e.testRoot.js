@@ -169,10 +169,13 @@ describe("Basic user flow for Website", () => {
   it("Editing and saving modal from entry search result updates dropdown", async () => {
     let testEditTitle = "Testing 3 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
+    await page.keyboard.press("Delete");
     await page.type("#journalTitle", testEditTitle);  // Change the title
     await page.click("#closeModal");
     // Get all the notes
@@ -202,10 +205,12 @@ describe("Basic user flow for Website", () => {
     await dropDownEditEntry.click();
     let testEditTitle = "Testing 2 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
     await page.type("#journalTitle", testEditTitle);  // Change title
     await page.click("#cancelModal"); // But not saving it 
     const journalEntries = await page.evaluate(() => {
@@ -265,10 +270,11 @@ describe("Basic user flow for Website", () => {
   it("Checks the save button after clicking on the node", async () => {
     let testEditTitle = "Testing 14 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
     await page.type("#journalTitle", testEditTitle);  // Delete old title and input new title
     await page.click("#closeModal");  // Save journal
     const journalEntries = await page.evaluate(() => {
@@ -285,20 +291,22 @@ describe("Basic user flow for Website", () => {
     // Entry 1 
     let testEditTitle = "Testing 3 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
     await page.type("#journalTitle", testEditTitle);  // New title
     await page.click("#closeModal");
     await page.click("#can-container");
     // Entry 2 
     let testEdit2Title = "Testing 2 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
     await page.type("#journalTitle", testEdit2Title); // New title 
     await page.click("#closeModal");
     let noNewCount = await countDivsWithClass(page, "root-node");

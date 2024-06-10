@@ -176,10 +176,13 @@ describe("Basic user flow for List Page Website", () => {
 
     // Enter the title
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+
+    await page.click("#journalTitle");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
 
     await page.type("#journalTitle", "Test Title");
 
@@ -203,10 +206,12 @@ describe("Basic user flow for List Page Website", () => {
 
     // Enter the title
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+    await page.click("#journalTitle");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
     await timeout(2000);
     await page.type("#journalTitle", "Test 2");
 
@@ -229,10 +234,11 @@ describe("Basic user flow for List Page Website", () => {
 
     // Enter the title
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
     await timeout(2000);
     await page.type("#journalTitle", "This is testing");
 
