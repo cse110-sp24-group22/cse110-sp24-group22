@@ -44,6 +44,13 @@ function init() {
     newListOnCanClick();
     setUpHomeSearch();
     updatePlantImage();
+
+    document.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault();
+        document.getElementById("closeModal").click();
+      }
+  });
 }
 
 /**
