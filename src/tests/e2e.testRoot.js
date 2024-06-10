@@ -24,6 +24,7 @@ describe("Basic user flow for Website", () => {
     });
 
   // ==============================================================
+  // Get text content of a journal given an id
   async function getTextById(page, id) {
     const element = await page.$(`#${id}`);
     if (element) {
@@ -33,6 +34,7 @@ describe("Basic user flow for Website", () => {
     return null;
   }
 
+  // Count the number of divs of a given class
   async function countDivsWithClass(page, className) {
     const count = await page.evaluate((className) => {
       return document.querySelectorAll(`div.${className}`).length;
@@ -40,6 +42,7 @@ describe("Basic user flow for Website", () => {
     return count;
   }
 
+  // check if the journal modal is visible
   async function isModalVisible(page) {
     const isVisible = await page.evaluate(() => {
       // Get the modal element
@@ -60,9 +63,11 @@ describe("Basic user flow for Website", () => {
 
   // Testing 1: Canceling a new Journal
   it("Canceling creation of journal does not create journal", async () => {
+    // Cancel a new journal without writing anything
     await page.click("#can-container");
     await page.click(".close-button");
     let cancelCount = await countDivsWithClass(page, "root-node");
+    // Check that there should be no root nodes added 
     expect(cancelCount).toBe(0);
   });
 
@@ -70,6 +75,7 @@ describe("Basic user flow for Website", () => {
   it("Check for correct date and weekday", async () => {
     let todayTime = new Date();
     let testWeekDay = await getTextById(page, "weekday");
+    // Map days to numbers 
     let testWeekDayValue;
     switch (testWeekDay) {
       case "Sunday":
@@ -94,6 +100,7 @@ describe("Basic user flow for Website", () => {
         testWeekDayValue = 6;
         break;
     }
+    // Check that the weekday is correct 
     expect(testWeekDayValue).toBe(todayTime.getDay());
     let testDate = await getTextById(page, "date");
     let todayMonth = todayTime.getMonth() + 1;
@@ -105,18 +112,22 @@ describe("Basic user flow for Website", () => {
   // Testing 3: Pressing create opens modal
   it("Pressing create opens modal", async () => {
     await page.reload();
+    // Press create
     await page.click("#can-container");
+    // Check that modal is visible 
     const modal = await isModalVisible(page);
     expect(modal).toBe(true);
   });
 
   // Testing 4: Edit and save a journal to have title Testing 4
   it("Edit and save a journal to have title Testing 4", async () => {
+    // Title to be added
     let testTitle = "Testing 4";
     await page.type("#journalTitle", testTitle);
 
     await page.click("#closeModal");
 
+    // Get all the notes 
     const journalEntries = await page.evaluate(() => {
       return JSON.parse(localStorage.getItem("GarlicNotes"));
     });
@@ -135,17 +146,21 @@ describe("Basic user flow for Website", () => {
   it("Search for a journal by title", async () => {
     await page.reload();
 
+    // Search for the journal with the title from the previous test 
     await page.type("#search-bar", "Testing 4");
 
     const journalEntries = await page.$$("#entry-dropdown li");
 
+    // Check that there should be one journal with that title 
     expect(journalEntries.length).toBe(1);
   });
 
   // Testing 7: Pressing entry search result opens modal
   it("Pressing entry search result opens modal", async () => {
+    // Click on one of the entries in the dropdown list 
     const dropDownEntry = await page.$("#entry-dropdown li");
     await dropDownEntry.click();
+    // Modal should be visible 
     const modalEntry = await isModalVisible(page);
     expect(modalEntry).toBe(true);
   });
