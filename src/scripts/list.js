@@ -330,7 +330,7 @@ function saveJournalTags(journalTags) {
 function editJournal(id) {
   const modal = document.getElementById("journalModal");
   /** @type {HTMLButtonElement} */
-  const saveJournal = document.getElementById("closeModal");
+  const saveButton = document.getElementById("closeModal");
   /** @type {HTMLInputElement} */
   const titleBar = document.getElementById("journalTitle");
   /** @type {HTMLButtonElement} */
@@ -339,8 +339,7 @@ function editJournal(id) {
   const cancelButton = document.getElementById("cancelModal");
   /** @type {HTMLDivElement} */
   const itemList = document.getElementById("item-list");
-  /** @type {HTMLButtonElement} */
-  const deleteModal = document.getElementById("deleteModal");
+
 
   /* Tags */
   /** @type {HTMLButtonElement} */
@@ -367,38 +366,21 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
-  // Ensures that when clicking outside from the editor, it will not close the modal
-  window.addEventListener("click", function (event) {
-    if (event.target !== modal) {
-      modal.style.display = "block";
-    }
-  });
-
-  /* Deletes journal inside modal */
-  deleteModal.onclick = () => {
-    if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
-      modal.style.display = "none";
-      deleteJournal(id);
-      saveJournalList(journalList);
-      displayList(journalList);
+  function preventExit(event) {
+    if (!modal.contains(event.target)) {
+        modal.style.display = "block";
     }
   }
 
-  saveJournal.onclick = () => {
-    updateTitleHandler();
-    quillUpdateTextHandler();
-    if (isTitleValid(titleBar.value)) {
-      modal.style.display = "none";
-      itemList.innerHTML = "";
-      displayList(journalList);
-      quill.off("text-change", quillUpdateTextHandler);
-    } else {
-      alert('Cannot save journal without a title!');
+  // Ensures that when clicking outside from the editor, it will not close the modal
+  window.addEventListener("click",  function (event) {
+    if (!modal.contains(event.target)) {
+        modal.style.display = "block";
     }
-  };
+  });
+
 
   /* Uses timestamp as id, Creates new noteObject*/
-
   let noteObject;
   let isNewJournal = false;
 
@@ -438,6 +420,20 @@ function editJournal(id) {
   /* Adds or modifies title */
   titleBar.oninput = updateTitleHandler;
 
+  saveButton.onclick = () => {
+    updateTitleHandler();
+    quillUpdateTextHandler();
+    if (isTitleValid(titleBar.value)) {
+      modal.style.display = "none";
+      itemList.innerHTML = "";
+      displayList(journalList);
+      quill.off("text-change", quillUpdateTextHandler);
+      
+    } else {
+      alert('Cannot save journal without a title!');
+    }
+  };
+
   // Delete current journal
   deleteButton.onclick = (event) => {
       // Define the deletion logic in a separate function
@@ -474,7 +470,6 @@ function editJournal(id) {
       itemList.innerHTML = "";
       displayList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
-
       event.stopPropagation();
     }
     else {
@@ -509,7 +504,7 @@ function editJournal(id) {
       saveJournalList(journalList);
 
     } else {
-      saveJournal.title = "Title cannot be empty";
+      saveButton.title = "Title cannot be empty";
     }
     noteObject.editTime = new Date().getTime();
   }

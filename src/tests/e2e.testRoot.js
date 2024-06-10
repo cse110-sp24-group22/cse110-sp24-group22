@@ -24,6 +24,7 @@ describe("Basic user flow for Website", () => {
     });
 
   // ==============================================================
+  // Get text content of a journal given an id
   async function getTextById(page, id) {
     const element = await page.$(`#${id}`);
     if (element) {
@@ -33,6 +34,7 @@ describe("Basic user flow for Website", () => {
     return null;
   }
 
+  // Count the number of divs of a given class
   async function countDivsWithClass(page, className) {
     const count = await page.evaluate((className) => {
       return document.querySelectorAll(`div.${className}`).length;
@@ -40,6 +42,7 @@ describe("Basic user flow for Website", () => {
     return count;
   }
 
+  // check if the journal modal is visible
   async function isModalVisible(page) {
     const isVisible = await page.evaluate(() => {
       // Get the modal element
@@ -60,9 +63,11 @@ describe("Basic user flow for Website", () => {
 
   // Testing 1: Canceling a new Journal
   it("Canceling creation of journal does not create journal", async () => {
+    // Cancel a new journal without writing anything
     await page.click("#can-container");
     await page.click(".close-button");
     let cancelCount = await countDivsWithClass(page, "root-node");
+    // Check that there should be no root nodes added 
     expect(cancelCount).toBe(0);
   });
 
@@ -70,6 +75,7 @@ describe("Basic user flow for Website", () => {
   it("Check for correct date and weekday", async () => {
     let todayTime = new Date();
     let testWeekDay = await getTextById(page, "weekday");
+    // Map days to numbers 
     let testWeekDayValue;
     switch (testWeekDay) {
       case "Sunday":
@@ -94,6 +100,7 @@ describe("Basic user flow for Website", () => {
         testWeekDayValue = 6;
         break;
     }
+    // Check that the weekday is correct 
     expect(testWeekDayValue).toBe(todayTime.getDay());
     let testDate = await getTextById(page, "date");
     let todayMonth = todayTime.getMonth() + 1;
@@ -105,18 +112,22 @@ describe("Basic user flow for Website", () => {
   // Testing 3: Pressing create opens modal
   it("Pressing create opens modal", async () => {
     await page.reload();
+    // Press create
     await page.click("#can-container");
+    // Check that modal is visible 
     const modal = await isModalVisible(page);
     expect(modal).toBe(true);
   });
 
   // Testing 4: Edit and save a journal to have title Testing 4
   it("Edit and save a journal to have title Testing 4", async () => {
+    // Title to be added
     let testTitle = "Testing 4";
     await page.type("#journalTitle", testTitle);
 
     await page.click("#closeModal");
 
+    // Get all the notes 
     const journalEntries = await page.evaluate(() => {
       return JSON.parse(localStorage.getItem("GarlicNotes"));
     });
@@ -135,17 +146,21 @@ describe("Basic user flow for Website", () => {
   it("Search for a journal by title", async () => {
     await page.reload();
 
+    // Search for the journal with the title from the previous test 
     await page.type("#search-bar", "Testing 4");
 
     const journalEntries = await page.$$("#entry-dropdown li");
 
+    // Check that there should be one journal with that title 
     expect(journalEntries.length).toBe(1);
   });
 
   // Testing 7: Pressing entry search result opens modal
   it("Pressing entry search result opens modal", async () => {
+    // Click on one of the entries in the dropdown list 
     const dropDownEntry = await page.$("#entry-dropdown li");
     await dropDownEntry.click();
+    // Modal should be visible 
     const modalEntry = await isModalVisible(page);
     expect(modalEntry).toBe(true);
   });
@@ -154,12 +169,16 @@ describe("Basic user flow for Website", () => {
   it("Editing and saving modal from entry search result updates dropdown", async () => {
     let testEditTitle = "Testing 3 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
-    await page.type("#journalTitle", testEditTitle);
+
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
+    await page.keyboard.press("Delete");
+    await page.type("#journalTitle", testEditTitle);  // Change the title
     await page.click("#closeModal");
+    // Get all the notes
     const journalEntries = await page.evaluate(() => {
       return JSON.parse(localStorage.getItem("GarlicNotes"));
     });
@@ -169,12 +188,13 @@ describe("Basic user flow for Website", () => {
     await page.type("#search-bar", testEditTitle);
 
     const journalEditEntries = await page.$$("#entry-dropdown li");
-
+    // Check that no new notes are added: we are only modifying old notes 
     expect(journalEditEntries.length).toBe(1);
   });
 
   // Testing 9: The previous edit to an existing entry didn't add another root node
   it("The previous edit to an existing entry didn't add another root node", async () => {
+    // Check that the number of nodes is still 1 
     let editCount = await countDivsWithClass(page, "root-node");
     expect(editCount).toBe(1);
   });
@@ -185,20 +205,22 @@ describe("Basic user flow for Website", () => {
     await dropDownEditEntry.click();
     let testEditTitle = "Testing 2 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
-    await page.type("#journalTitle", testEditTitle);
-    await page.click("#cancelModal");
+
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
+    await page.type("#journalTitle", testEditTitle);  // Change title
+    await page.click("#cancelModal"); // But not saving it 
     const journalEntries = await page.evaluate(() => {
       return JSON.parse(localStorage.getItem("GarlicNotes"));
     });
-    // Check that the title is updated
+    // Check that the title is not updated
     expect(journalEntries[0].title).toBe("Testing 3 Updated");
     await page.reload();
     await page.type("#search-bar", testEditTitle);
-
+    // Check that we cannot find the journal with the new title because it has not been updated 
     const journalCancelEntries = await page.$$("#entry-dropdown li");
     expect(journalCancelEntries.length).toBe(0);
   });
@@ -208,6 +230,7 @@ describe("Basic user flow for Website", () => {
     await page.reload();
     await page.click("#year-increment");
     const yearDisplayText = await getTextById(page, "year-display-inner");
+    // Check that the year is still 2024 
     expect(yearDisplayText).toBe("2024");
   });
 
@@ -217,6 +240,7 @@ describe("Basic user flow for Website", () => {
     const yearDisplayText = await getTextById(page, "year-display-inner");
     expect(yearDisplayText).toBe("2023");
     let intIncrementNode = await countDivsWithClass(page, "root-node");
+    // Check that there are no nodes for the previous years 
     expect(intIncrementNode).toBe(0);
   });
 
@@ -224,28 +248,35 @@ describe("Basic user flow for Website", () => {
   it("Increment year button correctly changes year-display year and changes root to have previous amount of nodes", async () => {
     await page.click("#year-increment");
     const yearDisplayText = await getTextById(page, "year-display-inner");
+    // Check that we correctly go back to 2024 
     expect(yearDisplayText).toBe("2024");
     let intIncrementNode = await countDivsWithClass(page, "root-node");
+    // Check that there should be 1 node in 2024
     expect(intIncrementNode).toBe(1);
   });
 
   //Test 14: Checks clicking on the nodes
   it("Checks clicking on the nodes", async () => {
     await page.reload();
+    // Click on the nodes
     await page.click(".root-node");
     await page.waitForSelector("#deleteModal");
     const nodeModal = await isModalVisible(page);
+    // Check that the modal is opened 
     expect(nodeModal).toBe(true);
   });
+
+  // Test 15: Checks the save button after clicking on the node
   it("Checks the save button after clicking on the node", async () => {
     let testEditTitle = "Testing 14 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
-    await page.type("#journalTitle", testEditTitle);
-    await page.click("#closeModal");
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
+    await page.type("#journalTitle", testEditTitle);  // Delete old title and input new title
+    await page.click("#closeModal");  // Save journal
     const journalEntries = await page.evaluate(() => {
       return JSON.parse(localStorage.getItem("GarlicNotes"));
     });
@@ -253,67 +284,177 @@ describe("Basic user flow for Website", () => {
     expect(journalEntries[0].title).toBe("Testing 14 Updated");
   });
 
-//   //Testing 14: Checks Delete Button
-//   it("Checks the delete button in the modal", async () => {
-//     await page.reload();
-//     await page.click(".root-node");
-//     await page.click("#deleteModal");
-//     let checkNodeCount = await countDivsWithClass(page, "root-node");
-//     expect(checkNodeCount).toBe(0);
-//   });
-
-  // Test 15: Check if having 2 entries on one node does not update node Count.
+  // Test 16: Check if having 2 entries on one node does not update node Count.
   it("Check if having 2 entries on one node does not update node Count.", async () => {
     await page.reload();
     await page.click("#can-container");
+    // Entry 1 
     let testEditTitle = "Testing 3 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
-    await page.type("#journalTitle", testEditTitle);
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
+    await page.type("#journalTitle", testEditTitle);  // New title
     await page.click("#closeModal");
     await page.click("#can-container");
+    // Entry 2 
     let testEdit2Title = "Testing 2 Updated";
     await page.click("#journalTitle");
-    await page.keyboard.down("Control");
-    await page.keyboard.press("A");
-    await page.keyboard.up("Control");
-    await page.keyboard.press("Backspace");
-    await page.type("#journalTitle", testEdit2Title);
+    await page.evaluate(() => {
+      const titleInput = document.querySelector("#journalTitle");
+      titleInput.focus();
+      titleInput.select();
+    });
+    await page.type("#journalTitle", testEdit2Title); // New title 
     await page.click("#closeModal");
     let noNewCount = await countDivsWithClass(page, "root-node");
+    // Check that node count is preserved 
     expect(noNewCount).toBe(1);
   });
+// ==============================================================
 
-//   // Test 16: Checking if having 2 entries on one node redirects
-//   it("Checking if having 2 entries on one node redirects", async () => {
-//     await page.reload();
-//     await page.click(".root-node");
-//     let testEntriesDate = new Date();
-//     let result = false;
-//     // Convert month to string
-//     let basemonth = ("0" + (testEntriesDate.getMonth() + 1)).slice(-2);
-//     // Convert date to string
-//     let basetime =
-//       testEntriesDate.getFullYear() +
-//       "-" +
-//       basemonth +
-//       "-" +
-//       ("0" + testEntriesDate.getDate()).slice(-2);
-//     // Construct URL to take us to the list page
-//     let url =
-//       "http://127.0.0.1:5500/src/html/list.html?query=&tags=&startDate=" +
-//       basetime +
-//       "&endDate=" +
-//       basetime;
-//     if (page.url() == url) {
-//       result = true;
-//     }
-//     expect(result).toBe(true);
-//   });
-  // ==============================================================
+  
+  // Tags
+
+  // Testing 16: Add new tags to journal inside modal
+  it("Add new tags to journal", async () => {
+    await page.reload();
+    
+    // Add new journal
+    await page.click("#can-container");
+
+    // Add tag
+    await page.click("#tag-plus-button");
+    const testTag = "Test";
+    await page.type("#tag-input-bar", testTag);
+
+    // Save tag
+    await page.click("#save-tag");
+
+    // Add title
+    const testTitle = "Dummy";
+    await page.type("#journalTitle", testTitle);
+    await page.click("#closeModal");
+
+    // Get local storage
+    const journalEntries = await page.evaluate(() => {
+      return JSON.parse(localStorage.getItem("GarlicNotes"));
+    });
+    // Check that the tags are updated
+    expect(journalEntries.find((entry) => entry.title == testTitle).tags).toStrictEqual([testTag]);
+
+    // Check that the tags are updated in modal
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+    const journalEditEntries = await page.$$("#entry-dropdown li");
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+
+    let tag = await page.$(".colored-tag");
+    let tagContent = await (await tag.getProperty("innerText")).jsonValue();
+    // Check that the tags in the noteObject contains testTag
+    expect(tagContent).toBe(testTag);
+  });
+
+  // Testing 17: Add tags when there are tags inside modal
+  it("Add tags when there are tags inside modal", async () => {
+    const testTag = "Test";
+    const testTitle = "Dummy";
+
+    // Get Dummy entry
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+
+    let journalEditEntries = await page.$$("#entry-dropdown li");
+
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+    await page.click("#tag-plus-button");
+    const testTag2 = "Test2";
+    await page.type("#tag-input-bar", testTag2);
+    await page.click("#save-tag");
+    await page.click("#closeModal");
+
+    // Get local storage
+    const journalEntries = await page.evaluate(() => {
+      return JSON.parse(localStorage.getItem("GarlicNotes"));
+    });
+    // Check that the tags are updated
+    expect(journalEntries.find((entry) => entry.title == testTitle).tags).toStrictEqual([testTag, testTag2]);
+
+    // Check that the tags are updated in modal
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+    journalEditEntries = await page.$$("#entry-dropdown li");
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+
+    // Grab tags from modal
+    let tags = await page.$$(".colored-tag");
+    let result = [];
+    for (let t of tags) {
+      result.push(await t.evaluate((x) => x.textContent));
+    }
+
+    // Grab tags content
+    let result2 = await Promise.all(
+      tags.map(async (t) => {
+        return await t.evaluate((x) => x.textContent);
+      })
+    );
+    expect(result.length).toEqual(2);
+    expect(result2.length).toEqual(2);
+    expect(result2).toStrictEqual([testTag, testTag2]);
+  });
+
+  // Testing 18: delete tags in modal
+  it("Delete tags in modal", async () => {
+    await page.reload();
+
+    // Add new journal
+    await page.click("#can-container");
+
+    // Add tag
+    await page.click("#tag-plus-button");
+    const testTag = "Test";
+    await page.type("#tag-input-bar", testTag);
+
+    // Save tag
+    await page.click("#save-tag");
+
+    // Add title
+    const testTitle = "Dummy2";
+    await page.type("#journalTitle", testTitle);
+
+    // Handle the dialog within the context of clicking the tag
+    page.on("dialog", async (dialog) => {
+      //get alert message
+      await dialog.accept();
+    });
+
+    //make sure a tag was added
+    let tags = await page.$$(".tags");
+    expect(tags.length).toBe(1);
+
+    // Delete tag by clicking on it
+    await page.click(".colored-tag");
+
+    // Save the journal entry
+    await page.click("#closeModal");
+
+    // Check that the tags in the noteObject contains testTag
+    await page.reload();
+    await page.type("#search-bar", testTitle);
+
+    let journalEditEntries = await page.$$("#entry-dropdown li");
+
+    expect(journalEditEntries.length).toBe(1);
+    await journalEditEntries[0].click();
+    tags = await page.$$(".colored-tag");
+    expect(tags.length).toBe(0);
+  });
 
   afterAll(async () => {
     // Disable both JavaScript and CSS coverage

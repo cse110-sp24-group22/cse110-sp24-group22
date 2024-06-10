@@ -222,9 +222,9 @@ function editJournal(id) {
 
 
    // Ensures that when clicking outside from the editor, it will not close the modal
-   window.addEventListener("click", function (event) {
-    if (event.target !== modal) {
-      modal.style.display = "block";
+   window.addEventListener("click",  function (event) {
+    if (!modal.contains(event.target)) {
+        modal.style.display = "block";
     }
   });
 
