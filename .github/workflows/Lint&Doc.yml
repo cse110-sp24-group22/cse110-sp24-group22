@@ -1,16 +1,43 @@
-name: Prettier Linting & JS Doc Generation
+name: Update Documentation
 
 on:
   push:
     branches:
-        - main-doc
+      - main
 
 jobs:
+  merge-main-to-doc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Checkout doc branch
+        run: git checkout doc
+
+      - name: Merge main into doc
+        run: |
+          git merge main
+          git push origin doc
+
   prettier-linting:
+    needs: merge-main-to-doc
     runs-on: ubuntu-latest
     steps:
         - name: Checkout
           uses: actions/checkout@v4
+          with:
+            ref: doc
   
         - name: Prettify code
           uses: creyD/prettier_action@v4.3
@@ -26,6 +53,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+            ref: doc
 
       - name: Build
         uses: andstor/jsdoc-action@v1
@@ -41,3 +70,17 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com
           push: origin HEAD:${{github.ref_name}}
+
+  create-pr:
+    needs: JSDoc-generation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create pull request
+        id: create_pull_request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: doc
+          base: main
+          title: 'Update Documentation'
+          body: 'Automated PR to merge doc into main.'
