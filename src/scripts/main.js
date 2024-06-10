@@ -238,6 +238,7 @@ function editJournal(id) {
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
       renderRoots();
+      updatePlantImage();
     } else {
         alert('Cannot save journal without a title!');
       }
