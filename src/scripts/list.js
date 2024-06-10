@@ -66,6 +66,14 @@ function init() {
   document.getElementById("sort-timestamp").addEventListener("click", () => {
     sortByCategory("timestamp");
   });
+
+  document.addEventListener("keydown", (event) => {
+    const modal = document.getElementById("journalModal");
+    if ((event.ctrlKey || event.metaKey) && event.key === "s" && modal.style.display !== "none") {
+      event.preventDefault();
+      document.getElementById("closeModal").click();
+    }
+});
 }
 
 /**
@@ -461,6 +469,7 @@ function editJournal(id) {
     else {
       modal.style.display = "none";
       itemList.innerHTML = "";
+      saveJournalList(journalList);
       displayList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
     }

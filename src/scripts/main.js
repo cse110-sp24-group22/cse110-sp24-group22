@@ -44,6 +44,14 @@ function init() {
     newListOnCanClick();
     setUpHomeSearch();
     updatePlantImage();
+
+    document.addEventListener("keydown", (event) => {
+      const modal = document.getElementById("journalModal");
+      if ((event.ctrlKey || event.metaKey) && event.key === "s" && modal.style.display !== "none") {
+        event.preventDefault();
+        document.getElementById("closeModal").click();
+      }
+  });
 }
 
 /**
@@ -164,8 +172,8 @@ function updateDropdown() {
     displayEntryDropdownList(matchingEntries);
   } else {
     // Hide dropdown and reset the border radius to normal.
-    entryDropdownList.style.display = "none";
     searchBar.style.borderRadius = "12px";
+    entryDropdownList.innerHTML = "";
   }
 }
 
@@ -223,7 +231,7 @@ function editJournal(id) {
   deleteModal.onclick = () => {
     if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
       modal.style.display = "none";
-      deleteJournal(id);
+      deleteJournal();
       renderRoots();
     }
   }
@@ -236,6 +244,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+      renderRoots();
     } else {
         alert('Cannot save journal without a title!');
       }
@@ -284,6 +293,7 @@ function editJournal(id) {
       modal.style.display = "none";
       quill.off("text-change", quillUpdateTextHandler);
       updateDropdown();
+      renderRoots();
     };
     if(isNewJournal){
       executeDeletion();
@@ -312,6 +322,7 @@ function editJournal(id) {
     }
     else {
       modal.style.display = "none";
+      saveJournalList(journalList);
       quill.off("text-change", quillUpdateTextHandler);
     }
     renderRoots();

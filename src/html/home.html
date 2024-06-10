@@ -20,8 +20,7 @@
   <body>
     <!-- Header with logo, search, and switch to list view button -->
     <div class="top-section">
-      <a href="../../admin/team.html">
-        <img src="..\assets\TeamIcon_3Diagonal.png"
+      <img src="..\assets\TeamIcon_3Diagonal.png"
       ,
       class="logo"
       ,
@@ -29,14 +28,16 @@
       ,
       width="55"
       ,
-      alt="logo" />
-      </a>
+      alt="logo"
+      ,
+      style="cursor: pointer;"
+      ,
+      onclick="window.location.href='../../admin/team.html';" />
       <div class="search-container">
         <input type="text" placeholder="Search..." id="search-bar" />
       </div>
       <div class ="button-contain">
-        <button type="button" onclick="window.location.href ='./list.html'">
-
+        <button type="button" onclick="window.location.href ='./list.html'" class = "list-view-button">
         List View
         </button>
       </div>
