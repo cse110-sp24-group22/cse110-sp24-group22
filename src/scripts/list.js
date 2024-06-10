@@ -68,6 +68,7 @@ function init() {
     sortByCategory("timestamp");
   });
 
+  // Save function by completing the key combination ctrl + s
   document.addEventListener("keydown", (event) => {
     const modal = document.getElementById("journalModal");
     if ((event.ctrlKey || event.metaKey) && event.key === "s" && modal.style.display !== "none") {
