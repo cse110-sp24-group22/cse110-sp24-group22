@@ -228,17 +228,6 @@ function editJournal(id) {
     }
   };
 
-
-  /* Deletes journal inside modal */
-  deleteModal.onclick = () => {
-    if (window.confirm(`Are you sure you would like to delete ${titleBar.value}?`)) {
-      modal.style.display = "none";
-      window.onclick = null;
-      deleteJournal();
-      renderRoots();
-    }
-  }
-
   /* Saves journal */
   saveJournal.onclick = () => {
     updateTitleHandler();
