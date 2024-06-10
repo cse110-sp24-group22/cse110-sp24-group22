@@ -367,9 +367,10 @@ function editJournal(id) {
     quill = new Quill("#editor", { theme: "snow" });
   }
 
+  // Ensures that when clicking outside from the editor, it will not close the modal
   window.addEventListener("click", function (event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
+    if (event.target !== modal) {
+      modal.style.display = "block";
     }
   });
 
