@@ -28,9 +28,3 @@
 - Kevin is a junior software engineer who works in a team in creating an app for his company. Being a novel worker, he is unfamiliar about a lot of things and are often overwhelmed due to the scale of the projects. He needs to keep track of the things he does every day and any challenges he faces and bring them up during daily stand-up meetings. 
 - Micayla is a senior software engineer who is overseeing a huge development project of her company and leading a team of her own. While producing and testing code, she also needs to provide guidance and mentorship to those in her team who are less experienced than her. She also needs to keep track of the stages of the project and identifies the tasks needed to be done. During frequent meetings with her supervisors, she needs to report the progress of her team. 
 - Joe is a CS professor at a world-renowned university. Apart from teaching several classes with varying difficulties, he also has his own research project. Preparing for lectures, writing exams, making progress in his research, writing papers, and traveling to conferences are what constitute his overwhelming schedule. He needs a good journal to keep track of his daily tasks so he doesn't get drowned within them.
- 
-# Garlic
-- garlicgarlicgarlic
-- garlic bred
-abcdef
-ghijkl
