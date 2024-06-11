@@ -20,9 +20,8 @@ The purpose of our journal is to promote daily journaling and turn it into a hab
 
 ## Developer Journal
 
-Let's get your project growing!
 
-[Check out our Demo Vid!]() Link Needed!!
+### [Checkout our demo video!](https://youtu.be/izuEQhJM_Us?si=S79WfpCLh6V6YXRE)
 
 ### **Features:**
    
