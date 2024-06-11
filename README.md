@@ -84,3 +84,9 @@ We utilized the Jest framework in conjunction with the Puppeteer library to impl
 - [Team Page](https://cse110-sp24-group22.github.io/cse110-sp24-group22/admin/team.html)
 - [Group Intro](https://youtu.be/Pr2DBvsQnfE)
 - [Documentation Page](https://cse110-sp24-group22.github.io/cse110-sp24-group22/docs/index.html)
+
+## Public Video
+- https://youtu.be/izuEQhJM_Us
+
+## Private Video
+- 
